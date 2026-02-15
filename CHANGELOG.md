@@ -5,6 +5,21 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.0] – 14.02.2026 20:20
+
+### Změněno
+- Verze povýšena na 1.1 (kumulace změn z 1.0.25–1.0.30)
+
+## [1.0.30] – 14.02.2026 20:15
+
+### Změněno
+- **Google Calendar:** pole pro ruční zadání Calendar ID (e-mail účtu = primární kalendář) – spolehlivější než dropdown
+
+## [1.0.29] – 14.02.2026 20:00
+
+### Změněno
+- **Admin:** layout pro desktop – menu vlevo (sidebar), verze vpravo vedle jména přihlášeného
+
 ## [1.0.28] – 14.02.2026 19:30
 
 ### Změněno

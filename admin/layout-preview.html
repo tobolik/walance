@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Náhled – Admin layout (menu vlevo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'DM Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+    <!-- Návrh: flex layout, sidebar vlevo fixní 220px -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar vlevo -->
+        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col shrink-0">
+            <div class="p-4 border-b border-slate-100">
+                <h1 class="text-lg font-bold text-slate-800">WALANCE<span class="text-teal-600">.</span></h1>
+                <p class="text-xs text-slate-500 mt-0.5">CRM administrace</p>
+            </div>
+            <nav class="flex-1 p-3 space-y-0.5">
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-teal-50 text-teal-700 font-medium text-sm">
+                    <i data-lucide="users" class="w-4 h-4 text-teal-600"></i>
+                    Kontakty
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-800 text-sm">
+                    <i data-lucide="calendar-check" class="w-4 h-4"></i>
+                    Rezervace
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-800 text-sm">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    Kalendář
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-800 text-sm">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    Dostupnost
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-800 text-sm mt-2">
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                    Web
+                </a>
+            </nav>
+            <div class="p-3 border-t border-slate-100">
+                <p class="text-xs text-slate-500 px-3">Přihlášen jako</p>
+                <p class="flex items-center justify-between px-3 mt-0.5">
+                    <span class="text-sm font-medium text-slate-700">Admin</span>
+                    <span class="text-xs text-slate-400">v1.0.28</span>
+                </p>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 mt-2 rounded-lg text-red-600 hover:bg-red-50 text-sm font-medium">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Odhlásit
+                </a>
+            </div>
+        </aside>
+
+        <!-- Hlavní obsah -->
+        <main class="flex-1 overflow-auto">
+            <div class="p-6 max-w-6xl">
+                <h2 class="text-lg font-bold text-slate-800 mb-4">Kontakty z webu</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <div class="flex flex-wrap gap-4">
+                        <input type="text" placeholder="Hledat jméno, e-mail..." class="px-4 py-2 border border-slate-300 rounded-lg flex-1 min-w-[200px]">
+                        <select class="px-4 py-2 border border-slate-300 rounded-lg">
+                            <option>Všechny zdroje</option>
+                        </select>
+                        <button class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-medium">Hledat</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Datum</th>
+                                <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Jméno</th>
+                                <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">E-mail</th>
+                                <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Zdroj</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-100 hover:bg-slate-50/50"><td class="py-4 px-6 text-sm">14.02.2026</td><td class="py-4 px-6 font-medium">Jan Novák</td><td class="py-4 px-6 text-slate-600">jan@example.cz</td><td class="py-4 px-6"><span class="px-2 py-1 rounded text-xs bg-teal-100 text-teal-700">Rezervace</span></td></tr>
+                            <tr class="border-b border-slate-100 hover:bg-slate-50/50"><td class="py-4 px-6 text-sm">13.02.2026</td><td class="py-4 px-6 font-medium">Marie Svobodová</td><td class="py-4 px-6 text-slate-600">marie@example.cz</td><td class="py-4 px-6"><span class="px-2 py-1 rounded text-xs bg-slate-100 text-slate-600">Kontakt</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

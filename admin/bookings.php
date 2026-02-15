@@ -100,22 +100,8 @@ $statusLabels = [
     <style>body { font-family: 'DM Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-100 min-h-screen">
-    <header class="bg-white border-b border-slate-200 px-6 py-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-slate-800">WALANCE CRM</h1>
-            <nav class="flex items-center gap-4">
-                <a href="dashboard.php" class="text-slate-500 hover:text-teal-600 text-sm">Kontakty</a>
-                <a href="bookings.php" class="text-teal-600 font-medium text-sm">Rezervace</a>
-                <a href="calendar.php" class="text-slate-500 hover:text-teal-600 text-sm">Kalendář</a>
-                <a href="availability.php" class="text-slate-500 hover:text-teal-600 text-sm">Dostupnost</a>
-                <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
-                <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
-                <a href="logout.php" class="text-red-600 hover:text-red-700 text-sm font-medium">Odhlásit</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto p-6">
+<?php $adminCurrentPage = 'bookings'; include __DIR__ . '/includes/layout.php'; ?>
+    <div class="p-6 max-w-6xl">
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
             <h2 class="text-lg font-bold text-slate-800 mb-4">Správa rezervací</h2>
             <div class="flex flex-wrap gap-4 items-center">
@@ -196,11 +182,8 @@ $statusLabels = [
             <div class="p-12 text-center text-slate-500">Žádné rezervace.</div>
             <?php endif; ?>
         </div>
-    </main>
-
-    <footer class="max-w-6xl mx-auto px-6 py-4 text-center text-slate-400 text-xs">
-        v<?= htmlspecialchars($v) ?>
-    </footer>
+    </div>
+<?php include __DIR__ . '/includes/layout-end.php'; ?>
 
     <script>
         lucide.createIcons();

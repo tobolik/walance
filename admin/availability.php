@@ -16,7 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slotInterval = (int)($_POST['slot_interval'] ?? 30);
     $workDays = isset($_POST['work_days']) ? array_map('intval', (array)$_POST['work_days']) : [1,2,3,4,5];
     $excludedDates = trim($_POST['excluded_dates'] ?? '');
-    $googleCalendarId = trim($_POST['google_calendar_id'] ?? '');
+    $googleCalendarId = trim($_POST['google_calendar_id_manual'] ?? '');
+    if ($googleCalendarId === '') {
+        $googleCalendarId = trim($_POST['google_calendar_id'] ?? '');
+    }
     
     $slotRanges = [];
     $starts = (array)($_POST['slot_range_start'] ?? []);
@@ -91,22 +94,8 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
     <style>body { font-family: 'DM Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-100 min-h-screen">
-    <header class="bg-white border-b border-slate-200 px-6 py-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-slate-800">WALANCE CRM</h1>
-            <nav class="flex items-center gap-4">
-                <a href="dashboard.php" class="text-slate-500 hover:text-teal-600 text-sm">Kontakty</a>
-                <a href="bookings.php" class="text-slate-500 hover:text-teal-600 text-sm">Rezervace</a>
-                <a href="calendar.php" class="text-slate-500 hover:text-teal-600 text-sm">Kalendář</a>
-                <a href="availability.php" class="text-teal-600 font-medium text-sm">Dostupnost</a>
-                <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
-                <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
-                <a href="logout.php" class="text-red-600 hover:text-red-700 text-sm font-medium">Odhlásit</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="max-w-2xl mx-auto p-6">
+<?php $adminCurrentPage = 'availability'; include __DIR__ . '/includes/layout.php'; ?>
+    <div class="p-6 max-w-2xl">
         <a href="dashboard.php" class="inline-flex items-center text-slate-600 hover:text-teal-600 text-sm mb-6">
             <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Zpět
         </a>
@@ -140,8 +129,8 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Google Calendar</label>
                     <?php if ($hasCalendarList): ?>
-                    <select name="google_calendar_id" class="w-full px-4 py-2 border border-slate-300 rounded-lg">
-                        <option value="">Výchozí (config)</option>
+                    <select name="google_calendar_id" id="gc-select" class="w-full px-4 py-2 border border-slate-300 rounded-lg mb-2">
+                        <option value="">Výchozí (config) – nefunguje pro sdílený kalendář</option>
                         <?php foreach ($calendarList as $cal): ?>
                         <option value="<?= htmlspecialchars($cal['id']) ?>" <?= ($settings['google_calendar_id'] ?? '') === $cal['id'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($cal['summary']) ?><?= !empty($cal['primary']) ? ' (primární)' : '' ?>
@@ -149,12 +138,14 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                         <?php endforeach; ?>
                     </select>
                     <?php else: ?>
-                    <input type="text" name="google_calendar_id" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="primary nebo e-mail kalendáře" class="w-full px-4 py-2 border border-slate-300 rounded-lg">
+                    <input type="text" name="google_calendar_id" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="primary nebo e-mail kalendáře" class="w-full px-4 py-2 border border-slate-300 rounded-lg mb-2">
                     <?php if (isset($calendarList['error'])): ?>
-                    <p class="text-amber-600 text-xs mt-1">Seznam nelze načíst: <?= htmlspecialchars($calendarList['error']) ?>. Zadejte ID ručně nebo spusťte <code class="bg-amber-100 px-1 rounded">composer install</code> v kořeni projektu.</p>
+                    <p class="text-amber-600 text-xs mt-1 mb-2">Seznam nelze načíst: <?= htmlspecialchars($calendarList['error']) ?>. Zadejte ID ručně.</p>
                     <?php endif; ?>
                     <?php endif; ?>
-                    <p class="text-slate-500 text-xs mt-1">Vyberte kalendář pro blokování slotů. Kolega sdílí kalendář s e-mailem Service Accountu.</p>
+                    <p class="text-slate-600 text-sm font-medium mb-1">Nebo zadejte Calendar ID ručně (doporučeno):</p>
+                    <input type="text" name="google_calendar_id_manual" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="např. vase@gmail.com nebo xxx@group.calendar.google.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm">
+                    <p class="text-slate-500 text-xs mt-1">E-mail vašeho Google účtu = váš primární kalendář. Nebo: Google Calendar → Nastavení → Váš kalendář → Integrace kalendáře → Zkopírujte ID.</p>
                 </div>
                 <?php endif; ?>
                 <div>
@@ -251,7 +242,7 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1 mb-3">
                     <li>V Google Calendar (calendar.google.com) otevřete <strong>nastavení kalendáře</strong> (ikona ozubeného kolečka u vašeho kalendáře).</li>
                     <li>V sekci „Sdílet s konkrétními lidmi“ přidejte e-mail: <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars($serviceAccountEmail ?? 'client_email z google-calendar.json') ?></code> s oprávněním „Zobrazit všechny podrobnosti události“.</li>
-                    <li>Výše v Nastavení dostupnosti vyberte v dropdownu <strong>konkrétní kalendář</strong> (ne „Výchozí“) – nebo zkopírujte Calendar ID z Google Calendar (Nastavení → Váš kalendář → Integrace kalendáře).</li>
+                    <li>V poli „Zadejte Calendar ID ručně“ zadejte <strong>e-mail vašeho Google účtu</strong> (např. jana@gmail.com) – to je ID vašeho primárního kalendáře. Nebo z Google Calendar: Nastavení → Váš kalendář → Integrace kalendáře → zkopírujte ID.</li>
                     <li>Uložte nastavení a obnovte stránku.</li>
                 </ol>
                 <?php else: ?>
@@ -299,14 +290,16 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
             <p class="text-sm font-medium text-slate-800 mb-2">Časy pro <span id="block-selected-date"></span>:</p>
             <div id="block-slots-list" class="flex flex-wrap gap-2"></div>
         </div>
-    </main>
-
-    <footer class="max-w-2xl mx-auto px-6 py-4 text-center text-slate-400 text-xs">
-        v<?= htmlspecialchars($v) ?>
-    </footer>
+    </div>
+<?php include __DIR__ . '/includes/layout-end.php'; ?>
 
     <script>
         lucide.createIcons();
+        const gcSelect = document.getElementById('gc-select');
+        const gcManual = document.querySelector('[name="google_calendar_id_manual"]');
+        if (gcSelect && gcManual) {
+            gcSelect.addEventListener('change', () => { gcManual.value = gcSelect.value; });
+        }
 
         document.getElementById('slot-range-add').addEventListener('click', () => {
             const tpl = document.querySelector('.slot-range-row');
