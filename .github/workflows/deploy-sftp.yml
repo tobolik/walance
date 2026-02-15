@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Composer install
+      - name: Composer install (jen Calendar API)
         run: composer install --no-dev --optimize-autoloader
 
       - name: Připravit soubory k nasazení
@@ -40,7 +40,7 @@ jobs:
           sftp_only: true
           sftpArgs: '-o ConnectTimeout=10'
 
-      - name: Composer install na serveru
+      - name: Composer install na serveru (fallback pokud vendor chybí)
         if: success()
         continue-on-error: true
         uses: appleboy/ssh-action@v1.0.3

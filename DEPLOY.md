@@ -32,8 +32,7 @@ V **Settings → Secrets and variables → Actions**:
 ## Co se nasazuje
 
 - Vše kromě: `node_modules`, `.git`, `data/*.db`, `api/credentials/*.json`, `api/config.local.php`
-- `vendor/` se nasazuje (composer install běží v CI před deployem)
-- Po nasazení se na serveru spustí `composer install` přes SSH (pokud server podporuje SSH se stejnými přihlašovacími údaji)
+- `vendor/` se nasazuje – obsahuje jen Google Calendar API (ostatní služby jsou ořezány v composer.json)
 - `config.local.php` zůstává na serveru z ručního nastavení (není v gitu)
 
 ## Po nasazení na serveru

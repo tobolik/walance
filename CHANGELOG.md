@@ -5,6 +5,17 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.20] – 14.02.2026 16:45
+
+### Změněno
+- **composer.json:** ořezání google/apiclient – ponechán jen Calendar (odstraněno 100+ dalších API služeb). Vendor je nyní malý, deploy rychlý
+- **Deploy:** vendor se opět nahrává (je malý díky ořezání)
+
+## [1.0.19] – 14.02.2026 16:35
+
+### Změněno
+- **Deploy:** `vendor/` se nenasazuje přes SFTP – google/apiclient má tisíce souborů, upload trval 47+ minut. Nyní se spustí `composer install` pouze na serveru přes SSH (rychlé nasazení)
+
 ## [1.0.18] – 14.02.2026 16:20
 
 ### Přidáno
