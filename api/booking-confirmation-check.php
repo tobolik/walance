@@ -1,0 +1,50 @@
+<?php
+/**
+ * Kontrola, zda byl pro rezervaci již odeslán potvrzující e-mail (admin)
+ * GET ?id=123
+ */
+session_start();
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+
+if (!isset($_SESSION['walance_admin'])) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Unauthorized']);
+    exit;
+}
+
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/db.php';
+
+$id = (int)($_GET['id'] ?? 0);
+if (!$id) {
+    echo json_encode(['already_sent' => false]);
+    exit;
+}
+
+try {
+    $db = getDb();
+    // Načíst bookings_id (entity) rezervace
+    $stmt = $db->prepare("SELECT bookings_id, contacts_id FROM bookings WHERE id = ? AND valid_to IS NULL");
+    $stmt->execute([$id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) {
+        echo json_encode(['already_sent' => false]);
+        exit;
+    }
+    $bookingsId = $row['bookings_id'] ?? $id;
+    $contactsId = $row['contacts_id'];
+
+    // Hledat aktivitu typu booking_confirmation pro tuto rezervaci (bookings_id = entity id)
+    $stmt = $db->prepare("
+        SELECT 1 FROM activities
+        WHERE type = 'booking_confirmation' AND bookings_id = ? AND valid_to IS NULL
+        LIMIT 1
+    ");
+    $stmt->execute([$bookingsId]);
+    $found = $stmt->fetch();
+
+    echo json_encode(['already_sent' => (bool)$found]);
+} catch (Exception $e) {
+    echo json_encode(['already_sent' => false]);
+}

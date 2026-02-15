@@ -305,6 +305,34 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
         function updateBookingFromCalendar(id, action) {
             const btn = event.target;
             btn.disabled = true;
+
+            if (action === 'confirm') {
+                fetch('../api/booking-confirmation-check.php?id=' + id, { cache: 'no-store', credentials: 'same-origin' })
+                    .then(r => r.json())
+                    .then(check => {
+                        let sendEmail = 1;
+                        if (check.already_sent) {
+                            if (!confirm('E-mail s potvrzením termínu byl již dříve odeslán. Chcete odeslat znovu?')) {
+                                sendEmail = 0;
+                            }
+                        }
+                        const fd = new FormData();
+                        fd.append('id', id);
+                        fd.append('send_email', sendEmail);
+                        return fetch('../api/booking-confirm.php', { method: 'POST', body: fd, cache: 'no-store', credentials: 'same-origin' });
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            closeBookingModal();
+                            loadCalendarMonth();
+                        }
+                    })
+                    .catch(() => {})
+                    .finally(() => { btn.disabled = false; });
+                return;
+            }
+
             fetch('bookings.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

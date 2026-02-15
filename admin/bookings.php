@@ -12,12 +12,12 @@ require_once __DIR__ . '/../api/availability.php';
 $db = getDb();
 $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 
-// Akce: potvrdit / zamítnout (softUpdate)
+// Akce: potvrdit / zamítnout (form POST – confirm přes booking-confirm.php)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['action'];
-    if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
-        $status = $action === 'restore' ? 'pending' : ($action === 'confirm' ? 'confirmed' : 'cancelled');
+    if ($id && in_array($action, ['cancel', 'restore'])) {
+        $status = $action === 'restore' ? 'pending' : 'cancelled';
         $row = null;
         if ($action === 'cancel') {
             $stmt = $db->prepare("SELECT booking_date, booking_time FROM bookings WHERE id = ?");
@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     exit;
 }
 
-// AJAX pro rychlé akce
+// AJAX pro rychlé akce (cancel, restore – confirm jde přes booking-confirm.php)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
     header('Content-Type: application/json');
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['ajax_action'];
-    if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
-        $status = $action === 'restore' ? 'pending' : ($action === 'confirm' ? 'confirmed' : 'cancelled');
+    if ($id && in_array($action, ['cancel', 'restore'])) {
+        $status = $action === 'restore' ? 'pending' : 'cancelled';
         $row = null;
         if ($action === 'cancel') {
             $stmt = $db->prepare("SELECT booking_date, booking_time FROM bookings WHERE id = ?");
@@ -269,6 +269,31 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
             if (!row) return;
             const btn = event.target;
             btn.disabled = true;
+
+            if (action === 'confirm') {
+                fetch('../api/booking-confirmation-check.php?id=' + id, { cache: 'no-store', credentials: 'same-origin' })
+                    .then(r => r.json())
+                    .then(check => {
+                        let sendEmail = 1;
+                        if (check.already_sent) {
+                            if (!confirm('E-mail s potvrzením termínu byl již dříve odeslán. Chcete odeslat znovu?')) {
+                                sendEmail = 0;
+                            }
+                        }
+                        const fd = new FormData();
+                        fd.append('id', id);
+                        fd.append('send_email', sendEmail);
+                        return fetch('../api/booking-confirm.php', { method: 'POST', body: fd, cache: 'no-store', credentials: 'same-origin' });
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) location.reload();
+                        else btn.disabled = false;
+                    })
+                    .catch(() => { btn.disabled = false; });
+                return;
+            }
+
             fetch('bookings.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -277,9 +302,8 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
             })
             .then(r => r.json())
             .then(data => {
-                if (data.success) {
-                    location.reload();
-                }
+                if (data.success) location.reload();
+                else btn.disabled = false;
             })
             .catch(() => { btn.disabled = false; });
         }

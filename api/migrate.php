@@ -109,13 +109,14 @@ try {
             $messages[] = "Uživatelé Honza, Jana vytvořeni.";
         }
 
-        // activities – aktivity u kontaktů (telefonáty, e-maily, schůzky, poznámky)
+        // activities – aktivity u kontaktů (telefonáty, e-maily, schůzky, poznámky, potvrzení termínu)
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS activities (
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 activities_id INT UNSIGNED NULL,
                 contacts_id INT UNSIGNED NULL,
-                type VARCHAR(20) NOT NULL,
+                bookings_id INT UNSIGNED NULL,
+                type VARCHAR(30) NOT NULL,
                 subject VARCHAR(255),
                 body TEXT,
                 direction VARCHAR(10),
@@ -130,6 +131,13 @@ try {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
         $messages[] = "Tabulka activities OK.";
+
+        // Migrace: přidat bookings_id do activities (propojení potvrzení termínu s rezervací)
+        $aBookingsCol = $pdo->query("SHOW COLUMNS FROM activities LIKE 'bookings_id'")->fetch();
+        if (!$aBookingsCol) {
+            $pdo->exec("ALTER TABLE activities ADD COLUMN bookings_id INT UNSIGNED NULL AFTER contacts_id, ADD INDEX idx_bookings_id (bookings_id)");
+            $messages[] = "Migrace activities: přidán sloupec bookings_id.";
+        }
 
         $bCols = $pdo->query("SHOW COLUMNS FROM bookings LIKE 'valid_from'")->fetch();
         if (!$bCols) {
@@ -226,6 +234,7 @@ try {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 activities_id INTEGER,
                 contacts_id INTEGER,
+                bookings_id INTEGER,
                 type TEXT NOT NULL,
                 subject TEXT,
                 body TEXT,
@@ -238,6 +247,17 @@ try {
         ");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_activities_contacts ON activities(contacts_id, valid_to)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_activities_v ON activities(valid_to)");
+
+        $aBookingsCol = $pdo->query("PRAGMA table_info(activities)")->fetchAll(PDO::FETCH_ASSOC);
+        $hasBookingsId = false;
+        foreach ($aBookingsCol as $c) {
+            if ($c['name'] === 'bookings_id') { $hasBookingsId = true; break; }
+        }
+        if (!$hasBookingsId) {
+            $pdo->exec("ALTER TABLE activities ADD COLUMN bookings_id INTEGER NULL");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_activities_bookings ON activities(bookings_id)");
+            $messages[] = "Migrace activities: přidán sloupec bookings_id.";
+        }
 
         $messages[] = "SQLite tabulky OK.";
     }

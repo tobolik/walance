@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-$typeLabels = ['call' => 'Telefonát', 'email' => 'E-mail', 'meeting' => 'Schůzka', 'note' => 'Poznámka'];
+$typeLabels = ['call' => 'Telefonát', 'email' => 'E-mail', 'meeting' => 'Schůzka', 'note' => 'Poznámka', 'booking_confirmation' => 'Potvrzení termínu'];
 $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
 ?>
 <!DOCTYPE html>
@@ -183,7 +183,7 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
             <?php else: ?>
             <div class="space-y-4">
                 <?php foreach ($activities as $a): ?>
-                <div class="flex gap-4 p-4 border-l-4 <?= $a['type'] === 'call' ? 'border-blue-400' : ($a['type'] === 'email' ? 'border-purple-400' : ($a['type'] === 'meeting' ? 'border-green-400' : 'border-slate-300')) ?> bg-slate-50/50 rounded-r-lg">
+                <div class="flex gap-4 p-4 border-l-4 <?= $a['type'] === 'call' ? 'border-blue-400' : ($a['type'] === 'email' ? 'border-purple-400' : ($a['type'] === 'meeting' ? 'border-green-400' : ($a['type'] === 'booking_confirmation' ? 'border-teal-400' : 'border-slate-300')) ?> bg-slate-50/50 rounded-r-lg">
                     <div class="flex-shrink-0">
                         <?php if ($a['type'] === 'call'): ?>
                         <i data-lucide="phone" class="w-5 h-5 text-blue-600"></i>
@@ -191,6 +191,8 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
                         <i data-lucide="mail" class="w-5 h-5 text-purple-600"></i>
                         <?php elseif ($a['type'] === 'meeting'): ?>
                         <i data-lucide="users" class="w-5 h-5 text-green-600"></i>
+                        <?php elseif ($a['type'] === 'booking_confirmation'): ?>
+                        <i data-lucide="calendar-check" class="w-5 h-5 text-teal-600"></i>
                         <?php else: ?>
                         <i data-lucide="file-text" class="w-5 h-5 text-slate-600"></i>
                         <?php endif; ?>

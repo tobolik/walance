@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS activities (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     activities_id INT UNSIGNED NULL,
     contacts_id INT UNSIGNED NULL,
+    bookings_id INT UNSIGNED NULL,
     type VARCHAR(20) NOT NULL,
     subject VARCHAR(255),
     body TEXT,

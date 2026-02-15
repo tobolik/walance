@@ -5,6 +5,25 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.8] – 14.02.2026
+
+### Přidáno
+- **Potvrzení termínu:** při kliknutí na Potvrdit (Kalendář i Správa rezervací) se odešle potvrzující e-mail klientovi včetně BCC konzultantovi
+- **Aktivity:** odeslání potvrzení se zapisuje jako aktivita typu „Potvrzení termínu“ u kontaktu
+- **api/booking-confirm.php, booking-confirmation-check.php:** nové endpointy pro potvrzení s e-mailem
+- **activities:** sloupec `bookings_id` pro propojení aktivity s rezervací
+
+### Změněno
+- **Potvrzení znovu:** pokud byl slot zamítnut a znovu potvrzen, systém se zeptá, zda odeslat e-mail znovu (pokud již byl dříve odeslán)
+
+## [1.1.7] – 14.02.2026
+
+### Přidáno
+- **Admin Dostupnost:** tooltip u slotů – zobrazení, čím je slot obsazen (Rezervace: jméno / Kalendář: událost z Google Calendar)
+- **Správa rezervací:** úprava data a času rezervace – tlačítko Upravit, modal s výběrem data a času
+- **api/booking-update.php:** endpoint pro úpravu termínu rezervace
+- **Google Calendar:** metoda `updateEvent()` pro aktualizaci události při změně termínu
+
 ## [1.1.6] – 14.02.2026
 
 ### Přidáno
