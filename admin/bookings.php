@@ -5,17 +5,19 @@ if (!isset($_SESSION['walance_admin'])) {
     exit;
 }
 require_once __DIR__ . '/../api/db.php';
+require_once __DIR__ . '/../api/crud.php';
 
 $db = getDb();
 
-// Akce: potvrdit / zamítnout
+// Akce: potvrdit / zamítnout (softUpdate)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['action'];
     if ($id && in_array($action, ['confirm', 'cancel'])) {
         $status = $action === 'confirm' ? 'confirmed' : 'cancelled';
-        $stmt = $db->prepare("UPDATE bookings SET status = ? WHERE id = ?");
-        $stmt->execute([$status, $id]);
+        try {
+            softUpdate('bookings', $id, ['status' => $status]);
+        } catch (Exception $e) { /* log */ }
     }
     header('Location: bookings.php' . (isset($_GET['status']) ? '?status=' . urlencode($_GET['status']) : ''));
     exit;
@@ -28,9 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
     $action = $_POST['ajax_action'];
     if ($id && in_array($action, ['confirm', 'cancel'])) {
         $status = $action === 'confirm' ? 'confirmed' : 'cancelled';
-        $stmt = $db->prepare("UPDATE bookings SET status = ? WHERE id = ?");
-        $stmt->execute([$status, $id]);
-        echo json_encode(['success' => true, 'status' => $status]);
+        try {
+            softUpdate('bookings', $id, ['status' => $status]);
+            echo json_encode(['success' => true, 'status' => $status]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false]);
+        }
     } else {
         echo json_encode(['success' => false]);
     }
@@ -39,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
 
 $statusFilter = $_GET['status'] ?? '';
 $sql = "SELECT b.*, c.notes as contact_notes FROM bookings b 
-        LEFT JOIN contacts c ON b.contact_id = c.id 
-        WHERE 1=1";
+        LEFT JOIN contacts c ON b.contacts_id = c.contacts_id AND c.valid_to IS NULL 
+        WHERE b.valid_to IS NULL";
 $params = [];
 if ($statusFilter && in_array($statusFilter, ['pending', 'confirmed', 'cancelled'])) {
     $sql .= " AND b.status = ?";

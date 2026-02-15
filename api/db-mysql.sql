@@ -1,25 +1,31 @@
--- WALANCE - migrační SQL pro MySQL (jen tabulky)
+-- WALANCE - migrační SQL pro MySQL (soft-update schema)
 -- Spuštění: mysql -u UZIVATEL -p walancecz < api/db-mysql.sql
--- Nebo: php api/migrate.php (použije config.php)
+-- Nebo: php api/migrate.php
 -- Předpoklad: databáze walancecz již existuje
 
 USE walancecz;
 
 CREATE TABLE IF NOT EXISTS contacts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    contacts_id INT UNSIGNED NULL,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone VARCHAR(50),
     message TEXT,
     source VARCHAR(50) DEFAULT 'contact',
     notes TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    valid_to DATETIME NULL DEFAULT NULL,
+    valid_user_from INT UNSIGNED NULL,
+    valid_user_to INT UNSIGNED NULL,
+    INDEX idx_contacts_id (contacts_id, valid_to),
+    INDEX idx_v (valid_to)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS bookings (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    contact_id INT,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    bookings_id INT UNSIGNED NULL,
+    contacts_id INT UNSIGNED NULL,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone VARCHAR(50),
@@ -28,8 +34,13 @@ CREATE TABLE IF NOT EXISTS bookings (
     message TEXT,
     status VARCHAR(20) DEFAULT 'pending',
     google_event_id VARCHAR(255),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE SET NULL,
+    valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    valid_to DATETIME NULL DEFAULT NULL,
+    valid_user_from INT UNSIGNED NULL,
+    valid_user_to INT UNSIGNED NULL,
+    INDEX idx_bookings_id (bookings_id, valid_to),
+    INDEX idx_contacts_id (contacts_id, valid_to),
+    INDEX idx_v (valid_to),
     INDEX idx_status (status),
     INDEX idx_date (booking_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

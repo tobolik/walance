@@ -5,6 +5,7 @@ if (!isset($_SESSION['walance_admin'])) {
     exit;
 }
 require_once __DIR__ . '/../api/db.php';
+require_once __DIR__ . '/../api/crud.php';
 
 $db = getDb();
 
@@ -13,9 +14,9 @@ $source = $_GET['source'] ?? '';
 $search = trim($_GET['search'] ?? '');
 
 $sql = "SELECT c.*, 
-    (SELECT COUNT(*) FROM bookings b WHERE b.contact_id = c.id) as booking_count,
-    (SELECT MAX(booking_date) FROM bookings b WHERE b.contact_id = c.id) as last_booking
-    FROM contacts c WHERE 1=1";
+    (SELECT COUNT(*) FROM bookings b WHERE b.contacts_id = COALESCE(c.contacts_id, c.id) AND b.valid_to IS NULL) as booking_count,
+    (SELECT MAX(booking_date) FROM bookings b WHERE b.contacts_id = COALESCE(c.contacts_id, c.id) AND b.valid_to IS NULL) as last_booking
+    FROM contacts c WHERE c.valid_to IS NULL";
 $params = [];
 
 if ($source) {
@@ -33,25 +34,29 @@ $stmt = $db->prepare($sql);
 $stmt->execute($params);
 $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Načíst rezervace pro kontakty
+// Načíst rezervace pro kontakty (soft-update: contacts_id, valid_to)
 $bookingsByContact = [];
 foreach ($contacts as $c) {
     if ($c['source'] === 'booking') {
-        $b = $db->prepare("SELECT booking_date, booking_time FROM bookings WHERE contact_id = ? ORDER BY booking_date DESC");
-        $b->execute([$c['id']]);
+        $entityId = $c['contacts_id'] ?? $c['id'];
+        $b = $db->prepare("SELECT booking_date, booking_time FROM bookings WHERE contacts_id = ? AND valid_to IS NULL ORDER BY booking_date DESC");
+        $b->execute([$entityId]);
         $bookingsByContact[$c['id']] = $b->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
-// Update notes (AJAX)
+// Update notes (AJAX) – softUpdate
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json');
     if ($_POST['action'] === 'update_notes') {
         $id = (int)($_POST['id'] ?? 0);
         $notes = trim($_POST['notes'] ?? '');
-        $stmt = $db->prepare("UPDATE contacts SET notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
-        $stmt->execute([$notes, $id]);
-        echo json_encode(['success' => true]);
+        try {
+            softUpdate('contacts', $id, ['notes' => $notes]);
+            echo json_encode(['success' => true]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false]);
+        }
     }
     exit;
 }
@@ -114,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                         <?php foreach ($contacts as $c): ?>
                         <tr class="border-b border-slate-100 hover:bg-slate-50/50">
                             <td class="py-4 px-6 text-sm text-slate-600">
-                                <?= date('d.m.Y H:i', strtotime($c['created_at'])) ?>
+                                <?= date('d.m.Y H:i', strtotime($c['valid_from'] ?? $c['created_at'] ?? 'now')) ?>
                             </td>
                             <td class="py-4 px-6 font-medium text-slate-800"><?= htmlspecialchars($c['name']) ?></td>
                             <td class="py-4 px-6">

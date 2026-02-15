@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/crud.php';
 
 $input = json_decode(file_get_contents('php://input'), true) ?? [];
 $name = trim($input['name'] ?? '');
@@ -39,11 +39,14 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// Uložení do CRM
+// Uložení do CRM (soft-update)
 try {
-    $db = getDb();
-    $stmt = $db->prepare("INSERT INTO contacts (name, email, message, source) VALUES (?, ?, ?, 'contact')");
-    $stmt->execute([$name, $email, $message]);
+    softInsert('contacts', [
+        'name' => $name,
+        'email' => $email,
+        'message' => $message,
+        'source' => 'contact',
+    ]);
 } catch (Exception $e) {
     // Log, ale nepřerušuj
 }

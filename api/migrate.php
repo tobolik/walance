@@ -1,55 +1,69 @@
 <?php
 /**
- * Migrační skript – vytvoření tabulek v databázi
+ * Migrační skript – soft-update tabulky (cursor-rules)
  * CLI: php api/migrate.php
- * HTTP: https://walance.cz/api/migrate.php?token=VAŠE_HODNOTA (vyžaduje MIGRATE_TOKEN v config)
+ * HTTP: https://walance.cz/api/migrate.php?token=VAŠE_HODNOTA
  */
 require_once __DIR__ . '/config.php';
 
 header('Content-Type: text/plain; charset=utf-8');
 
-// Při volání přes HTTP vyžadovat token (pokud je v config nastaven)
 if (php_sapi_name() !== 'cli' && defined('MIGRATE_TOKEN') && MIGRATE_TOKEN !== '') {
     $token = $_GET['token'] ?? $_POST['token'] ?? '';
     if (!hash_equals(MIGRATE_TOKEN, $token)) {
         http_response_code(403);
-        echo "Přístup odepřen. Vyžadován platný token.\n";
+        echo "Přístup odepřen.\n";
         exit(1);
     }
 }
 
-$errors = [];
 $messages = [];
 
 try {
     if (DB_TYPE === 'mysql') {
-        $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4';
-        $pdo = new PDO($dsn, DB_USER, DB_PASS);
+        $pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4', DB_USER, DB_PASS);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $messages[] = "Připojeno k MySQL databázi '" . DB_NAME . "'.";
-
-        // Tabulka contacts
+        // contacts – soft-update schema
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS contacts (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                contacts_id INT UNSIGNED NULL,
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 phone VARCHAR(50),
                 message TEXT,
                 source VARCHAR(50) DEFAULT 'contact',
                 notes TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME NULL DEFAULT NULL,
+                valid_user_from INT UNSIGNED NULL,
+                valid_user_to INT UNSIGNED NULL,
+                INDEX idx_contacts_id (contacts_id, valid_to),
+                INDEX idx_v (valid_to)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
         $messages[] = "Tabulka contacts OK.";
 
-        // Tabulka bookings (FK na contacts – vytváříme po ní)
+        // Migrace: přidat soft-update sloupce pokud chybí (starší instalace)
+        $cols = $pdo->query("SHOW COLUMNS FROM contacts LIKE 'valid_from'")->fetch();
+        if (!$cols) {
+            $pdo->exec("ALTER TABLE contacts ADD COLUMN contacts_id INT UNSIGNED NULL AFTER id,
+                ADD COLUMN valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                ADD COLUMN valid_to DATETIME NULL,
+                ADD COLUMN valid_user_from INT UNSIGNED NULL,
+                ADD COLUMN valid_user_to INT UNSIGNED NULL");
+            $pdo->exec("UPDATE contacts SET contacts_id = id, valid_from = COALESCE(created_at, CURRENT_TIMESTAMP), valid_to = NULL WHERE valid_to IS NULL OR valid_to = 0");
+            $pdo->exec("ALTER TABLE contacts ADD INDEX idx_contacts_id (contacts_id, valid_to), ADD INDEX idx_v (valid_to)");
+            $messages[] = "Migrace contacts na soft-update OK.";
+        }
+
+        // bookings – soft-update schema
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS bookings (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                contact_id INT NULL,
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                bookings_id INT UNSIGNED NULL,
+                contacts_id INT UNSIGNED NULL,
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 phone VARCHAR(50),
@@ -58,46 +72,62 @@ try {
                 message TEXT,
                 status VARCHAR(20) DEFAULT 'pending',
                 google_event_id VARCHAR(255),
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME NULL DEFAULT NULL,
+                valid_user_from INT UNSIGNED NULL,
+                valid_user_to INT UNSIGNED NULL,
+                INDEX idx_bookings_id (bookings_id, valid_to),
+                INDEX idx_contacts_id (contacts_id, valid_to),
+                INDEX idx_v (valid_to),
                 INDEX idx_status (status),
-                INDEX idx_date (booking_date),
-                INDEX idx_contact (contact_id),
-                CONSTRAINT fk_bookings_contact FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE SET NULL
+                INDEX idx_date (booking_date)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
         $messages[] = "Tabulka bookings OK.";
 
-    } else {
-        // SQLite
-        $dir = dirname(DB_PATH);
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-            $messages[] = "Složka data/ vytvořena.";
+        $bCols = $pdo->query("SHOW COLUMNS FROM bookings LIKE 'valid_from'")->fetch();
+        if (!$bCols) {
+            $pdo->exec("ALTER TABLE bookings ADD COLUMN bookings_id INT UNSIGNED NULL AFTER id,
+                ADD COLUMN contacts_id INT UNSIGNED NULL AFTER bookings_id,
+                ADD COLUMN valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                ADD COLUMN valid_to DATETIME NULL,
+                ADD COLUMN valid_user_from INT UNSIGNED NULL,
+                ADD COLUMN valid_user_to INT UNSIGNED NULL");
+            $pdo->exec("UPDATE bookings b LEFT JOIN contacts c ON b.contact_id = c.id SET b.contacts_id = COALESCE(c.contacts_id, c.id), b.bookings_id = b.id, b.valid_from = COALESCE(b.created_at, CURRENT_TIMESTAMP), b.valid_to = NULL");
+            $pdo->exec("ALTER TABLE bookings ADD INDEX idx_bookings_id (bookings_id, valid_to), ADD INDEX idx_contacts_id (contacts_id, valid_to), ADD INDEX idx_v (valid_to)");
+            $messages[] = "Migrace bookings na soft-update OK.";
         }
+
+    } else {
+        $dir = dirname(DB_PATH);
+        if (!is_dir($dir)) mkdir($dir, 0755, true);
         $pdo = new PDO('sqlite:' . DB_PATH);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $messages[] = "SQLite databáze '" . DB_PATH . "' připravena.";
 
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS contacts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                contacts_id INTEGER,
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone TEXT,
                 message TEXT,
                 source TEXT DEFAULT 'contact',
                 notes TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME,
+                valid_user_from INTEGER,
+                valid_user_to INTEGER
             )
         ");
-        $messages[] = "Tabulka contacts OK.";
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_contacts_valid ON contacts(contacts_id, valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_contacts_v ON contacts(valid_to)");
 
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS bookings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                contact_id INTEGER,
+                bookings_id INTEGER,
+                contacts_id INTEGER,
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone TEXT,
@@ -106,22 +136,22 @@ try {
                 message TEXT,
                 status TEXT DEFAULT 'pending',
                 google_event_id TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (contact_id) REFERENCES contacts(id)
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME,
+                valid_user_from INTEGER,
+                valid_user_to INTEGER
             )
         ");
-        $messages[] = "Tabulka bookings OK.";
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bookings_valid ON bookings(bookings_id, valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bookings_v ON bookings(valid_to)");
+
+        $messages[] = "SQLite tabulky OK.";
     }
 
-    echo "MIGRACE ÚSPĚŠNÁ\n";
-    echo str_repeat('-', 40) . "\n";
-    foreach ($messages as $m) {
-        echo "✓ $m\n";
-    }
+    echo "MIGRACE ÚSPĚŠNÁ\n" . str_repeat('-', 40) . "\n";
+    foreach ($messages as $m) echo "✓ $m\n";
 
 } catch (PDOException $e) {
-    echo "CHYBA MIGRACE\n";
-    echo str_repeat('-', 40) . "\n";
-    echo $e->getMessage() . "\n";
+    echo "CHYBA: " . $e->getMessage() . "\n";
     exit(1);
 }

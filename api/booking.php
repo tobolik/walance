@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/crud.php';
 
 $input = json_decode(file_get_contents('php://input'), true) ?? [];
 $name = trim($input['name'] ?? '');
@@ -60,16 +60,27 @@ if (GOOGLE_CALENDAR_ENABLED && file_exists(__DIR__ . '/GoogleCalendar.php')) {
 }
 
 try {
-    $db = getDb();
-    
-    // Kontakt
-    $stmt = $db->prepare("INSERT INTO contacts (name, email, phone, message, source) VALUES (?, ?, ?, ?, 'booking')");
-    $stmt->execute([$name, $email, $phone, $message]);
-    $contactId = $db->lastInsertId();
+    // Kontakt (softInsert)
+    $contactId = softInsert('contacts', [
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'message' => $message,
+        'source' => 'booking',
+    ]);
 
-    // Rezervace
-    $stmt = $db->prepare("INSERT INTO bookings (contact_id, name, email, phone, booking_date, booking_time, message, status, google_event_id) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)");
-    $stmt->execute([$contactId, $name, $email, $phone, $date, $time, $message, $googleEventId]);
+    // Rezervace (softInsert) – contacts_id = entity_id kontaktu
+    softInsert('bookings', [
+        'contacts_id' => $contactId,
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'booking_date' => $date,
+        'booking_time' => $time,
+        'message' => $message,
+        'status' => 'pending',
+        'google_event_id' => $googleEventId,
+    ]);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Nepodařilo se uložit rezervaci.']);
