@@ -118,7 +118,7 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
                     <?php else: ?>
                     <input type="text" name="google_calendar_id" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="primary nebo e-mail kalendáře" class="w-full px-4 py-2 border border-slate-300 rounded-lg">
                     <?php if (isset($calendarList['error'])): ?>
-                    <p class="text-amber-600 text-xs mt-1">Seznam nelze načíst: <?= htmlspecialchars($calendarList['error']) ?>. Zadejte ID ručně.</p>
+                    <p class="text-amber-600 text-xs mt-1">Seznam nelze načíst: <?= htmlspecialchars($calendarList['error']) ?>. Zadejte ID ručně nebo spusťte <code class="bg-amber-100 px-1 rounded">composer install</code> v kořeni projektu.</p>
                     <?php endif; ?>
                     <?php endif; ?>
                     <p class="text-slate-500 text-xs mt-1">Vyberte kalendář pro blokování slotů. Kolega sdílí kalendář s e-mailem Service Accountu.</p>

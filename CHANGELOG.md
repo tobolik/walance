@@ -5,6 +5,17 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.18] – 14.02.2026 16:20
+
+### Přidáno
+- **Deploy:** po nasazení se automaticky spustí `composer install` na serveru přes SSH (Google Calendar API)
+
+## [1.0.17] – 14.02.2026 16:15
+
+### Změněno
+- **Google Calendar:** upřesněná chybová hláška – místo „composer require“ nyní „composer install“ (balíček je již v composer.json)
+- **Admin Dostupnost:** v nápovědě při chybě přidán návod na spuštění composer install
+
 ## [1.0.16] – 14.02.2026 16:00
 
 ### Změněno

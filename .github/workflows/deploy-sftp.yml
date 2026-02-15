@@ -40,6 +40,19 @@ jobs:
           sftp_only: true
           sftpArgs: '-o ConnectTimeout=10'
 
+      - name: Composer install na serveru
+        if: success()
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          script: |
+            cd ${{ secrets.SFTP_REMOTE_PATH }} && composer install --no-dev --optimize-autoloader --no-interaction
+
       - name: Spustit migraci databáze
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://walance.cz' }}

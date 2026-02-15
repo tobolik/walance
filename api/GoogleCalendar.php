@@ -18,7 +18,7 @@ class GoogleCalendar {
     /** @param string|null $calendarId Přepíše GOOGLE_CALENDAR_ID (např. z admin nastavení) */
     public function __construct(?string $calendarId = null) {
         if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-            throw new Exception('Spusťte: composer require google/apiclient v kořenovém adresáři projektu.');
+            throw new Exception('Spusťte v kořenovém adresáři projektu: composer install');
         }
         require_once __DIR__ . '/../vendor/autoload.php';
 

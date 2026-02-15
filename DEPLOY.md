@@ -33,6 +33,7 @@ V **Settings → Secrets and variables → Actions**:
 
 - Vše kromě: `node_modules`, `.git`, `data/*.db`, `api/credentials/*.json`, `api/config.local.php`
 - `vendor/` se nasazuje (composer install běží v CI před deployem)
+- Po nasazení se na serveru spustí `composer install` přes SSH (pokud server podporuje SSH se stejnými přihlašovacími údaji)
 - `config.local.php` zůstává na serveru z ručního nastavení (není v gitu)
 
 ## Po nasazení na serveru
