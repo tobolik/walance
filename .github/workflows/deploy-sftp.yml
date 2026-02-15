@@ -8,6 +8,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Zkontrolovat secrets
+        run: |
+          if [ -z "${{ secrets.SFTP_REMOTE_PATH }}" ]; then
+            echo "::error::Secret SFTP_REMOTE_PATH chybí. Nastavte: Settings → Secrets and variables → Actions"
+            exit 1
+          fi
       - name: Checkout
         uses: actions/checkout@v4
 
