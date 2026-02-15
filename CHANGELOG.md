@@ -5,7 +5,7 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
-## [1.2.1] – 15.02.2026
+## [1.2.1] – 15.02.2026 22:25
 
 ### Přidáno
 - **Admin desktop:** úzké menu (jen ikony) – tlačítko v sidebaru, preference v localStorage

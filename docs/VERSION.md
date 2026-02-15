@@ -12,6 +12,18 @@ Web (index.php) i admin stránky čtou verzi z version.php automaticky.
 
 `vMAJOR.MINOR.PATCH` – při běžné změně zvyš PATCH.
 
+## CHANGELOG – datum a čas
+
+Při každém povýšení verze přidej záznam do `CHANGELOG.md`:
+
+```markdown
+## [1.0.25] – 15.02.2026 22:30
+```
+
+**Povinně:** datum **a** čas ve formátu `DD.MM.YYYY HH:MM`. Nikdy jen datum.
+
+Čas získáš např. z `git log --format="%ad" --date=format:"%d.%m.%Y %H:%M" -1`.
+
 ## Závěrečná hláška
 
 Po dokončení úkolů uveď: **Aktuální verze: vX.Y.Z** a zda byl projekt pushnut.
