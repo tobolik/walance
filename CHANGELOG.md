@@ -5,6 +5,15 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.2.2] – 14.02.2026 23:15
+
+### Přidáno
+- **Admin Kalendář – modal Rezervace:** zavření klávesou ESC
+- **Admin Kalendář – modal Rezervace:** odkaz „Upravit rezervaci“ → proklik do bookings.php s editací termínu
+
+### Opraveno
+- **Admin Kalendář:** šedé dny (minulé, víkend) – čísla nyní vždy tmavě (text-slate-800), ne bíle
+
 ## [1.2.1] – 15.02.2026 22:25
 
 ### Přidáno

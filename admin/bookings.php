@@ -130,7 +130,7 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                     </thead>
                     <tbody>
                         <?php foreach ($bookings as $b): ?>
-                        <tr class="border-b border-slate-100 hover:bg-slate-50/50 booking-row" data-id="<?= $b['id'] ?>">
+                        <tr class="border-b border-slate-100 hover:bg-slate-50/50 booking-row" data-id="<?= $b['id'] ?>" data-date="<?= htmlspecialchars($b['booking_date']) ?>" data-time="<?= htmlspecialchars($b['booking_time']) ?>" data-name="<?= htmlspecialchars($b['name']) ?>">
                             <td class="py-4 px-6">
                                 <span class="font-medium text-slate-800"><?= date('d.m.Y', strtotime($b['booking_date'])) ?></span>
                                 <span class="text-slate-600"><?= htmlspecialchars($b['booking_time']) ?></span>
@@ -218,6 +218,21 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
 
     <script>
         lucide.createIcons();
+
+        (function() {
+            const params = new URLSearchParams(location.search);
+            const id = params.get('id');
+            if (id) {
+                const row = document.querySelector('.booking-row[data-id="' + id + '"]');
+                if (row) {
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    row.classList.add('bg-teal-50');
+                    setTimeout(() => row.classList.remove('bg-teal-50'), 2000);
+                    const date = row.dataset.date, time = row.dataset.time, name = row.dataset.name;
+                    if (date && time && name) openEditModal(id, date, time, name);
+                }
+            }
+        })();
 
         function openEditModal(id, date, time, name) {
             document.getElementById('edit-booking-id').value = id;

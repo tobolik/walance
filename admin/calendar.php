@@ -160,7 +160,8 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 if (isPast) bg = 'bg-slate-100 opacity-60';
 
                 const clickable = !isWeekend && !isPast ? 'cursor-pointer' : 'cursor-default';
-                const textColor = (percent === 0 || pending > 0 || confirmed > 0 || percent >= 50) ? 'text-white' : 'text-slate-800';
+                let textColor = (percent === 0 || pending > 0 || confirmed > 0 || percent >= 50) ? 'text-white' : 'text-slate-800';
+                if (isPast || isWeekend) textColor = 'text-slate-800';
                 const title = confirmed > 0 ? (pending > 0 ? `${confirmed} potvrzeno, ${pending} čeká` : `${confirmed} potvrzeno`) : (pending > 0 ? `${pending} čeká na potvrzení` : '');
                 const selected = dateStr === calSelectedDate ? ' ring-2 ring-slate-800 ring-offset-2' : '';
                 grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]${selected}" data-date="${dateStr}" title="${title}">${d}</div>`;
@@ -286,12 +287,14 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                         <button type="button" class="cal-restore-btn px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs rounded" data-id="${b.id}">Obnovit</button>
                     </li>`;
                 });
-                html += '</ul>';
+                html += '</ul><p class="mt-2"><a href="bookings.php?status=cancelled" class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium">Upravit rezervace <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></p>';
             } else {
                 html += `<p><strong>Jméno:</strong> ${escapeHtml(booking.name)}</p>
-                    <p><strong>E-mail:</strong> <a href="mailto:${escapeHtml(booking.email)}" class="text-teal-600 hover:underline">${escapeHtml(booking.email)}</a></p>`;
+                    <p><strong>E-mail:</strong> <a href="mailto:${escapeHtml(booking.email)}" class="text-teal-600 hover:underline">${escapeHtml(booking.email)}</a></p>
+                    <p class="mt-2"><a href="bookings.php?id=${booking.id}" class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium">Upravit rezervaci <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></p>`;
             }
             body.innerHTML = html;
+            lucide.createIcons();
             body.querySelectorAll('.cal-restore-btn').forEach(btn => {
                 btn.addEventListener('click', () => updateBookingFromCalendar(parseInt(btn.dataset.id), 'restore'));
             });
@@ -310,9 +313,18 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             btnCancel.onclick = () => updateBookingFromCalendar(booking.id, 'cancel');
             btnRestore.onclick = () => updateBookingFromCalendar(booking.id, 'restore');
             modal.classList.remove('hidden');
+            document.addEventListener('keydown', escHandler);
+        }
+
+        function escHandler(e) {
+            if (e.key === 'Escape') {
+                document.removeEventListener('keydown', escHandler);
+                closeBookingModal();
+            }
         }
 
         function closeBookingModal() {
+            document.removeEventListener('keydown', escHandler);
             document.getElementById('cal-booking-modal').classList.add('hidden');
         }
 
