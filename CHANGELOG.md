@@ -5,19 +5,27 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
-## [1.2.0] – 14.02.2026
+## [1.2.1] – 15.02.2026
+
+### Přidáno
+- **Admin desktop:** úzké menu (jen ikony) – tlačítko v sidebaru, preference v localStorage
+
+### Změněno
+- **CHANGELOG:** doplněny časy změn u verzí 1.1.x a 1.2.0
+
+## [1.2.0] – 15.02.2026 22:21
 
 ### Změněno
 - **Admin responsivita:** sidebar přepracován na výsuvné hamburger menu – na mobilu nezabírá polovinu obrazovky
 
-## [1.1.11] – 14.02.2026
+## [1.1.11] – 15.02.2026 22:18
 
 ### Změněno
 - **Admin Kalendář – sloty:** title vždy zobrazuje stav a jméno (Volné, Zamítnuto: jména, Čeká: jména, Potvrzeno: jména, Obsazeno: událost z GC)
 - **Admin Kalendář:** Blokováno → „Blokováno ručně v administraci Dostupnost“
 - **Admin Kalendář:** sloty obsazené z Google Calendar (bez rezervace v DB) = šedá barva, neklikatelné, title se zdrojem
 
-## [1.1.10] – 14.02.2026
+## [1.1.10] – 15.02.2026 21:34
 
 ### Přidáno
 - **Aktivity:** u potvrzení termínu se ukládá i celý text odeslaného e-mailu
@@ -27,13 +35,13 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 - **Admin Kalendář:** Zamítnuto = šedá barva (místo zelené), odlišení od tyrkysové (Potvrzeno)
 - **Admin Kalendář:** upřesněná legenda – Zamítnuto (volné), popis barev
 
-## [1.1.9] – 14.02.2026
+## [1.1.9] – 15.02.2026 20:39
 
 ### Změněno
 - **E-maily:** odesílatel From/Reply-To z `info@walance.cz` (konstanta MAIL_FROM v config.local.php)
 - **Potvrzení termínu:** oprava feedback tlačítka – robustnější parsování JSON, zobrazení chyby při selhání
 
-## [1.1.8] – 14.02.2026
+## [1.1.8] – 15.02.2026 20:22
 
 ### Přidáno
 - **Potvrzení termínu:** při kliknutí na Potvrdit (Kalendář i Správa rezervací) se odešle potvrzující e-mail klientovi včetně BCC konzultantovi
@@ -44,7 +52,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 ### Změněno
 - **Potvrzení znovu:** pokud byl slot zamítnut a znovu potvrzen, systém se zeptá, zda odeslat e-mail znovu (pokud již byl dříve odeslán)
 
-## [1.1.7] – 14.02.2026
+## [1.1.7] – 15.02.2026 20:09
 
 ### Přidáno
 - **Admin Dostupnost:** tooltip u slotů – zobrazení, čím je slot obsazen (Rezervace: jméno / Kalendář: událost z Google Calendar)
@@ -52,7 +60,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 - **api/booking-update.php:** endpoint pro úpravu termínu rezervace
 - **Google Calendar:** metoda `updateEvent()` pro aktualizaci události při změně termínu
 
-## [1.1.6] – 14.02.2026
+## [1.1.6] – 15.02.2026 19:58
 
 ### Přidáno
 - **Google Calendar Domain-Wide Delegation:** zápis do kalendáře kolegy, pozvánky klientům
@@ -61,19 +69,19 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 ### Opraveno
 - **Google Calendar impersonation:** čtení (getEventsForDisplay, getBusySlots) nyní také používá impersonaci – oprava 404 u kalendáře kolegy
 
-## [1.1.5] – 14.02.2026
+## [1.1.5] – 15.02.2026 19:39
 
 ### Přidáno
 - **Google Calendar:** Service Account e-mail v nápovědě, rozšířené debug info (nastavené kalendáře, používá se, SA)
 - **Google Calendar:** při chybě 404 – červený box místo zeleného „napojeno“, srozumitelnější chyba
 
-## [1.1.4] – 14.02.2026
+## [1.1.4] – 15.02.2026 19:30
 
 ### Změněno
 - **Rezervační formulář:** tlačítko REZERVOVAT se zobrazí až po výběru času (plynulé vyrolování)
 - **Rezervační formulář:** scroll jen když je potřeba – na velkých monitorech se nic neposouvá
 
-## [1.1.3] – 14.02.2026
+## [1.1.3] – 15.02.2026 19:24
 
 ### Přidáno
 - **Web kalendář:** rozlišení dnů s rezervacemi – světlejší zelená = den má už nějaké rezervace
@@ -81,19 +89,19 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 ### Opraveno
 - **Admin Kalendář, Blokování:** scroll do panelu s časy – explicitní scroll v kontejneru main (overflow-auto)
 
-## [1.1.2] – 14.02.2026
+## [1.1.2] – 15.02.2026 19:13
 
 ### Opraveno
 - **Admin Kalendář:** barva „Čeká na potvrzení“ – sjednocení legendy a slotů (bg-amber-400)
 
-## [1.1.1] – 14.02.2026
+## [1.1.1] – 15.02.2026 18:47
 
 ### Přidáno
 - **Google Calendar:** podpora více kalendářů – textarea (jeden ID na řádek), sjednocení obsazených slotů ze všech
 - **Google Calendar:** ručně zadané Calendar ID se při uložení přidá do seznamu (addCalendarToList) – objeví se v dropdownu
 - **Admin Blokování časů:** rozlišení stavů – Čeká (amber), Obsazeno (šedé), Volné bylo zamítnuto (zelené se šedým okrajem, title se seznamem jmen)
 
-## [1.1.0] – 14.02.2026 20:20
+## [1.1.0] – 15.02.2026 17:52
 
 ### Změněno
 - Verze povýšena na 1.1 (kumulace změn z 1.0.25–1.0.30)
