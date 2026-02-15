@@ -1,13 +1,26 @@
 <?php
 /**
  * Admin layout – sidebar vlevo, hlavní obsah vpravo
+ * Na mobilu: hamburger menu (výsuvné)
  * Použití: před include nastavte $adminCurrentPage = 'dashboard'|'bookings'|'calendar'|'availability'|'contact'
  */
 $adminCurrentPage = $adminCurrentPage ?? '';
 $adminV = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 ?>
 <div class="flex min-h-screen">
-    <aside class="fixed left-0 top-0 bottom-0 w-56 bg-white border-r border-slate-200 flex flex-col z-40">
+    <!-- Mobilní header s hamburgerem -->
+    <header class="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-50">
+        <button type="button" id="menu-toggle" class="p-2 -ml-2 rounded-lg text-slate-600 hover:bg-slate-100" aria-label="Otevřít menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <span class="text-lg font-bold text-slate-800">WALANCE<span class="text-teal-600">.</span></span>
+        <div class="w-10"></div>
+    </header>
+
+    <!-- Backdrop pro mobilní menu -->
+    <div id="menu-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden" aria-hidden="true"></div>
+
+    <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-56 bg-white border-r border-slate-200 flex flex-col z-40 -translate-x-full md:translate-x-0 transition-transform duration-200 ease-out pt-14 md:pt-0">
         <div class="p-4 border-b border-slate-100">
             <h1 class="text-lg font-bold text-slate-800">WALANCE<span class="text-teal-600">.</span></h1>
             <p class="text-xs text-slate-500 mt-0.5">CRM administrace</p>
@@ -46,4 +59,4 @@ $adminV = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             </a>
         </div>
     </aside>
-    <main class="flex-1 overflow-auto ml-56">
+    <main class="flex-1 overflow-auto pt-14 md:pt-0 ml-0 md:ml-56">
