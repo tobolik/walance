@@ -620,10 +620,12 @@
         <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeBookingModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">
             <div class="bg-cream rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
-                <button type="button" onclick="closeBookingModal()" class="absolute top-6 right-6 text-ink/60 hover:text-ink p-2 z-10">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-                <div class="p-8 lg:p-12">
+                <div class="sticky top-0 z-20 flex justify-end p-4 bg-cream rounded-t-3xl">
+                    <button type="button" onclick="closeBookingModal()" class="text-ink/60 hover:text-ink p-2 -m-2">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <div class="p-8 lg:p-12 pt-2">
                     <h2 class="font-display text-2xl font-bold text-ink mb-2">Rezervace termínu</h2>
                     <p class="text-ink/70 mb-6 text-sm">Zelená = volné termíny. Čím sytější zelená, tím více volných slotů.</p>
                     
@@ -848,6 +850,11 @@
             document.getElementById('booking-modal').classList.add('hidden');
             document.body.style.overflow = '';
         }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('booking-modal').classList.contains('hidden')) {
+                closeBookingModal();
+            }
+        });
 
         async function loadCalendarMonth() {
             const grid = document.getElementById('cal-grid');
