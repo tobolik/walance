@@ -142,12 +142,175 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
             Google Calendar není nakonfigurován. Pro blokování časů z kalendáře nahrajte <code class="bg-amber-100 px-1 rounded">api/credentials/google-calendar.json</code>.
         </div>
         <?php endif; ?>
+
+        <div class="mt-8 bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-800 mb-2">Blokovat konkrétní časy</h2>
+            <p class="text-slate-600 text-sm mb-6">Klikněte na den v kalendáři, pak na časový slot. Klik na volný slot = blokovat (nedostupný). Klik na blokovaný = odblokovat.</p>
+            <div class="flex items-center justify-between mb-4">
+                <button type="button" id="block-cal-prev" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <h3 id="block-cal-month" class="font-bold text-slate-800">Únor 2026</h3>
+                <button type="button" id="block-cal-next" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-slate-500 mb-2">
+                <span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span class="text-slate-300">So</span><span class="text-slate-300">Ne</span>
+            </div>
+            <div id="block-cal-grid" class="grid grid-cols-7 gap-1 min-h-[200px]"></div>
+            <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-100"></span> Volné (klik = blokovat)</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-200"></span> Blokováno (klik = odblokovat)</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-slate-200"></span> Obsazeno rezervací</span>
+            </div>
+        </div>
+
+        <div id="block-slots-panel" class="hidden mt-6 bg-white rounded-xl shadow-sm p-6">
+            <p class="text-sm font-medium text-slate-800 mb-2">Časy pro <span id="block-selected-date"></span>:</p>
+            <div id="block-slots-list" class="flex flex-wrap gap-2"></div>
+        </div>
     </main>
 
     <footer class="max-w-2xl mx-auto px-6 py-4 text-center text-slate-400 text-xs">
         v<?= htmlspecialchars($v) ?>
     </footer>
 
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+
+        const apiBase = '../api';
+        let blockCalMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+        let blockCalData = { slots_detail: {}, availability: {} };
+
+        async function loadBlockCalendar() {
+            const grid = document.getElementById('block-cal-grid');
+            grid.innerHTML = '<div class="col-span-7 py-8 text-center text-slate-500">Načítám…</div>';
+            try {
+                const r = await fetch(apiBase + '/slots.php?month=' + blockCalMonth);
+                const data = await r.json();
+                blockCalData = data;
+                renderBlockCalendar();
+            } catch (err) {
+                grid.innerHTML = '<div class="col-span-7 py-8 text-center text-slate-500">Chyba načtení</div>';
+            }
+        }
+
+        function renderBlockCalendar() {
+            const [y, m] = blockCalMonth.split('-').map(Number);
+            const first = new Date(y, m - 1, 1);
+            const last = new Date(y, m - 1 + 1, 0);
+            const daysInMonth = last.getDate();
+            const startOffset = (first.getDay() + 6) % 7;
+            const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+            document.getElementById('block-cal-month').textContent = monthNames[m - 1] + ' ' + y;
+            const grid = document.getElementById('block-cal-grid');
+            grid.innerHTML = '';
+            const today = new Date().toISOString().slice(0, 10);
+            for (let i = 0; i < startOffset; i++) grid.innerHTML += '<div class="aspect-square"></div>';
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                const dayOfWeek = new Date(y, m - 1, d).getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                const isPast = dateStr < today;
+                const avail = blockCalData.availability?.[dateStr];
+                const hasSlots = avail && (avail.free > 0 || avail.pending > 0 || avail.confirmed > 0);
+                const slotsDetail = blockCalData.slots_detail?.[dateStr];
+                const hasBlocked = slotsDetail && Object.values(slotsDetail).includes('blocked');
+                let bg = 'bg-slate-100';
+                if (!isWeekend && !isPast && slotsDetail) {
+                    if (hasBlocked) bg = 'bg-red-100 hover:bg-red-200';
+                    else if (hasSlots) bg = 'bg-emerald-50 hover:bg-emerald-100';
+                    else bg = 'bg-slate-50 hover:bg-slate-100';
+                }
+                if (isWeekend) bg = 'bg-slate-50';
+                if (isPast) bg = 'bg-slate-100 opacity-60';
+                const clickable = !isWeekend && !isPast && slotsDetail ? 'cursor-pointer' : 'cursor-default';
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${bg} ${clickable} min-h-[28px]" data-date="${dateStr}">${d}</div>`;
+            }
+            grid.querySelectorAll('[data-date]').forEach(cell => {
+                const dateStr = cell.dataset.date;
+                const dayOfWeek = new Date(dateStr + 'T12:00:00').getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                const isPast = dateStr < today;
+                if (!isWeekend && !isPast && blockCalData.slots_detail?.[dateStr]) {
+                    cell.addEventListener('click', () => showBlockSlots(dateStr));
+                }
+            });
+            lucide.createIcons();
+        }
+
+        function showBlockSlots(dateStr) {
+            const slotsDetail = blockCalData.slots_detail?.[dateStr] || {};
+            const allTimes = Object.keys(slotsDetail).sort();
+            document.getElementById('block-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
+            const list = document.getElementById('block-slots-list');
+            list.innerHTML = '';
+            list.dataset.date = dateStr;
+            allTimes.forEach(t => {
+                const status = slotsDetail[t];
+                const span = document.createElement('button');
+                span.type = 'button';
+                span.textContent = t;
+                span.dataset.time = t;
+                span.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors';
+                if (status === 'blocked') {
+                    span.className += ' bg-red-200 hover:bg-red-300 text-red-900 cursor-pointer';
+                    span.title = 'Klik pro odblokování';
+                } else if (status === 'free') {
+                    span.className += ' bg-emerald-100 hover:bg-emerald-200 text-emerald-800 cursor-pointer';
+                    span.title = 'Klik pro blokování';
+                } else {
+                    span.className += ' bg-slate-200 text-slate-600 cursor-default';
+                    span.disabled = true;
+                    span.title = 'Obsazeno rezervací';
+                }
+                if (status === 'blocked' || status === 'free') {
+                    span.addEventListener('click', () => toggleBlock(dateStr, t, span));
+                }
+                list.appendChild(span);
+            });
+            document.getElementById('block-slots-panel').classList.remove('hidden');
+        }
+
+        async function toggleBlock(dateStr, time, el) {
+            el.disabled = true;
+            try {
+                const fd = new FormData();
+                fd.append('date', dateStr);
+                fd.append('time', time);
+                const r = await fetch(apiBase + '/availability-block.php', { method: 'POST', body: fd });
+                const data = await r.json();
+                if (data.success) {
+                    blockCalData.slots_detail[dateStr] = blockCalData.slots_detail[dateStr] || {};
+                    blockCalData.slots_detail[dateStr][time] = data.blocked ? 'blocked' : 'free';
+                    el.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors';
+                    if (data.blocked) {
+                        el.className += ' bg-red-200 hover:bg-red-300 text-red-900 cursor-pointer';
+                        el.title = 'Klik pro odblokování';
+                    } else {
+                        el.className += ' bg-emerald-100 hover:bg-emerald-200 text-emerald-800 cursor-pointer';
+                        el.title = 'Klik pro blokování';
+                    }
+                }
+            } catch (e) {}
+            el.disabled = false;
+        }
+
+        document.getElementById('block-cal-prev').addEventListener('click', () => {
+            const [y, m] = blockCalMonth.split('-').map(Number);
+            const d = new Date(y, m - 2, 1);
+            blockCalMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+            loadBlockCalendar();
+        });
+        document.getElementById('block-cal-next').addEventListener('click', () => {
+            const [y, m] = blockCalMonth.split('-').map(Number);
+            const d = new Date(y, m, 1);
+            blockCalMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+            loadBlockCalendar();
+        });
+
+        loadBlockCalendar();
+    </script>
 </body>
 </html>

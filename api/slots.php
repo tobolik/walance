@@ -17,6 +17,7 @@ $endHour = (int)($settings['slot_end'] ?? SLOT_END);
 $interval = (int)($settings['slot_interval'] ?? SLOT_INTERVAL);
 $workDays = $settings['work_days'] ?? [1, 2, 3, 4, 5];
 $excludedDates = array_flip($settings['excluded_dates'] ?? []);
+$excludedSlots = $settings['excluded_slots'] ?? []; // ['date' => ['09:00', ...]]
 
 // Generování všech slotů pro jeden pracovní den
 $allDaySlots = [];
@@ -96,14 +97,23 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
             $daySlots = array_values(array_filter($daySlots, function($s) use ($bookedTimes) { return !in_array($s, $bookedTimes); }));
         }
         
+        // Ručně blokované sloty (admin)
+        if (isset($excludedSlots[$dateStr])) {
+            $blocked = $excludedSlots[$dateStr];
+            $daySlots = array_values(array_filter($daySlots, function($s) use ($blocked) { return !in_array($s, $blocked); }));
+        }
+        
         $free = count($daySlots);
         $percent = $totalSlotsPerDay > 0 ? round(100 * $free / $totalSlotsPerDay) : 0;
         $pending = isset($pendingByDate[$dateStr]) ? count($pendingByDate[$dateStr]) : 0;
         $confirmed = isset($confirmedByDate[$dateStr]) ? count($confirmedByDate[$dateStr]) : 0;
         
+        $blockedByAdmin = $excludedSlots[$dateStr] ?? [];
         $slotsDetail = [];
         foreach ($allDaySlots as $t) {
-            if (isset($confirmedByDate[$dateStr]) && in_array($t, $confirmedByDate[$dateStr])) {
+            if (in_array($t, $blockedByAdmin)) {
+                $slotsDetail[$t] = 'blocked';
+            } elseif (isset($confirmedByDate[$dateStr]) && in_array($t, $confirmedByDate[$dateStr])) {
                 $slotsDetail[$t] = 'confirmed';
             } elseif (isset($pendingByDate[$dateStr]) && in_array($t, $pendingByDate[$dateStr])) {
                 $slotsDetail[$t] = 'pending';
@@ -147,6 +157,10 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         if (isset($bookedByDate[$dateStr])) {
             $bookedTimes = $bookedByDate[$dateStr];
             $daySlots = array_values(array_filter($daySlots, function($s) use ($bookedTimes) { return !in_array($s, $bookedTimes); }));
+        }
+        if (isset($excludedSlots[$dateStr])) {
+            $blocked = $excludedSlots[$dateStr];
+            $daySlots = array_values(array_filter($daySlots, function($s) use ($blocked) { return !in_array($s, $blocked); }));
         }
         
         $slots[$dateStr] = $daySlots;

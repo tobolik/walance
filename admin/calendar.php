@@ -61,6 +61,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             </div>
             <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-600">
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> Volné</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-300"></span> Blokováno</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-teal-500"></span> Potvrzeno</span>
             </div>
@@ -190,6 +191,9 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             if (status === 'free') {
                 span.className += ' bg-emerald-100 text-emerald-800';
                 span.title = 'Volné';
+            } else if (status === 'blocked') {
+                span.className += ' bg-red-100 text-red-800';
+                span.title = 'Blokováno (Dostupnost)';
             } else if (status === 'pending') {
                 span.className += ' bg-amber-100 text-amber-800';
                 span.title = 'Čeká na potvrzení';
