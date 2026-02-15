@@ -5,6 +5,15 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.6] – 14.02.2026
+
+### Přidáno
+- **Google Calendar Domain-Wide Delegation:** zápis do kalendáře kolegy, pozvánky klientům
+- **docs/GOOGLE-CALENDAR-DELEGATION.md:** podrobný postup nastavení
+
+### Opraveno
+- **Google Calendar impersonation:** čtení (getEventsForDisplay, getBusySlots) nyní také používá impersonaci – oprava 404 u kalendáře kolegy
+
 ## [1.1.5] – 14.02.2026
 
 ### Přidáno

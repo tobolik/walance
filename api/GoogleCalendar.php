@@ -68,6 +68,10 @@ class GoogleCalendar {
         }
     }
 
+    /**
+     * Vytvoří událost v kalendáři. S Domain-Wide Delegation (GOOGLE_CALENDAR_IMPERSONATION)
+     * zapisuje do kalendáře jiného uživatele (např. kolegy) a pozve klienta jako účastníka.
+     */
     public function createEvent(string $date, string $time, string $name, string $email, string $description = ''): string {
         $start = $date . 'T' . $time . ':00';
         $endTime = date('H:i', strtotime($time . ' +1 hour'));
@@ -81,7 +85,8 @@ class GoogleCalendar {
             'attendees' => [['email' => $email], ['email' => CONTACT_EMAIL]],
         ]);
 
-        $created = $this->service->events->insert($this->calendarId, $event);
+        $service = $this->getServiceForCalendar($this->calendarId);
+        $created = $service->events->insert($this->calendarId, $event);
         return $created->getId();
     }
 
@@ -103,8 +108,9 @@ class GoogleCalendar {
     private function getBusySlotsForCalendar(string $calId, string $date, int $intervalMinutes, int $dayStart, int $dayEnd): array {
         $start = $date . 'T00:00:00+01:00';
         $end = $date . 'T23:59:59+01:00';
+        $service = $this->getServiceForCalendar($calId);
         try {
-            $events = $this->service->events->listEvents($calId, [
+            $events = $service->events->listEvents($calId, [
                 'timeMin' => $start,
                 'timeMax' => $end,
                 'singleEvents' => true,
@@ -162,8 +168,9 @@ class GoogleCalendar {
     private function getBusySlotsForMonthSingle(string $calId, string $month, int $intervalMinutes, int $dayStart, int $dayEnd): array {
         $start = $month . '-01T00:00:00+01:00';
         $end = date('Y-m-t', strtotime($month . '-01')) . 'T23:59:59+01:00';
+        $service = $this->getServiceForCalendar($calId);
         try {
-            $events = $this->service->events->listEvents($calId, [
+            $events = $service->events->listEvents($calId, [
                 'timeMin' => $start,
                 'timeMax' => $end,
                 'singleEvents' => true,
@@ -226,6 +233,7 @@ class GoogleCalendar {
         $end = $endDate . 'T23:59:59+01:00';
         $items = [];
         $pageToken = null;
+        $service = $this->getServiceForCalendar($calId);
         do {
             try {
                 $params = [
@@ -235,11 +243,11 @@ class GoogleCalendar {
                     'orderBy' => 'startTime',
                 ];
                 if ($pageToken) $params['pageToken'] = $pageToken;
-                $events = $this->service->events->listEvents($calId, $params);
+                $events = $service->events->listEvents($calId, $params);
             } catch (Exception $e) {
                 $msg = $e->getMessage();
                 if (strpos($msg, '404') !== false || strpos($msg, 'notFound') !== false || strpos($msg, 'Not Found') !== false) {
-                    $msg = 'Kalendář nebyl nalezen (404). Zkontrolujte: 1) ID je správně (e-mail), 2) Kalendář je sdílen s Service Accountem.';
+                    $msg = 'Kalendář nebyl nalezen (404). Zkontrolujte: 1) ID je správně (e-mail), 2) Uživatel je v Google Workspace doméně, 3) Domain-Wide Delegation je nastavené, 4) GOOGLE_CALENDAR_IMPERSONATION je v config.local.php.';
                 }
                 return ['error' => $msg, 'items' => []];
             }
@@ -265,5 +273,19 @@ class GoogleCalendar {
     /** Vrací ID kalendáře, který se používá */
     public function getCalendarId(): string {
         return $this->calendarId;
+    }
+
+    /** Pro kalendář s e-mailovým ID a impersonation – vrací service s setSubject (čtení i zápis) */
+    private function getServiceForCalendar(string $calId): \Google_Service_Calendar {
+        if (defined('GOOGLE_CALENDAR_IMPERSONATION') && GOOGLE_CALENDAR_IMPERSONATION
+            && $calId && strpos($calId, '@') !== false) {
+            $client = new \Google_Client();
+            $client->setAuthConfig(GOOGLE_CALENDAR_CREDENTIALS);
+            $client->addScope(Google_Service_Calendar::CALENDAR);
+            $client->setAccessType('offline');
+            $client->setSubject($calId);
+            return new Google_Service_Calendar($client);
+        }
+        return $this->service;
     }
 }

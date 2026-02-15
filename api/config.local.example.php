@@ -17,3 +17,8 @@ define('DB_PASS', 'vaše-heslo');
 // Token pro spuštění migrace přes HTTP (deploy)
 // Nastavte stejnou hodnotu v GitHub Secrets jako MIGRATE_TOKEN
 define('MIGRATE_TOKEN', 'váš-náhodný-token');
+
+// Google Calendar – zapis do kalendáře jiného uživatele (Domain-Wide Delegation)
+// Povolte, pokud chcete zapisovat události do kalendáře kolegy (např. jana@firma.cz)
+// Vyžaduje nastavení Domain-Wide Delegation v Google Workspace Admin – viz docs/GOOGLE-CALENDAR-DELEGATION.md
+// define('GOOGLE_CALENDAR_IMPERSONATION', true);

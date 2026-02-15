@@ -20,3 +20,5 @@ define('BOOKING_DAYS_AHEAD', 14);
 define('GOOGLE_CALENDAR_CREDENTIALS', __DIR__ . '/credentials/google-calendar.json');
 define('GOOGLE_CALENDAR_ID', 'primary');
 define('GOOGLE_CALENDAR_ENABLED', file_exists(__DIR__ . '/credentials/google-calendar.json'));
+// Domain-Wide Delegation – zapis do kalendáře jiného uživatele. V config.local přidejte: define('GOOGLE_CALENDAR_IMPERSONATION', true);
+define('GOOGLE_CALENDAR_IMPERSONATION', true);
