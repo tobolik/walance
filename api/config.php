@@ -15,9 +15,9 @@ define('DB_PATH', __DIR__ . '/../data/contacts.db');
 
 // MySQL (použije se když DB_TYPE = 'mysql') - viz api/db-mysql.sql pro vytvoření DB
 define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'netwalkingcz');
-define('DB_USER', 'netwalkingcz001');
-define('DB_PASS', '61hAEefn');
+define('DB_NAME', 'walancecz');
+define('DB_USER', 'walancecz001');
+define('DB_PASS', 'ThlCRD9v');
 
 // Admin - heslo: Jana2026
 define('ADMIN_PASSWORD_HASH', '$2b$10$jtmKFFne7iDWtCFsupaKlezBLJoEIUjy62SCJKSQZY4ybZRgKPVye');

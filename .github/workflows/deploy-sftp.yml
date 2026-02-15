@@ -1,0 +1,32 @@
+name: Deploy via SFTP
+
+on:
+  push:
+    branches: [master, main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Připravit soubory k nasazení
+        run: |
+          mkdir -p deploy
+          rsync -a --exclude='node_modules' --exclude='.git' --exclude='vendor' \
+            --exclude='data/*.db' --exclude='api/credentials/*.json' --exclude='.github' \
+            ./ deploy/
+          mkdir -p deploy/data deploy/api/credentials
+
+      - name: Deploy na walance.cz
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_HOST }}
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './deploy/*'
+          remote_path: ${{ secrets.SFTP_REMOTE_PATH }}
+          sftp_only: true
+          sftpArgs: '-o ConnectTimeout=10'

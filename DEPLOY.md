@@ -1,8 +1,8 @@
-# Automatický deploy přes FTP
+# Automatický deploy přes SFTP
 
-Cíl: **https://walance.netwalkiing.cz**
+Cíl: **https://walance.cz**
 
-Při každém push na `master` nebo `main` se projekt automaticky nasadí na server přes FTP.
+Při každém push na `master` nebo `main` se projekt automaticky nasadí na server přes SFTP.
 
 ## Nastavení GitHub Secrets
 
@@ -10,16 +10,19 @@ V repozitáři: **Settings → Secrets and variables → Actions** přidejte:
 
 | Secret | Povinné | Popis |
 |--------|---------|-------|
-| `FTP_HOST` | ano | Adresa FTP serveru (např. `ftp.netwalkiing.cz` nebo IP) |
-| `FTP_USERNAME` | ano | FTP uživatel |
-| `FTP_PASSWORD` | ano | FTP heslo |
-| `FTP_REMOTE_PATH` | ano | Cesta na serveru, musí končit `/` (např. `public_html/` nebo `www/walance/`) |
-| `FTP_PORT` | ne | Port (výchozí 21) |
-| `FTP_PROTOCOL` | ne | `ftp` nebo `ftps` (výchozí `ftp`) |
+| `SFTP_HOST` | ano | Adresa serveru (např. `sftp.walance.cz` nebo IP) |
+| `SFTP_USERNAME` | ano | SFTP uživatel |
+| `SFTP_PASSWORD` | ano* | SFTP heslo |
+| `SFTP_REMOTE_PATH` | ano | Cesta na serveru (např. `/www/walance` nebo `/public_html`) |
+| `SFTP_PORT` | ne | Port (výchozí 22) |
+| `SSH_PRIVATE_KEY` | ano* | SSH privátní klíč (alternativa k heslu) |
+
+\* Použijte buď `SFTP_PASSWORD` nebo `SSH_PRIVATE_KEY`.
 
 ## Co se nasazuje
 
-- Vše kromě: `node_modules`, `.git`, `vendor`, `data/*.db`, `api/credentials/*.json`, `.github`
+- Vše kromě: `node_modules`, `.git`, `vendor`, `data/*.db`, `api/credentials/*.json`
+- Složky `data/` a `api/credentials/` se vytvoří prázdné
 
 ## Po nasazení na serveru
 
