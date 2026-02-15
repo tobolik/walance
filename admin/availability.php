@@ -464,11 +464,19 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 } else if (status === 'pending') {
                     span.className += ' bg-amber-200 text-amber-900 cursor-default';
                     span.disabled = true;
-                    span.title = 'Čeká na potvrzení';
+                    const pendingNames = bookings && bookings.length ? bookings.map(b => b.name).join(', ') : '';
+                    span.title = pendingNames ? 'Čeká na potvrzení: ' + pendingNames : 'Čeká na potvrzení';
                 } else if (status === 'confirmed') {
                     span.className += ' bg-slate-200 text-slate-600 cursor-default';
                     span.disabled = true;
-                    span.title = 'Obsazeno rezervací';
+                    const info = blockCalData.slots_detail_info?.[dateStr]?.[t];
+                    let title = 'Obsazeno rezervací';
+                    if (bookings && bookings.length) {
+                        title = 'Rezervace: ' + bookings.map(b => b.name).join(', ');
+                    } else if (info?.source === 'gc' && info?.label) {
+                        title = info.label;
+                    }
+                    span.title = title;
                 } else if (status === 'free' && hasRejected) {
                     span.className += ' bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border-2 border-slate-400 cursor-pointer';
                     span.title = 'Volné (bylo zamítnuto): ' + bookings.map(b => b.name).join(', ');

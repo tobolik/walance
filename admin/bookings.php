@@ -84,6 +84,9 @@ $statusLabels = [
     'confirmed' => ['Potvrzeno', 'bg-green-100 text-green-800'],
     'cancelled' => ['Zamítnuto', 'bg-red-100 text-red-800'],
 ];
+
+$settings = getAvailabilitySettings();
+$timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ?? 30));
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -145,26 +148,27 @@ $statusLabels = [
                                 </span>
                             </td>
                             <td class="py-4 px-6">
-                                <?php if ($b['status'] === 'pending'): ?>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2 items-center">
+                                    <button type="button" onclick="openEditModal(<?= $b['id'] ?>, '<?= htmlspecialchars($b['booking_date']) ?>', '<?= htmlspecialchars($b['booking_time']) ?>', '<?= htmlspecialchars(addslashes($b['name'])) ?>')" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-medium rounded-lg transition-colors" title="Upravit datum a čas">
+                                        Upravit
+                                    </button>
+                                    <?php if ($b['status'] === 'pending'): ?>
                                     <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'confirm')" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-lg transition-colors">
                                         Potvrdit
                                     </button>
                                     <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors">
                                         Zamítnout
                                     </button>
+                                    <?php elseif ($b['status'] === 'confirmed'): ?>
+                                    <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-slate-500 hover:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
+                                        Zamítnout
+                                    </button>
+                                    <?php elseif ($b['status'] === 'cancelled'): ?>
+                                    <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'restore')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors">
+                                        Zrušit zamítnutí
+                                    </button>
+                                    <?php endif; ?>
                                 </div>
-                                <?php elseif ($b['status'] === 'confirmed'): ?>
-                                <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-slate-500 hover:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
-                                    Zamítnout
-                                </button>
-                                <?php elseif ($b['status'] === 'cancelled'): ?>
-                                <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'restore')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors">
-                                    Zrušit zamítnutí
-                                </button>
-                                <?php else: ?>
-                                <span class="text-slate-400 text-xs">—</span>
-                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php if ($b['message']): ?>
@@ -183,10 +187,83 @@ $statusLabels = [
             <?php endif; ?>
         </div>
     </div>
+
+    <!-- Modal pro úpravu data a času -->
+    <div id="edit-booking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onclick="if(event.target===this) closeEditModal()">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Upravit termín</h3>
+            <p id="edit-modal-name" class="text-sm text-slate-600 mb-4"></p>
+            <form id="edit-booking-form" onsubmit="saveEditBooking(event)">
+                <input type="hidden" id="edit-booking-id" name="id">
+                <div class="mb-4">
+                    <label for="edit-booking-date" class="block text-sm font-medium text-slate-700 mb-1">Datum</label>
+                    <input type="date" id="edit-booking-date" name="date" required class="w-full px-4 py-2 border border-slate-300 rounded-lg">
+                </div>
+                <div class="mb-4">
+                    <label for="edit-booking-time" class="block text-sm font-medium text-slate-700 mb-1">Čas</label>
+                    <select id="edit-booking-time" name="time" required class="w-full px-4 py-2 border border-slate-300 rounded-lg">
+                        <?php foreach ($timeSlots as $slot): ?>
+                        <option value="<?= htmlspecialchars($slot) ?>"><?= htmlspecialchars($slot) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-medium rounded-lg">Zrušit</button>
+                    <button type="submit" id="edit-booking-submit" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg">Uložit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 <?php include __DIR__ . '/includes/layout-end.php'; ?>
 
     <script>
         lucide.createIcons();
+
+        function openEditModal(id, date, time, name) {
+            document.getElementById('edit-booking-id').value = id;
+            document.getElementById('edit-booking-date').value = date;
+            document.getElementById('edit-booking-time').value = time;
+            document.getElementById('edit-modal-name').textContent = name;
+            document.getElementById('edit-booking-modal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-booking-modal').classList.add('hidden');
+        }
+
+        function saveEditBooking(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-booking-id').value;
+            const date = document.getElementById('edit-booking-date').value;
+            const time = document.getElementById('edit-booking-time').value;
+            const btn = document.getElementById('edit-booking-submit');
+            btn.disabled = true;
+            const fd = new FormData();
+            fd.append('id', id);
+            fd.append('date', date);
+            fd.append('time', time);
+            fetch('../api/booking-update.php', {
+                method: 'POST',
+                body: fd,
+                cache: 'no-store',
+                credentials: 'same-origin'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    closeEditModal();
+                    location.reload();
+                } else {
+                    alert(data.error || 'Chyba při ukládání.');
+                    btn.disabled = false;
+                }
+            })
+            .catch(() => {
+                alert('Chyba při ukládání.');
+                btn.disabled = false;
+            });
+        }
+
         function updateBooking(id, action) {
             const row = document.querySelector(`.booking-row[data-id="${id}"]`);
             if (!row) return;

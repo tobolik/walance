@@ -78,11 +78,16 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
     $slots = [];
     $availability = [];
     $slotsDetailByDate = [];
+    $slotsDetailInfoByDate = [];
     $gcBusyByDate = [];
+    $gcBusyDetailsByDate = [];
     if (isset($gc)) {
         try {
             $ids = !empty($calendarIds) ? $calendarIds : null;
-            $gcBusyByDate = $gc->getBusySlotsForMonth($monthParam, $interval, $startHour, $endHour, $ids);
+            $gcBusyDetailsByDate = $gc->getBusySlotsDetailsForMonth($monthParam, $interval, $startHour, $endHour, $ids);
+            foreach ($gcBusyDetailsByDate as $d => $times) {
+                $gcBusyByDate[$d] = array_keys($times);
+            }
         } catch (Exception $e) {}
     }
     
@@ -122,16 +127,25 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         
         $blockedByAdmin = $excludedSlots[$dateStr] ?? [];
         $slotsDetail = [];
+        $slotsDetailInfo = [];
         foreach ($allDaySlots as $t) {
             // Rezervace má přednost před blokací – slot s rezervací zobrazíme podle stavu rezervace
             if (isset($confirmedByDate[$dateStr]) && in_array($t, $confirmedByDate[$dateStr])) {
                 $slotsDetail[$t] = 'confirmed';
+                $slotsDetailInfo[$t] = ['source' => 'booking'];
             } elseif (isset($pendingByDate[$dateStr]) && in_array($t, $pendingByDate[$dateStr])) {
                 $slotsDetail[$t] = 'pending';
+                $slotsDetailInfo[$t] = ['source' => 'booking'];
             } elseif (in_array($t, $blockedByAdmin)) {
                 $slotsDetail[$t] = 'blocked';
             } elseif (isset($gcBusyByDate[$dateStr]) && in_array($t, $gcBusyByDate[$dateStr])) {
                 $slotsDetail[$t] = 'confirmed';
+                $info = $gcBusyDetailsByDate[$dateStr][$t] ?? null;
+                $label = 'Událost z Google Calendar';
+                if ($info) {
+                    $label = 'Kalendář ' . $info['calendar'] . ': ' . $info['summary'];
+                }
+                $slotsDetailInfo[$t] = ['source' => 'gc', 'label' => $label];
             } else {
                 $slotsDetail[$t] = 'free';
             }
@@ -140,9 +154,10 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         $slots[$dateStr] = $daySlots;
         $availability[$dateStr] = ['free' => $free, 'total' => $totalSlotsPerDay, 'percent' => $percent, 'pending' => $pending, 'confirmed' => $confirmed];
         $slotsDetailByDate[$dateStr] = $slotsDetail;
+        $slotsDetailInfoByDate[$dateStr] = $slotsDetailInfo;
     }
     
-    echo json_encode(['slots' => $slots, 'availability' => $availability, 'slots_detail' => $slotsDetailByDate, 'month' => $monthParam]);
+    echo json_encode(['slots' => $slots, 'availability' => $availability, 'slots_detail' => $slotsDetailByDate, 'slots_detail_info' => $slotsDetailInfoByDate, 'month' => $monthParam]);
 } else {
     $today = new DateTime('today', new DateTimeZone('Europe/Prague'));
     $slots = [];

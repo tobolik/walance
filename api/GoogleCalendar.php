@@ -91,6 +91,29 @@ class GoogleCalendar {
     }
 
     /**
+     * Aktualizuje datum a čas události v kalendáři.
+     * @param string $eventId ID události z Google Calendar
+     * @param string $date YYYY-MM-DD
+     * @param string $time HH:MM
+     */
+    public function updateEvent(string $eventId, string $date, string $time): void {
+        $service = $this->getServiceForCalendar($this->calendarId);
+        $event = $service->events->get($this->calendarId, $eventId);
+        $start = $date . 'T' . $time . ':00';
+        $endTime = date('H:i', strtotime($time . ' +1 hour'));
+        $end = $date . 'T' . $endTime . ':00';
+        $event->setStart(new \Google_Service_Calendar_EventDateTime([
+            'dateTime' => $start,
+            'timeZone' => 'Europe/Prague',
+        ]));
+        $event->setEnd(new \Google_Service_Calendar_EventDateTime([
+            'dateTime' => $end,
+            'timeZone' => 'Europe/Prague',
+        ]));
+        $service->events->update($this->calendarId, $eventId, $event);
+    }
+
+    /**
      * Vrací obsazené časy (HH:MM) pro daný den z Google Calendar
      * Události se mapují na sloty podle intervalu – blokuje sloty, které se s událostí překrývají
      * @param array|null $calendarIds Více kalendářů – sjednocení obsazených slotů; null = použít $this->calendarId
@@ -166,6 +189,19 @@ class GoogleCalendar {
     }
 
     private function getBusySlotsForMonthSingle(string $calId, string $month, int $intervalMinutes, int $dayStart, int $dayEnd): array {
+        $result = $this->getBusySlotsForMonthSingleWithDetails($calId, $month, $intervalMinutes, $dayStart, $dayEnd);
+        $byDate = [];
+        foreach ($result as $d => $times) {
+            $byDate[$d] = array_keys($times);
+        }
+        return $byDate;
+    }
+
+    /**
+     * Vrací obsazené sloty s detaily (kalendář, název události) pro jeden kalendář
+     * @return array ['YYYY-MM-DD' => ['09:00' => ['calendar' => calId, 'summary' => '...'], ...], ...]
+     */
+    private function getBusySlotsForMonthSingleWithDetails(string $calId, string $month, int $intervalMinutes, int $dayStart, int $dayEnd): array {
         $start = $month . '-01T00:00:00+01:00';
         $end = date('Y-m-t', strtotime($month . '-01')) . 'T23:59:59+01:00';
         $service = $this->getServiceForCalendar($calId);
@@ -189,6 +225,8 @@ class GoogleCalendar {
             if (!$startTime || !$endTime) continue;
             $eventStart = strtotime($startTime);
             $eventEnd = strtotime($endTime);
+            $summary = $event->getSummary();
+            $summary = $summary !== null && $summary !== '' ? $summary : '(Bez názvu)';
             $date = date('Y-m-d', $eventStart);
             if (!isset($byDate[$date])) $byDate[$date] = [];
             for ($h = $dayStart; $h < $dayEnd; $h++) {
@@ -196,15 +234,38 @@ class GoogleCalendar {
                     $slotStart = strtotime($date . sprintf(' %02d:%02d:00', $h, $m));
                     $slotEnd = $slotStart + $intervalMinutes * 60;
                     if ($eventStart < $slotEnd && $eventEnd > $slotStart) {
-                        $byDate[$date][] = sprintf('%02d:%02d', $h, $m);
+                        $t = sprintf('%02d:%02d', $h, $m);
+                        if (!isset($byDate[$date][$t])) {
+                            $byDate[$date][$t] = ['calendar' => $calId, 'summary' => $summary];
+                        }
                     }
                 }
             }
         }
-        foreach ($byDate as $d => $slots) {
-            $byDate[$d] = array_unique($slots);
-        }
         return $byDate;
+    }
+
+    /**
+     * Vrací obsazené sloty s detaily – kalendář a název události (pro admin tooltip)
+     * @param array|null $calendarIds Více kalendářů; null = použít $this->calendarId
+     * @return array ['YYYY-MM-DD' => ['09:00' => ['calendar' => calId, 'summary' => '...'], ...], ...]
+     */
+    public function getBusySlotsDetailsForMonth(string $month, int $intervalMinutes = 30, int $dayStart = 0, int $dayEnd = 24, ?array $calendarIds = null): array {
+        $ids = $calendarIds && !empty($calendarIds) ? $calendarIds : [$this->calendarId];
+        $merged = [];
+        foreach ($ids as $calId) {
+            if (empty($calId)) continue;
+            $byDate = $this->getBusySlotsForMonthSingleWithDetails($calId, $month, $intervalMinutes, $dayStart, $dayEnd);
+            foreach ($byDate as $d => $times) {
+                if (!isset($merged[$d])) $merged[$d] = [];
+                foreach ($times as $t => $info) {
+                    if (!isset($merged[$d][$t])) {
+                        $merged[$d][$t] = $info;
+                    }
+                }
+            }
+        }
+        return $merged;
     }
 
     /**
