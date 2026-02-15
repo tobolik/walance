@@ -5,6 +5,17 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.22] – 14.02.2026 17:15
+
+### Změněno
+- **slots.php:** Google Calendar – jeden API call pro celý měsíc místo 20+ volání (rychlejší načítání)
+- **Web kalendář:** ohraničení vybraného dne – použit ring-teal-500 (standardní Tailwind)
+
+## [1.0.21] – 14.02.2026 17:00
+
+### Přidáno
+- **api/reset-password.php:** reset admin hesla – oprava přihlášení po upgradu PHP (7.4→8.2, známý bug v password_verify)
+
 ## [1.0.20] – 14.02.2026 16:45
 
 ### Změněno

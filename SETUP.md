@@ -42,6 +42,7 @@ php -S localhost:8000
 ## 3. CRM administrace
 
 - URL: `http://localhost:8000/admin/`
+- **Reset hesla** (po upgradu PHP): `php api/reset-password.php email@example.com nove_heslo` nebo přes web s tokenem
 - **Kontakty** – přehled kontaktů z formuláře a rezervací
 - **Rezervace** – správa termínů: potvrdit / zamítnout
 - **Výchozí heslo:** `password` – **změňte ihned!**

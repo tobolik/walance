@@ -71,6 +71,11 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
     $availability = [];
     $slotsDetailByDate = [];
     $gcBusyByDate = [];
+    if (isset($gc)) {
+        try {
+            $gcBusyByDate = $gc->getBusySlotsForMonth($monthParam, $interval, $startHour, $endHour);
+        } catch (Exception $e) {}
+    }
     
     for ($day = 1; $day <= $daysInMonth; $day++) {
         $date = (clone $firstDay)->setDate((int)$firstDay->format('Y'), (int)$firstDay->format('m'), $day);
@@ -83,15 +88,10 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         
         $daySlots = $allDaySlots;
         
-        // GC obsazenost
-        if (isset($gc)) {
-            try {
-                $gcBusy = $gc->getBusySlots($dateStr, $interval, $startHour, $endHour);
-                if (!empty($gcBusy)) {
-                    $gcBusyByDate[$dateStr] = $gcBusy;
-                    $daySlots = array_values(array_filter($daySlots, function($s) use ($gcBusy) { return !in_array($s, $gcBusy); }));
-                }
-            } catch (Exception $e) {}
+        // GC obsazenost (už načteno v jednom volání)
+        if (isset($gcBusyByDate[$dateStr]) && !empty($gcBusyByDate[$dateStr])) {
+            $gcBusy = $gcBusyByDate[$dateStr];
+            $daySlots = array_values(array_filter($daySlots, function($s) use ($gcBusy) { return !in_array($s, $gcBusy); }));
         }
         
         // DB rezervace

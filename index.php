@@ -904,7 +904,7 @@
 
                 const clickable = !isWeekend && !isPast && hasSlots ? 'cursor-pointer' : 'cursor-default';
                 const textColor = hasSlots && percent >= 50 ? 'text-white' : 'text-ink';
-                const selected = dateStr === calSelectedDate ? ' ring-2 ring-accent ring-offset-2' : '';
+                const selected = dateStr === calSelectedDate ? ' ring-2 ring-teal-500 ring-offset-2' : '';
                 grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]${selected}" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
             }
 
@@ -918,7 +918,7 @@
             calSelectedDate = dateStr;
             document.querySelectorAll('#cal-grid [data-date]').forEach(cell => {
                 cell.classList.toggle('ring-2', cell.dataset.date === dateStr);
-                cell.classList.toggle('ring-accent', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-teal-500', cell.dataset.date === dateStr);
                 cell.classList.toggle('ring-offset-2', cell.dataset.date === dateStr);
             });
             const freeSlots = calData.slots[dateStr] || [];
