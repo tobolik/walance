@@ -50,10 +50,11 @@ foreach ($booked as $b) {
 
 // Google Calendar – obsazené časy
 $gc = null;
+$gcCalendarId = !empty($settings['google_calendar_id']) ? $settings['google_calendar_id'] : null;
 if (GOOGLE_CALENDAR_ENABLED && file_exists(__DIR__ . '/GoogleCalendar.php')) {
     try {
         require_once __DIR__ . '/GoogleCalendar.php';
-        $gc = new GoogleCalendar();
+        $gc = new GoogleCalendar($gcCalendarId);
     } catch (Exception $e) {}
 }
 

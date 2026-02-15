@@ -114,7 +114,6 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             for (let i = 0; i < startOffset; i++) {
                 grid.innerHTML += '<div class="aspect-square"></div>';
             }
-            const today = new Date().toISOString().slice(0, 10);
             for (let d = 1; d <= daysInMonth; d++) {
                 const dateStr = y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
                 const dayOfWeek = new Date(y, m - 1, d).getDay();

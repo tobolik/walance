@@ -31,7 +31,8 @@ V **Settings → Secrets and variables → Actions**:
 
 ## Co se nasazuje
 
-- Vše kromě: `node_modules`, `.git`, `vendor`, `data/*.db`, `api/credentials/*.json`, `api/config.local.php`
+- Vše kromě: `node_modules`, `.git`, `data/*.db`, `api/credentials/*.json`, `api/config.local.php`
+- `vendor/` se nasazuje (composer install běží v CI před deployem)
 - `config.local.php` zůstává na serveru z ručního nastavení (není v gitu)
 
 ## Po nasazení na serveru
@@ -40,4 +41,3 @@ V **Settings → Secrets and variables → Actions**:
 2. Migrace se spustí automaticky po každém deploy (viz výše). Ručně: `php api/migrate.php` nebo `https://walance.cz/api/migrate.php?token=VAŠE_HODNOTA`
 3. Zajistěte zapisovatelnost složky `data/` (pro SQLite)
 4. Pro Google Calendar: nahrajte `api/credentials/google-calendar.json`
-5. Spusťte `composer install` v kořeni projektu (pro Google Calendar API)

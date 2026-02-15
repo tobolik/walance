@@ -15,7 +15,8 @@ class GoogleCalendar {
     private $service;
     private $calendarId;
 
-    public function __construct() {
+    /** @param string|null $calendarId Přepíše GOOGLE_CALENDAR_ID (např. z admin nastavení) */
+    public function __construct(?string $calendarId = null) {
         if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
             throw new Exception('Spusťte: composer require google/apiclient v kořenovém adresáři projektu.');
         }
@@ -25,9 +26,27 @@ class GoogleCalendar {
         $this->client->setAuthConfig(GOOGLE_CALENDAR_CREDENTIALS);
         $this->client->addScope(Google_Service_Calendar::CALENDAR);
         $this->client->setAccessType('offline');
-        $this->calendarId = GOOGLE_CALENDAR_ID;
+        $this->calendarId = $calendarId ?: GOOGLE_CALENDAR_ID;
 
         $this->service = new Google_Service_Calendar($this->client);
+    }
+
+    /** Seznam kalendářů, ke kterým má Service Account přístup */
+    public function getCalendarList(): array {
+        try {
+            $list = $this->service->calendarList->listCalendarList();
+            $items = [];
+            foreach ($list->getItems() as $cal) {
+                $items[] = [
+                    'id' => $cal->getId(),
+                    'summary' => $cal->getSummary() ?: $cal->getId(),
+                    'primary' => (bool) $cal->getPrimary(),
+                ];
+            }
+            return $items;
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     public function createEvent(string $date, string $time, string $name, string $email, string $description = ''): string {

@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slotInterval = (int)($_POST['slot_interval'] ?? 30);
     $workDays = isset($_POST['work_days']) ? array_map('intval', (array)$_POST['work_days']) : [1,2,3,4,5];
     $excludedDates = trim($_POST['excluded_dates'] ?? '');
+    $googleCalendarId = trim($_POST['google_calendar_id'] ?? '');
     
     if ($slotStart < 0 || $slotStart > 23) $slotStart = 9;
     if ($slotEnd < 1 || $slotEnd > 24) $slotEnd = 17;
@@ -30,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'slot_interval' => $slotInterval,
         'work_days' => $workDays,
         'excluded_dates' => array_filter(array_map('trim', explode("\n", $excludedDates))),
+        'google_calendar_id' => $googleCalendarId,
     ];
     if (saveAvailabilitySettings($data)) {
         $saved = true;
@@ -84,7 +86,41 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
             <div class="mb-4 p-3 bg-red-50 text-red-800 rounded-lg text-sm"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
+            <?php
+            $calendarList = [];
+            if (GOOGLE_CALENDAR_ENABLED) {
+                try {
+                    require_once __DIR__ . '/../api/GoogleCalendar.php';
+                    $gc = new GoogleCalendar();
+                    $calendarList = $gc->getCalendarList();
+                } catch (Exception $e) {
+                    $calendarList = ['error' => $e->getMessage()];
+                }
+            }
+            $hasCalendarList = is_array($calendarList) && !isset($calendarList['error']);
+            ?>
             <form method="POST" class="space-y-6">
+                <?php if (GOOGLE_CALENDAR_ENABLED): ?>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Google Calendar</label>
+                    <?php if ($hasCalendarList): ?>
+                    <select name="google_calendar_id" class="w-full px-4 py-2 border border-slate-300 rounded-lg">
+                        <option value="">Výchozí (config)</option>
+                        <?php foreach ($calendarList as $cal): ?>
+                        <option value="<?= htmlspecialchars($cal['id']) ?>" <?= ($settings['google_calendar_id'] ?? '') === $cal['id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($cal['summary']) ?><?= !empty($cal['primary']) ? ' (primární)' : '' ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php else: ?>
+                    <input type="text" name="google_calendar_id" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="primary nebo e-mail kalendáře" class="w-full px-4 py-2 border border-slate-300 rounded-lg">
+                    <?php if (isset($calendarList['error'])): ?>
+                    <p class="text-amber-600 text-xs mt-1">Seznam nelze načíst: <?= htmlspecialchars($calendarList['error']) ?>. Zadejte ID ručně.</p>
+                    <?php endif; ?>
+                    <?php endif; ?>
+                    <p class="text-slate-500 text-xs mt-1">Vyberte kalendář pro blokování slotů. Kolega sdílí kalendář s e-mailem Service Accountu.</p>
+                </div>
+                <?php endif; ?>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Pracovní doba</label>
                     <div class="flex items-center gap-4">
@@ -136,9 +172,10 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
         <?php if (GOOGLE_CALENDAR_ENABLED): ?>
         <?php
         $gcEvents = ['items' => []];
+        $gcCalId = !empty($settings['google_calendar_id']) ? $settings['google_calendar_id'] : null;
         try {
             require_once __DIR__ . '/../api/GoogleCalendar.php';
-            $gc = new GoogleCalendar();
+            $gc = new GoogleCalendar($gcCalId);
             $gcEvents = $gc->getEventsForDisplay(date('Y-m-d'), 14);
         } catch (Exception $e) {
             $gcEvents = ['error' => $e->getMessage(), 'items' => []];

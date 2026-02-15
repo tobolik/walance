@@ -14,6 +14,7 @@ function getAvailabilitySettings(): array {
         'work_days' => [1, 2, 3, 4, 5], // Po-Pá (0=Ne, 1=Po, ..., 6=So)
         'excluded_dates' => [],
         'excluded_slots' => [], // ['date' => ['09:00', '09:30'], ...] – ručně blokované časy
+        'google_calendar_id' => '', // prázdné = GOOGLE_CALENDAR_ID z config
     ];
     if (file_exists($path)) {
         $json = @file_get_contents($path);
@@ -75,7 +76,7 @@ function saveAvailabilitySettings(array $data): bool {
         $json = @file_get_contents($path);
         if ($json) $existing = json_decode($json, true) ?: [];
     }
-    $data = array_intersect_key($data, array_flip(['slot_start', 'slot_end', 'slot_interval', 'work_days', 'excluded_dates']));
+    $data = array_intersect_key($data, array_flip(['slot_start', 'slot_end', 'slot_interval', 'work_days', 'excluded_dates', 'google_calendar_id']));
     if (isset($data['work_days']) && is_array($data['work_days'])) {
         $data['work_days'] = array_map('intval', $data['work_days']);
     }

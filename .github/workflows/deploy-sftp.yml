@@ -17,10 +17,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Composer install
+        run: composer install --no-dev --optimize-autoloader
+
       - name: Připravit soubory k nasazení
         run: |
           mkdir -p deploy
-          rsync -a --exclude='node_modules' --exclude='.git' --exclude='vendor' \
+          rsync -a --exclude='node_modules' --exclude='.git' \
             --exclude='data/*.db' --exclude='api/credentials/*.json' --exclude='.github' \
             ./ deploy/
           mkdir -p deploy/data deploy/api/credentials
