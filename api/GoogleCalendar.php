@@ -87,4 +87,39 @@ class GoogleCalendar {
         }
         return array_unique($busy);
     }
+
+    /**
+     * Vrací události pro kontrolu – datum, čas, název (pro debug/admin)
+     */
+    public function getEventsForDisplay(string $fromDate, int $days = 14): array {
+        $start = $fromDate . 'T00:00:00+01:00';
+        $endDate = date('Y-m-d', strtotime($fromDate . " +$days days"));
+        $end = $endDate . 'T23:59:59+01:00';
+        try {
+            $events = $this->service->events->listEvents($this->calendarId, [
+                'timeMin' => $start,
+                'timeMax' => $end,
+                'singleEvents' => true,
+                'orderBy' => 'startTime',
+            ]);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage(), 'items' => []];
+        }
+        $items = [];
+        foreach ($events->getItems() as $event) {
+            $startDt = $event->getStart();
+            $endDt = $event->getEnd();
+            if (!$startDt || !$endDt) continue;
+            $startTime = $startDt->getDateTime() ?: $startDt->getDate();
+            $endTime = $endDt->getDateTime() ?: $endDt->getDate();
+            if (!$startTime || !$endTime) continue;
+            $items[] = [
+                'date' => date('Y-m-d', strtotime($startTime)),
+                'start' => date('H:i', strtotime($startTime)),
+                'end' => date('H:i', strtotime($endTime)),
+                'summary' => $event->getSummary() ?: '(bez názvu)',
+            ];
+        }
+        return ['items' => $items];
+    }
 }

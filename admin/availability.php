@@ -134,9 +134,39 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
         </div>
 
         <?php if (GOOGLE_CALENDAR_ENABLED): ?>
+        <?php
+        $gcEvents = ['items' => []];
+        try {
+            require_once __DIR__ . '/../api/GoogleCalendar.php';
+            $gc = new GoogleCalendar();
+            $gcEvents = $gc->getEventsForDisplay(date('Y-m-d'), 14);
+        } catch (Exception $e) {
+            $gcEvents = ['error' => $e->getMessage(), 'items' => []];
+        }
+        ?>
         <div class="mt-6 p-4 bg-teal-50 rounded-lg text-sm text-teal-800">
             <strong>Google Calendar</strong> je napojen – události z kalendáře automaticky blokují sloty.
         </div>
+        <details class="mt-4 bg-white rounded-xl shadow-sm overflow-hidden">
+            <summary class="p-4 cursor-pointer font-medium text-slate-800 hover:bg-slate-50">Události z kalendáře (kontrola)</summary>
+            <div class="p-4 border-t border-slate-100">
+                <?php if (!empty($gcEvents['error'])): ?>
+                <p class="text-red-600 text-sm">Chyba: <?= htmlspecialchars($gcEvents['error']) ?></p>
+                <?php elseif (empty($gcEvents['items'])): ?>
+                <p class="text-slate-500 text-sm">Žádné události v příštích 14 dnech.</p>
+                <p class="text-slate-400 text-xs mt-1">Zkontrolujte: 1) Sdílení kalendáře s e-mailem Service Accountu (client_email v google-calendar.json). 2) GOOGLE_CALENDAR_ID v config (primary nebo konkrétní ID kalendáře).</p>
+                <?php else: ?>
+                <ul class="space-y-2 text-sm">
+                    <?php foreach ($gcEvents['items'] as $ev): ?>
+                    <li class="flex gap-4">
+                        <span class="font-mono text-slate-600"><?= htmlspecialchars($ev['date']) ?> <?= htmlspecialchars($ev['start']) ?>–<?= htmlspecialchars($ev['end']) ?></span>
+                        <span class="font-medium"><?= htmlspecialchars($ev['summary']) ?></span>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+            </div>
+        </details>
         <?php else: ?>
         <div class="mt-6 p-4 bg-amber-50 rounded-lg text-sm text-amber-800">
             Google Calendar není nakonfigurován. Pro blokování časů z kalendáře nahrajte <code class="bg-amber-100 px-1 rounded">api/credentials/google-calendar.json</code>.
