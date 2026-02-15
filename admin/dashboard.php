@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full [&>tbody>tr:nth-child(odd)]:bg-white [&>tbody>tr:nth-child(even)]:bg-slate-50/50">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
                             <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Datum</th>
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     </thead>
                     <tbody>
                         <?php foreach ($contacts as $c): ?>
-                        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                        <tr class="border-b border-slate-100 hover:!bg-slate-100">
                             <td class="py-4 px-6 text-sm text-slate-600">
                                 <?= date('d.m.Y H:i', strtotime($c['valid_from'] ?? $c['created_at'] ?? 'now')) ?>
                             </td>
@@ -138,8 +138,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                         <span class="block"><?= date('d.m.', strtotime($b['booking_date'])) ?> <?= $b['booking_time'] ?></span>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
-                                <?= htmlspecialchars($c['message'] ?: ($c['phone'] && empty($bookingsByContact[$c['id']]) ? $c['phone'] : '')) ?>
-                                <?php if (empty($bookingsByContact[$c['id']]) && !$c['message'] && !$c['phone']): ?>—<?php endif; ?>
+                                <?php
+                                $msg = $c['message'] ?: ($c['phone'] && empty($bookingsByContact[$c['id']]) ? $c['phone'] : '');
+                                if ($msg): ?>
+                                    <span class="block truncate" title="<?= htmlspecialchars($msg) ?>"><?= htmlspecialchars($msg) ?></span>
+                                <?php elseif (empty($bookingsByContact[$c['id']])): ?>—<?php endif; ?>
                             </td>
                             <td class="py-4 px-6">
                                 <textarea data-id="<?= $c['id'] ?>" class="notes-input w-full text-sm border border-slate-200 rounded px-2 py-1 focus:ring-2 focus:ring-teal-500" rows="2" placeholder="Poznámka..."><?= htmlspecialchars($c['notes'] ?? '') ?></textarea>

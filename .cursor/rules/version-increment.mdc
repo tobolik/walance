@@ -1,18 +1,25 @@
 ---
-description: KRITICKÉ – povýšení verze při každé úpravě kódu
+description: KRITICKÉ – verze, cache busting, push, závěrečná hláška
 alwaysApply: true
 ---
 
-# Povýšení verze – KRITICKÉ
+# Verze aplikace – NIKDY NEZAPOMENOUT
 
-**Při každé úpravě kódu vždy zvýš verzi** (PATCH: 1.0.x → 1.0.x+1).
+Při každé úpravě kódu aplikace (nové funkce, opravy bugů, změny UI) **vždy** zvýšit verzi v `index.html`.
 
-## Kde aktualizovat
+- Verze je v patičce: `<span class="footer-version">v1.0.5</span>`
+- Formát: `vMAJOR.MINOR.PATCH` – při změně zvyš PATCH (např. v1.0.5 → v1.0.6)
+- **Cache busting:** Aktualizuj i `?v=1.0.5` u všech odkazů na CSS a JS (link href, script src) – stejná hodnota bez „v“
+- **Poznámka:** Na feature branchi může být verze vyšší než na main (např. main má v2.2.2, branch v2.6.0 dle CHANGELOG). To je záměr – nesnižovat verzi zpět na main; srovnání s main není chyba.
+- Toto je kritická instrukce – nikdy na to nezapomenout.
 
-**Pouze api/version.php** – `define('APP_VERSION', '1.0.x');`
+# Závěrečná hláška – POKAŽDÉ
 
-Web i admin berou verzi automaticky.
+Na konci práce (po dokončení úkolů, před ukončením odpovědi) **vždy** uveď:
 
-## Závěrečná hláška
+1. **Aktuální verze:** např. „Verze: v1.0.2“
+2. **Push:** „Projekt byl pushnut“ nebo „Projekt nebyl pushnut – spusť `git add -A && git commit -m \"...\" && git push`“
 
-Po dokončení úkolů uveď: **Aktuální verze: vX.Y.Z** a zda byl projekt pushnut.
+**Po push:** Pokaždé po provedení push **vždy** oznam aktuální verzi aplikace (např. „Aktuální verze: v1.2.1“).
+
+Pokud byly provedeny změny a projekt nebyl pushnut, nabídni push nebo ho proveď.

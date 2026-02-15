@@ -5,12 +5,20 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.2.4] – 15.02.2026 00:15
+
+### Změněno
+- **Admin tabulky:** pruhování řádků (striped) dle ux-ui-conventions – střídavé pozadí pro lepší čitelnost
+- **Admin tabulky:** hover řádku `bg-slate-100` (silnější zvýraznění)
+- **Admin Rezervace:** poznámka – ořez s ellipsis, tooltip `title` s plným textem
+- **Admin Dashboard:** sloupec Zpráva – ořez s ellipsis, tooltip `title` s plným textem
+
 ## [1.2.3] – 14.02.2026 23:45
 
 ### Přidáno
 - **Admin Rezervace – modal Upravit:** zavření klávesou ESC
 - **Admin Rezervace:** při kliknutí na Upravit se řádek podbarví (bg-teal-50) až do zavření modalu
-- **cursor-rules:** `admin-tables.mdc` – zvyklosti pro tabulky v admin rozhraní
+- **cursor-rules:** pravidla z tobolik/cursor-rules (install.ps1)
 
 ## [1.2.2] – 14.02.2026 23:15
 

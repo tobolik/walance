@@ -3,4 +3,4 @@
  * Verze aplikace – jediný soubor ke změně při povýšení verze
  * vMAJOR.MINOR.PATCH – při běžné změně zvyš PATCH
  */
-define('APP_VERSION', '1.2.3');
+define('APP_VERSION', '1.2.4');

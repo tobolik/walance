@@ -1,0 +1,49 @@
+---
+description: Obecné UX/UI konvence – poznámka, scrollbary, formuláře
+globs: css/style.css, js/**/*.js, index.html
+alwaysApply: true
+---
+
+# Obecné UX/UI konvence – DODRŽOVAT
+
+Při úpravách UI (tabulky, formuláře, styly) vždy dodržuj následující.
+
+## 1. Sloupec / pole Poznámka
+
+- **V tabulkách:** Poznámka je vždy **max. na jeden řádek**, poté ořez s `text-overflow: ellipsis` (třída `.cell-note-truncate`).
+- **Při najetí myší:** Celý text se zobrazí v nativním tooltipu – použít atribut `title` s plným obsahem. **Nerozbalujte** text při hoveru (žádné `white-space: normal` / `overflow: visible` na hover), to způsobuje vodorovné rolování.
+- **Kde:** Nájemníci, Nemovitosti, Smlouvy, Platby – sloupec „Poznámka“; v modalech u požadavků na platbu atd. Všechna místa, kde se zobrazuje poznámka v tabulce, musí používat `<span class="cell-note-truncate" title="…">…</span>` uvnitř `<td class="col-note cell-note-wrap">`.
+
+## 2. Vodorovné posuvníky (scrollbary)
+
+- **Nikde** nechceme spodní (vodorovné) postranní rolovátko.
+- **Zajistit:** `overflow-x: hidden` u kontejnerů, které by mohly přetékat (`.heatmap-wrap`, `.tbl-wrap`; `body` už má `overflow-x: hidden`).
+- **Nepřidávat** `overflow-x: auto` pro tabulky – raději zmenšit obsah (ořez poznámky atd.) tak, aby vše zůstalo v šířce.
+
+## 3. Verzování a cache busting
+
+- Při každé změně kódu zvýšit verzi v `index.html`: formát `vMAJOR.MINOR.PATCH`, stejná hodnota (bez „v“) u všech `?v=...` u CSS a JS.
+- Viz `.cursor/rules/version-increment.mdc`.
+
+## 4. Barvy štítků (tags)
+
+- **Zelená a červená** jsou vyhrazené pro **stav** (úspěch / problém). Pro informační štítky (typ platby, úhrada požadavku, kauce atd.) používat jiné barvy (modrá, tyrkysová, šedá), aby nedocházelo ke kolizi se systémovými stavy.
+
+## 5. Vyhledávací select (searchable select)
+
+- Nativní `<select>` uvnitř komponenty má `tabindex="-1"`, aby nebyl v pořadí tabulátoru (tab jde rovnou na viditelný input).
+- Při focusu na input: pokud má pole hodnotu, označit celý text (`input.select()`), aby šel snadno přepsat.
+
+## 6. Tabulky – řazení a pruhování
+
+- **Řazení:** U tabulek s řazením musí být graficky jasné, podle kterého sloupce a v jakém směru je řazeno. Po načtení je vždy jeden sloupec v řazení (implicitní stav), aby ikona odpovídala skutečnému pořadí.
+  - **Řazený sloupec:** v záhlaví vždy **vyplněný** trojúhelník (▲ vzestupně, ▼ sestupně). Při více úrovních zobrazit číslo priority (1, 2, 3…) vedle ikony.
+  - **Řaditelný, neřazený sloupec:** v záhlaví **nevyplněný** trojúhelník (jen obrys) šipkou nahoru – značí, že sloupec jde řadit (výchozí směr = vzestupně). Po kliku se změní na vyplněný.
+  - Klik na záhlaví: řazení podle tohoto sloupce; první klik = vzestupně, druhý = sestupně. Klik na jiný sloupec přepne řazení na ten sloupec.
+  - **Ctrl+Klik:** ponechat stávající sloupce a přidat tento jako další úroveň; u již zařazeného přepne směr.
+  - Implementace: `UI.renderTable(…, { sortable: { order: [ { key, dir }, … ] }, striped: true })`. Zpětná kompatibilita: `sortable: { currentKey, currentDir }` se převede na jednu úroveň.
+- **Pruhování řádků:** Tabulky s řazením nebo dlouhým seznamem mají mít `striped: true` (třída `tbl-striped`), aby se řádky vizuálně střídaly (např. každý sudý řádek mírně odlišené pozadí) a zlepšila se čitelnost.
+
+---
+
+Plná dokumentace: `docs/UX-UI-CONVENTIONS.md`.

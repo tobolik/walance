@@ -118,7 +118,7 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
 
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full [&>tbody>tr:nth-child(4n+1)]:bg-white [&>tbody>tr:nth-child(4n+2)]:bg-white [&>tbody>tr:nth-child(4n+3)]:bg-slate-50/50 [&>tbody>tr:nth-child(4n+4)]:bg-slate-50/50">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
                             <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Datum & čas</th>
@@ -130,7 +130,7 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                     </thead>
                     <tbody>
                         <?php foreach ($bookings as $b): ?>
-                        <tr class="border-b border-slate-100 hover:bg-slate-50/50 booking-row" data-id="<?= $b['id'] ?>" data-date="<?= htmlspecialchars($b['booking_date']) ?>" data-time="<?= htmlspecialchars($b['booking_time']) ?>" data-name="<?= htmlspecialchars($b['name']) ?>">
+                        <tr class="border-b border-slate-100 hover:!bg-slate-100 booking-row" data-id="<?= $b['id'] ?>" data-date="<?= htmlspecialchars($b['booking_date']) ?>" data-time="<?= htmlspecialchars($b['booking_time']) ?>" data-name="<?= htmlspecialchars($b['name']) ?>">
                             <td class="py-4 px-6">
                                 <span class="font-medium text-slate-800"><?= date('d.m.Y', strtotime($b['booking_date'])) ?></span>
                                 <span class="text-slate-600"><?= htmlspecialchars($b['booking_time']) ?></span>
@@ -172,9 +172,9 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                             </td>
                         </tr>
                         <?php if ($b['message']): ?>
-                        <tr class="bg-slate-50/50">
-                            <td colspan="5" class="py-2 px-6 text-sm text-slate-600">
-                                <span class="text-slate-500">Poznámka:</span> <?= htmlspecialchars($b['message']) ?>
+                        <tr class="hover:!bg-slate-100">
+                            <td colspan="5" class="py-2 px-6 text-sm text-slate-600 overflow-hidden">
+                                <span class="text-slate-500">Poznámka:</span> <span class="block truncate max-w-full" title="<?= htmlspecialchars($b['message']) ?>"><?= htmlspecialchars($b['message']) ?></span>
                             </td>
                         </tr>
                         <?php endif; ?>
