@@ -33,29 +33,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slotRanges = [['9', '17']];
     }
     
+    // Kontrola kolizí – rozsahy se nesmí překrývat
+    for ($i = 0; $i < count($slotRanges); $i++) {
+        for ($j = $i + 1; $j < count($slotRanges); $j++) {
+            $a1 = (int)$slotRanges[$i][0];
+            $b1 = (int)$slotRanges[$i][1];
+            $a2 = (int)$slotRanges[$j][0];
+            $b2 = (int)$slotRanges[$j][1];
+            if ($a1 < $b2 && $a2 < $b1) {
+                $error = "Rozsahy se překrývají: {$slotRanges[$i][0]}-{$slotRanges[$i][1]} a {$slotRanges[$j][0]}-{$slotRanges[$j][1]} hod. Nastavte nesouvisející intervaly (např. 9–12 a 15–19).";
+                break 2;
+            }
+        }
+    }
+    
     if (!in_array($slotInterval, [15, 30, 60])) $slotInterval = 30;
     
-    $data = [
-        'slot_start' => (int)($slotRanges[0][0] ?? 9),
-        'slot_end' => (int)($slotRanges[count($slotRanges) - 1][1] ?? 17),
-        'slot_ranges' => $slotRanges,
-        'slot_interval' => $slotInterval,
-        'work_days' => $workDays,
-        'excluded_dates' => array_filter(array_map('trim', explode("\n", $excludedDates))),
-        'google_calendar_id' => $googleCalendarId,
-    ];
-    if (saveAvailabilitySettings($data)) {
-        $saved = true;
-        $settings = getAvailabilitySettings();
-    } else {
-        $error = 'Nepodařilo se uložit. Zkontrolujte oprávnění složky data/.';
+    if (empty($error)) {
+        $data = [
+            'slot_start' => (int)($slotRanges[0][0] ?? 9),
+            'slot_end' => (int)($slotRanges[count($slotRanges) - 1][1] ?? 17),
+            'slot_ranges' => $slotRanges,
+            'slot_interval' => $slotInterval,
+            'work_days' => $workDays,
+            'excluded_dates' => array_filter(array_map('trim', explode("\n", $excludedDates))),
+            'google_calendar_id' => $googleCalendarId,
+        ];
+        if (saveAvailabilitySettings($data)) {
+            $saved = true;
+            $settings = getAvailabilitySettings();
+        } else {
+            $error = 'Nepodařilo se uložit. Zkontrolujte oprávnění složky data/.';
+        }
     }
 }
 
 $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
-$slotRanges = $settings['slot_ranges'] ?? [];
-if (empty($slotRanges)) {
-    $slotRanges = [[(string)($settings['slot_start'] ?? 9), (string)($settings['slot_end'] ?? 17)]];
+if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
+    $slotRanges = $settings['slot_ranges'] ?? [];
+    if (empty($slotRanges)) {
+        $slotRanges = [[(string)($settings['slot_start'] ?? 9), (string)($settings['slot_end'] ?? 17)]];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -198,10 +216,17 @@ if (empty($slotRanges)) {
         <?php
         $gcEvents = ['items' => []];
         $gcCalId = !empty($settings['google_calendar_id']) ? $settings['google_calendar_id'] : null;
+        $serviceAccountEmail = null;
+        if (file_exists(__DIR__ . '/../api/credentials/google-calendar.json')) {
+            $creds = json_decode(file_get_contents(__DIR__ . '/../api/credentials/google-calendar.json'), true);
+            $serviceAccountEmail = $creds['client_email'] ?? null;
+        }
+        $effectiveCalId = $gcCalId ?: (defined('GOOGLE_CALENDAR_ID') ? GOOGLE_CALENDAR_ID : 'primary');
         try {
             require_once __DIR__ . '/../api/GoogleCalendar.php';
             $gc = new GoogleCalendar($gcCalId);
             $gcEvents = $gc->getEventsForDisplay(date('Y-m-d'), 14);
+            $effectiveCalId = $gc->getCalendarId();
         } catch (Exception $e) {
             $gcEvents = ['error' => $e->getMessage(), 'items' => []];
         }
@@ -215,8 +240,20 @@ if (empty($slotRanges)) {
                 <?php if (!empty($gcEvents['error'])): ?>
                 <p class="text-red-600 text-sm">Chyba: <?= htmlspecialchars($gcEvents['error']) ?></p>
                 <?php elseif (empty($gcEvents['items'])): ?>
-                <p class="text-slate-500 text-sm">Žádné události v příštích 14 dnech.</p>
-                <p class="text-slate-400 text-xs mt-1">Zkontrolujte: 1) Sdílení kalendáře s e-mailem Service Accountu (client_email v google-calendar.json). 2) GOOGLE_CALENDAR_ID v config (primary nebo konkrétní ID kalendáře).</p>
+                <p class="text-slate-600 font-medium mb-3">Žádné události v příštích 14 dnech.</p>
+                <p class="text-slate-600 text-sm mb-2">Používá se kalendář: <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars($effectiveCalId ?? '?') ?></code></p>
+                <?php if ($effectiveCalId === 'primary'): ?>
+                <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800 mb-3">
+                    <strong>Problém:</strong> „primary“ = kalendář Service Accountu (prázdný). Musíte použít <strong>váš</strong> kalendář s událostmi.
+                </div>
+                <?php endif; ?>
+                <p class="text-slate-600 text-sm font-medium mb-1">Postup:</p>
+                <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1 mb-3">
+                    <li>V Google Calendar (calendar.google.com) otevřete <strong>nastavení kalendáře</strong> (ikona ozubeného kolečka u vašeho kalendáře).</li>
+                    <li>V sekci „Sdílet s konkrétními lidmi“ přidejte e-mail: <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars($serviceAccountEmail ?? 'client_email z google-calendar.json') ?></code> s oprávněním „Zobrazit všechny podrobnosti události“.</li>
+                    <li>Výše v Nastavení dostupnosti vyberte v dropdownu <strong>konkrétní kalendář</strong> (ne „Výchozí“) – nebo zkopírujte Calendar ID z Google Calendar (Nastavení → Váš kalendář → Integrace kalendáře).</li>
+                    <li>Uložte nastavení a obnovte stránku.</li>
+                </ol>
                 <?php else: ?>
                 <ul class="space-y-2 text-sm">
                     <?php foreach ($gcEvents['items'] as $ev): ?>

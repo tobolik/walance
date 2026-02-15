@@ -5,6 +5,17 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.28] – 14.02.2026 19:30
+
+### Změněno
+- **Google Calendar:** při žádných událostech – podrobný postup řešení (sdílení kalendáře, výběr kalendáře), zobrazení Service Account e-mailu a ID kalendáře
+- **Google Calendar:** stránkování při načítání událostí (více než 250)
+
+## [1.0.27] – 14.02.2026 19:15
+
+### Přidáno
+- **Nastavení dostupnosti:** kontrola kolizí – rozsahy pracovní doby se nesmí překrývat (např. 9–12 a 11–17)
+
 ## [1.0.26] – 14.02.2026 19:00
 
 ### Přidáno
