@@ -108,6 +108,8 @@ $clientBody .= "Těšíme se na setkání!\n\n";
 $clientBody .= "S pozdravem,\ntým WALANCE";
 
 $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
+$headers .= "From: " . MAIL_FROM . "\r\n";
+$headers .= "Reply-To: " . MAIL_FROM . "\r\n";
 $headers .= "Bcc: " . CONTACT_EMAIL . "\r\n";
 @mail($email, '=?UTF-8?B?' . base64_encode($clientSubject) . '?=', $clientBody, $headers);
 

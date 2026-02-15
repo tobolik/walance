@@ -3,17 +3,20 @@
  * Potvrzení rezervace – změna stavu + volitelně odeslání potvrzujícího e-mailu (admin)
  * POST: id, send_email (0|1)
  */
+ob_start();
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 
 if (!isset($_SESSION['walance_admin'])) {
+    ob_end_clean();
     http_response_code(403);
     echo json_encode(['success' => false, 'error' => 'Přihlášení vyžadováno']);
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    ob_end_clean();
     http_response_code(405);
     echo json_encode(['success' => false, 'error' => 'Metoda není povolena']);
     exit;
@@ -27,6 +30,7 @@ $id = (int)($_POST['id'] ?? 0);
 $sendEmail = (int)($_POST['send_email'] ?? 1);
 
 if (!$id) {
+    ob_end_clean();
     echo json_encode(['success' => false, 'error' => 'Chybí ID rezervace']);
     exit;
 }
@@ -34,6 +38,7 @@ if (!$id) {
 try {
     $row = findActive('bookings', $id);
     if (!$row) {
+        ob_end_clean();
         echo json_encode(['success' => false, 'error' => 'Rezervace nenalezena']);
         exit;
     }
@@ -62,6 +67,8 @@ try {
         $clientBody .= "S pozdravem,\ntým WALANCE";
 
         $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
+        $headers .= "From: " . MAIL_FROM . "\r\n";
+        $headers .= "Reply-To: " . MAIL_FROM . "\r\n";
         $headers .= "Bcc: " . CONTACT_EMAIL . "\r\n";
         @mail($email, '=?UTF-8?B?' . base64_encode($clientSubject) . '?=', $clientBody, $headers);
 
@@ -77,7 +84,9 @@ try {
         ]);
     }
 
+    ob_end_clean();
     echo json_encode(['success' => true, 'status' => 'confirmed']);
 } catch (Exception $e) {
+    ob_end_clean();
     echo json_encode(['success' => false, 'error' => 'Nepodařilo se potvrdit rezervaci']);
 }

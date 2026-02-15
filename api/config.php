@@ -12,3 +12,7 @@ if (!file_exists(__DIR__ . '/config.local.php')) {
     die('Chybí api/config.local.php. Zkopírujte config.local.example.php jako config.local.php a vyplňte hodnoty.');
 }
 require_once __DIR__ . '/config.local.php';
+
+if (!defined('MAIL_FROM')) {
+    define('MAIL_FROM', CONTACT_EMAIL);
+}

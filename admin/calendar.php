@@ -303,12 +303,26 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
         }
 
         function updateBookingFromCalendar(id, action) {
-            const btn = event.target;
-            btn.disabled = true;
+            const btn = event && event.target ? event.target : null;
+            if (btn) btn.disabled = true;
+
+            function parseJson(r) {
+                return r.text().then(t => {
+                    try { return JSON.parse(t); } catch (_) { return {}; }
+                });
+            }
+
+            function finish(ok) {
+                if (btn) btn.disabled = false;
+                if (ok) {
+                    closeBookingModal();
+                    loadCalendarMonth();
+                }
+            }
 
             if (action === 'confirm') {
                 fetch('../api/booking-confirmation-check.php?id=' + id, { cache: 'no-store', credentials: 'same-origin' })
-                    .then(r => r.json())
+                    .then(parseJson)
                     .then(check => {
                         let sendEmail = 1;
                         if (check.already_sent) {
@@ -321,15 +335,12 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                         fd.append('send_email', sendEmail);
                         return fetch('../api/booking-confirm.php', { method: 'POST', body: fd, cache: 'no-store', credentials: 'same-origin' });
                     })
-                    .then(r => r.json())
+                    .then(parseJson)
                     .then(data => {
-                        if (data.success) {
-                            closeBookingModal();
-                            loadCalendarMonth();
-                        }
+                        if (data.success) finish(true);
+                        else { finish(false); alert(data.error || 'Chyba při potvrzování.'); }
                     })
-                    .catch(() => {})
-                    .finally(() => { btn.disabled = false; });
+                    .catch(err => { finish(false); console.error(err); alert('Chyba při odesílání.'); });
                 return;
             }
 
@@ -337,17 +348,15 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: 'ajax_action=' + action + '&id=' + id,
-                cache: 'no-store'
+                cache: 'no-store',
+                credentials: 'same-origin'
             })
-            .then(r => r.json())
+            .then(parseJson)
             .then(data => {
-                if (data.success) {
-                    closeBookingModal();
-                    loadCalendarMonth();
-                }
+                if (data.success) finish(true);
+                else finish(false);
             })
-            .catch(() => {})
-            .finally(() => { btn.disabled = false; });
+            .catch(() => finish(false));
         }
 
         document.getElementById('cal-prev').addEventListener('click', () => {

@@ -153,18 +153,18 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                                         Upravit
                                     </button>
                                     <?php if ($b['status'] === 'pending'): ?>
-                                    <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'confirm')" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-lg transition-colors">
+                                    <button type="button" onclick="updateBooking(event, <?= $b['id'] ?>, 'confirm')" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-lg transition-colors">
                                         Potvrdit
                                     </button>
-                                    <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors">
+                                    <button type="button" onclick="updateBooking(event, <?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors">
                                         Zamítnout
                                     </button>
                                     <?php elseif ($b['status'] === 'confirmed'): ?>
-                                    <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-slate-500 hover:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
+                                    <button type="button" onclick="updateBooking(event, <?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-slate-500 hover:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
                                         Zamítnout
                                     </button>
                                     <?php elseif ($b['status'] === 'cancelled'): ?>
-                                    <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'restore')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors">
+                                    <button type="button" onclick="updateBooking(event, <?= $b['id'] ?>, 'restore')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors">
                                         Zrušit zamítnutí
                                     </button>
                                     <?php endif; ?>
@@ -264,15 +264,24 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
             });
         }
 
-        function updateBooking(id, action) {
-            const row = document.querySelector(`.booking-row[data-id="${id}"]`);
-            if (!row) return;
-            const btn = event.target;
-            btn.disabled = true;
+        function updateBooking(ev, id, action) {
+            const btn = ev && ev.target ? ev.target : (typeof event !== 'undefined' ? event.target : null);
+            if (btn) btn.disabled = true;
+
+            function parseJson(r) {
+                return r.text().then(t => {
+                    try { return JSON.parse(t); } catch (_) { return {}; }
+                });
+            }
+
+            function done(ok) {
+                if (btn) btn.disabled = false;
+                if (ok) location.reload();
+            }
 
             if (action === 'confirm') {
                 fetch('../api/booking-confirmation-check.php?id=' + id, { cache: 'no-store', credentials: 'same-origin' })
-                    .then(r => r.json())
+                    .then(parseJson)
                     .then(check => {
                         let sendEmail = 1;
                         if (check.already_sent) {
@@ -285,12 +294,12 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                         fd.append('send_email', sendEmail);
                         return fetch('../api/booking-confirm.php', { method: 'POST', body: fd, cache: 'no-store', credentials: 'same-origin' });
                     })
-                    .then(r => r.json())
+                    .then(parseJson)
                     .then(data => {
                         if (data.success) location.reload();
-                        else btn.disabled = false;
+                        else { done(false); if (!data.success) alert(data.error || 'Chyba při potvrzování.'); }
                     })
-                    .catch(() => { btn.disabled = false; });
+                    .catch(err => { done(false); console.error(err); alert('Chyba při odesílání.'); });
                 return;
             }
 
@@ -298,14 +307,15 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: 'ajax_action=' + action + '&id=' + id,
-                cache: 'no-store'
+                cache: 'no-store',
+                credentials: 'same-origin'
             })
-            .then(r => r.json())
+            .then(parseJson)
             .then(data => {
                 if (data.success) location.reload();
-                else btn.disabled = false;
+                else done(false);
             })
-            .catch(() => { btn.disabled = false; });
+            .catch(() => done(false));
         }
     </script>
 </body>

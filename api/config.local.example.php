@@ -8,6 +8,9 @@
 // E-mail pro příjem zpráv z kontaktního formuláře a rezervací
 define('CONTACT_EMAIL', 'info@walance.cz');
 
+// Odesílatel systémových e-mailů (rezervace, potvrzení termínu) – bez nastavení se použije CONTACT_EMAIL
+define('MAIL_FROM', 'info@walance.cz');
+
 // MySQL – použije se když DB_TYPE = 'mysql' v config.public.php
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'walancecz');
