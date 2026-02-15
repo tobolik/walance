@@ -144,6 +144,16 @@ try {
             $messages[] = "Migrace bookings na soft-update OK.";
         }
 
+        // Odstranit redundantní contact_id (legacy – aplikace používá contacts_id)
+        $contactIdCol = $pdo->query("SHOW COLUMNS FROM bookings LIKE 'contact_id'")->fetch();
+        if ($contactIdCol) {
+            try {
+                $pdo->exec("ALTER TABLE bookings DROP FOREIGN KEY bookings_ibfk_1");
+            } catch (PDOException $e) { /* FK nemusí existovat */ }
+            $pdo->exec("ALTER TABLE bookings DROP COLUMN contact_id");
+            $messages[] = "Odstraněn redundantní sloupec bookings.contact_id.";
+        }
+
     } else {
         $dir = dirname(DB_PATH);
         if (!is_dir($dir)) mkdir($dir, 0755, true);

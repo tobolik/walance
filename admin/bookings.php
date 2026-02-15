@@ -15,8 +15,8 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['action'];
-    if ($id && in_array($action, ['confirm', 'cancel'])) {
-        $status = $action === 'confirm' ? 'confirmed' : 'cancelled';
+    if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
+        $status = $action === 'restore' ? 'pending' : ($action === 'confirm' ? 'confirmed' : 'cancelled');
         try {
             softUpdate('bookings', $id, ['status' => $status]);
         } catch (Exception $e) { /* log */ }
@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
     header('Content-Type: application/json');
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['ajax_action'];
-    if ($id && in_array($action, ['confirm', 'cancel'])) {
-        $status = $action === 'confirm' ? 'confirmed' : 'cancelled';
+    if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
+        $status = $action === 'restore' ? 'pending' : ($action === 'confirm' ? 'confirmed' : 'cancelled');
         try {
             softUpdate('bookings', $id, ['status' => $status]);
             echo json_encode(['success' => true, 'status' => $status]);
@@ -148,6 +148,10 @@ $statusLabels = [
                                 <?php elseif ($b['status'] === 'confirmed'): ?>
                                 <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'cancel')" class="px-3 py-1.5 bg-slate-500 hover:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
                                     Zamítnout
+                                </button>
+                                <?php elseif ($b['status'] === 'cancelled'): ?>
+                                <button type="button" onclick="updateBooking(<?= $b['id'] ?>, 'restore')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors">
+                                    Zrušit zamítnutí
                                 </button>
                                 <?php else: ?>
                                 <span class="text-slate-400 text-xs">—</span>
