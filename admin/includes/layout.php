@@ -7,7 +7,7 @@ $adminCurrentPage = $adminCurrentPage ?? '';
 $adminV = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 ?>
 <div class="flex min-h-screen">
-    <aside class="w-56 bg-white border-r border-slate-200 flex flex-col shrink-0">
+    <aside class="fixed left-0 top-0 bottom-0 w-56 bg-white border-r border-slate-200 flex flex-col z-40">
         <div class="p-4 border-b border-slate-100">
             <h1 class="text-lg font-bold text-slate-800">WALANCE<span class="text-teal-600">.</span></h1>
             <p class="text-xs text-slate-500 mt-0.5">CRM administrace</p>
@@ -46,4 +46,4 @@ $adminV = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             </a>
         </div>
     </aside>
-    <main class="flex-1 overflow-auto">
+    <main class="flex-1 overflow-auto ml-56">

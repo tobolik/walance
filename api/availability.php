@@ -16,6 +16,7 @@ function getAvailabilitySettings(): array {
         'excluded_dates' => [],
         'excluded_slots' => [], // ['date' => ['09:00', '09:30'], ...] – ručně blokované časy
         'google_calendar_id' => '', // prázdné = GOOGLE_CALENDAR_ID z config
+        'google_calendar_ids' => [], // více kalendářů – sjednocení obsazených slotů
     ];
     if (file_exists($path)) {
         $json = @file_get_contents($path);
@@ -24,11 +25,24 @@ function getAvailabilitySettings(): array {
             if ($data) {
                 $merged = array_merge($default, $data);
                 if (empty($merged['excluded_slots'])) $merged['excluded_slots'] = [];
+                if (empty($merged['google_calendar_ids']) && !empty($merged['google_calendar_id'])) {
+                    $merged['google_calendar_ids'] = [$merged['google_calendar_id']];
+                }
                 return $merged;
             }
         }
     }
     return $default;
+}
+
+/** Vrací pole ID kalendářů pro dotazy na obsazenost (sjednocení více kalendářů) */
+function getCalendarIds(): array {
+    $s = getAvailabilitySettings();
+    $ids = $s['google_calendar_ids'] ?? [];
+    if (!empty($ids) && is_array($ids)) return array_values(array_filter(array_map('trim', $ids)));
+    $single = trim($s['google_calendar_id'] ?? '');
+    if ($single !== '') return [$single];
+    return [];
 }
 
 /** Vrací pole časových slotů (HH:MM) pro daný interval a rozsahy hodin */
@@ -117,7 +131,7 @@ function saveAvailabilitySettings(array $data): bool {
         $json = @file_get_contents($path);
         if ($json) $existing = json_decode($json, true) ?: [];
     }
-    $data = array_intersect_key($data, array_flip(['slot_start', 'slot_end', 'slot_ranges', 'slot_interval', 'work_days', 'excluded_dates', 'google_calendar_id']));
+    $data = array_intersect_key($data, array_flip(['slot_start', 'slot_end', 'slot_ranges', 'slot_interval', 'work_days', 'excluded_dates', 'google_calendar_id', 'google_calendar_ids']));
     if (isset($data['work_days']) && is_array($data['work_days'])) {
         $data['work_days'] = array_map('intval', $data['work_days']);
     }
@@ -128,6 +142,15 @@ function saveAvailabilitySettings(array $data): bool {
         $data['slot_ranges'] = array_values(array_filter($data['slot_ranges'], function ($r) {
             return is_array($r) && count($r) >= 2 && (int)($r[1] ?? 0) > (int)($r[0] ?? 0);
         }));
+    }
+    if (isset($data['google_calendar_ids'])) {
+        if (is_array($data['google_calendar_ids'])) {
+            $data['google_calendar_ids'] = array_values(array_filter(array_map('trim', $data['google_calendar_ids'])));
+        } else {
+            $parts = preg_split('/[\s,]+/', (string)$data['google_calendar_ids'], -1, PREG_SPLIT_NO_EMPTY);
+            $data['google_calendar_ids'] = array_values(array_filter(array_map('trim', $parts)));
+        }
+        $data['google_calendar_id'] = $data['google_calendar_ids'][0] ?? '';
     }
     $data['excluded_slots'] = $existing['excluded_slots'] ?? [];
     return file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) !== false;

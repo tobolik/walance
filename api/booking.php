@@ -51,8 +51,8 @@ if (!$bookingDate || $bookingDate < new DateTime('today')) {
 $googleEventId = null;
 if (GOOGLE_CALENDAR_ENABLED && file_exists(__DIR__ . '/GoogleCalendar.php')) {
     require_once __DIR__ . '/availability.php';
-    $availSettings = getAvailabilitySettings();
-    $gcCalendarId = !empty($availSettings['google_calendar_id']) ? $availSettings['google_calendar_id'] : null;
+    $calendarIds = getCalendarIds();
+    $gcCalendarId = $calendarIds[0] ?? null;
     require_once __DIR__ . '/GoogleCalendar.php';
     try {
         $gc = new GoogleCalendar($gcCalendarId);

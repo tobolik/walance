@@ -57,9 +57,10 @@ foreach ($booked as $b) {
     }
 }
 
-// Google Calendar – obsazené časy
+// Google Calendar – obsazené časy (podpora více kalendářů)
 $gc = null;
-$gcCalendarId = !empty($settings['google_calendar_id']) ? $settings['google_calendar_id'] : null;
+$calendarIds = getCalendarIds();
+$gcCalendarId = $calendarIds[0] ?? null;
 if (GOOGLE_CALENDAR_ENABLED && file_exists(__DIR__ . '/GoogleCalendar.php')) {
     try {
         require_once __DIR__ . '/GoogleCalendar.php';
@@ -80,7 +81,8 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
     $gcBusyByDate = [];
     if (isset($gc)) {
         try {
-            $gcBusyByDate = $gc->getBusySlotsForMonth($monthParam, $interval, $startHour, $endHour);
+            $ids = !empty($calendarIds) ? $calendarIds : null;
+            $gcBusyByDate = $gc->getBusySlotsForMonth($monthParam, $interval, $startHour, $endHour, $ids);
         } catch (Exception $e) {}
     }
     
@@ -158,7 +160,8 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         
         if (isset($gc)) {
             try {
-                $gcBusy = $gc->getBusySlots($dateStr, $interval, $startHour, $endHour);
+                $ids = !empty($calendarIds) ? $calendarIds : null;
+                $gcBusy = $gc->getBusySlots($dateStr, $interval, $startHour, $endHour, $ids);
                 if (!empty($gcBusy)) {
                     $daySlots = array_values(array_filter($daySlots, function($s) use ($gcBusy) { return !in_array($s, $gcBusy); }));
                 }

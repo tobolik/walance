@@ -16,9 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slotInterval = (int)($_POST['slot_interval'] ?? 30);
     $workDays = isset($_POST['work_days']) ? array_map('intval', (array)$_POST['work_days']) : [1,2,3,4,5];
     $excludedDates = trim($_POST['excluded_dates'] ?? '');
-    $googleCalendarId = trim($_POST['google_calendar_id_manual'] ?? '');
-    if ($googleCalendarId === '') {
-        $googleCalendarId = trim($_POST['google_calendar_id'] ?? '');
+    $manualIds = trim($_POST['google_calendar_id_manual'] ?? '');
+    $googleCalendarIds = [];
+    if ($manualIds !== '') {
+        $googleCalendarIds = preg_split('/[\s,]+/', $manualIds, -1, PREG_SPLIT_NO_EMPTY);
+        $googleCalendarIds = array_values(array_filter(array_map('trim', $googleCalendarIds)));
+    }
+    if (empty($googleCalendarIds)) {
+        $single = trim($_POST['google_calendar_id'] ?? '');
+        if ($single !== '') $googleCalendarIds = [$single];
     }
     
     $slotRanges = [];
@@ -60,11 +66,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'slot_interval' => $slotInterval,
             'work_days' => $workDays,
             'excluded_dates' => array_filter(array_map('trim', explode("\n", $excludedDates))),
-            'google_calendar_id' => $googleCalendarId,
+            'google_calendar_ids' => $googleCalendarIds,
         ];
         if (saveAvailabilitySettings($data)) {
             $saved = true;
             $settings = getAvailabilitySettings();
+            if (!empty($googleCalendarIds) && GOOGLE_CALENDAR_ENABLED && file_exists(__DIR__ . '/../api/GoogleCalendar.php')) {
+                try {
+                    require_once __DIR__ . '/../api/GoogleCalendar.php';
+                    $gc = new GoogleCalendar();
+                    foreach ($googleCalendarIds as $cid) {
+                        $gc->addCalendarToList($cid);
+                    }
+                } catch (Exception $e) {}
+            }
         } else {
             $error = 'Nepodařilo se uložit. Zkontrolujte oprávnění složky data/.';
         }
@@ -128,24 +143,26 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 <?php if (GOOGLE_CALENDAR_ENABLED): ?>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Google Calendar</label>
+                    <?php
+                    $calIds = $settings['google_calendar_ids'] ?? [];
+                    if (empty($calIds) && !empty($settings['google_calendar_id'])) $calIds = [$settings['google_calendar_id']];
+                    $calIdsStr = implode("\n", $calIds);
+                    ?>
                     <?php if ($hasCalendarList): ?>
                     <select name="google_calendar_id" id="gc-select" class="w-full px-4 py-2 border border-slate-300 rounded-lg mb-2">
-                        <option value="">Výchozí (config) – nefunguje pro sdílený kalendář</option>
+                        <option value="">— Přidat z výběru —</option>
                         <?php foreach ($calendarList as $cal): ?>
-                        <option value="<?= htmlspecialchars($cal['id']) ?>" <?= ($settings['google_calendar_id'] ?? '') === $cal['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($cal['summary']) ?><?= !empty($cal['primary']) ? ' (primární)' : '' ?>
-                        </option>
+                        <option value="<?= htmlspecialchars($cal['id']) ?>"><?= htmlspecialchars($cal['summary']) ?><?= !empty($cal['primary']) ? ' (primární)' : '' ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?php else: ?>
-                    <input type="text" name="google_calendar_id" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="primary nebo e-mail kalendáře" class="w-full px-4 py-2 border border-slate-300 rounded-lg mb-2">
                     <?php if (isset($calendarList['error'])): ?>
                     <p class="text-amber-600 text-xs mt-1 mb-2">Seznam nelze načíst: <?= htmlspecialchars($calendarList['error']) ?>. Zadejte ID ručně.</p>
                     <?php endif; ?>
                     <?php endif; ?>
-                    <p class="text-slate-600 text-sm font-medium mb-1">Nebo zadejte Calendar ID ručně (doporučeno):</p>
-                    <input type="text" name="google_calendar_id_manual" value="<?= htmlspecialchars($settings['google_calendar_id'] ?? '') ?>" placeholder="např. vase@gmail.com nebo xxx@group.calendar.google.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm">
-                    <p class="text-slate-500 text-xs mt-1">E-mail vašeho Google účtu = váš primární kalendář. Nebo: Google Calendar → Nastavení → Váš kalendář → Integrace kalendáře → Zkopírujte ID.</p>
+                    <p class="text-slate-600 text-sm font-medium mb-1">Calendar ID (jeden na řádek nebo oddělené čárkou) – můžete kombinovat více kalendářů:</p>
+                    <textarea name="google_calendar_id_manual" id="gc-manual" rows="3" placeholder="vase@gmail.com&#10;xxx@group.calendar.google.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm"><?= htmlspecialchars($calIdsStr) ?></textarea>
+                    <p class="text-slate-500 text-xs mt-1">E-mail vašeho Google účtu = váš primární kalendář. Nebo: Google Calendar → Nastavení → Váš kalendář → Integrace kalendáře → Zkopírujte ID. Rezervace se zapisují do prvního kalendáře.</p>
                 </div>
                 <?php endif; ?>
                 <div>
@@ -206,7 +223,8 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
         <?php if (GOOGLE_CALENDAR_ENABLED): ?>
         <?php
         $gcEvents = ['items' => []];
-        $gcCalId = !empty($settings['google_calendar_id']) ? $settings['google_calendar_id'] : null;
+        $calendarIds = getCalendarIds();
+        $gcCalId = $calendarIds[0] ?? null;
         $serviceAccountEmail = null;
         if (file_exists(__DIR__ . '/../api/credentials/google-calendar.json')) {
             $creds = json_decode(file_get_contents(__DIR__ . '/../api/credentials/google-calendar.json'), true);
@@ -216,7 +234,8 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
         try {
             require_once __DIR__ . '/../api/GoogleCalendar.php';
             $gc = new GoogleCalendar($gcCalId);
-            $gcEvents = $gc->getEventsForDisplay(date('Y-m-d'), 14);
+            $ids = !empty($calendarIds) ? $calendarIds : null;
+            $gcEvents = $gc->getEventsForDisplay(date('Y-m-d'), 14, $ids);
             $effectiveCalId = $gc->getCalendarId();
         } catch (Exception $e) {
             $gcEvents = ['error' => $e->getMessage(), 'items' => []];
@@ -232,7 +251,7 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 <p class="text-red-600 text-sm">Chyba: <?= htmlspecialchars($gcEvents['error']) ?></p>
                 <?php elseif (empty($gcEvents['items'])): ?>
                 <p class="text-slate-600 font-medium mb-3">Žádné události v příštích 14 dnech.</p>
-                <p class="text-slate-600 text-sm mb-2">Používá se kalendář: <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars($effectiveCalId ?? '?') ?></code></p>
+                <p class="text-slate-600 text-sm mb-2"><?= count($calendarIds) > 1 ? 'Kalendáře' : 'Kalendář' ?>: <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars(implode(', ', !empty($calendarIds) ? $calendarIds : [$effectiveCalId ?? '?'])) ?></code></p>
                 <?php if ($effectiveCalId === 'primary'): ?>
                 <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800 mb-3">
                     <strong>Problém:</strong> „primary“ = kalendář Service Accountu (prázdný). Musíte použít <strong>váš</strong> kalendář s událostmi.
@@ -281,6 +300,8 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
             <div id="block-cal-grid" class="grid grid-cols-7 gap-1 min-h-[200px]"></div>
             <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-600">
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-100"></span> Volné (klik = blokovat)</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-100 border-2 border-slate-400"></span> Volné, bylo zamítnuto</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-200"></span> Čeká na potvrzení</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-200"></span> Blokováno (klik = odblokovat)</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-slate-200"></span> Obsazeno rezervací</span>
             </div>
@@ -296,9 +317,16 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
     <script>
         lucide.createIcons();
         const gcSelect = document.getElementById('gc-select');
-        const gcManual = document.querySelector('[name="google_calendar_id_manual"]');
+        const gcManual = document.getElementById('gc-manual');
         if (gcSelect && gcManual) {
-            gcSelect.addEventListener('change', () => { gcManual.value = gcSelect.value; });
+            gcSelect.addEventListener('change', () => {
+                const v = gcSelect.value;
+                if (!v) return;
+                const lines = gcManual.value.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+                if (!lines.includes(v)) lines.push(v);
+                gcManual.value = lines.join('\n');
+                gcSelect.selectedIndex = 0;
+            });
         }
 
         document.getElementById('slot-range-add').addEventListener('click', () => {
@@ -316,16 +344,23 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
 
         const apiBase = '../api';
         let blockCalMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
-        let blockCalData = { slots_detail: {}, availability: {} };
+        let blockCalData = { slots_detail: {}, availability: {}, bookings: {} };
         let blockCalSelectedDate = null;
 
         async function loadBlockCalendar() {
             const grid = document.getElementById('block-cal-grid');
             grid.innerHTML = '<div class="col-span-7 py-8 text-center text-slate-500">Načítám…</div>';
             try {
-                const r = await fetch(apiBase + '/slots.php?month=' + blockCalMonth, { cache: 'no-store' });
-                const data = await r.json();
-                blockCalData = data;
+                const [slotsRes, bookingsRes] = await Promise.all([
+                    fetch(apiBase + '/slots.php?month=' + blockCalMonth, { cache: 'no-store' }),
+                    fetch(apiBase + '/calendar-bookings.php?month=' + blockCalMonth, { cache: 'no-store', credentials: 'same-origin' })
+                ]);
+                const data = await slotsRes.json();
+                blockCalData = { ...data, bookings: {} };
+                if (bookingsRes.ok) {
+                    const bookings = await bookingsRes.json();
+                    blockCalData.bookings = bookings;
+                }
                 renderBlockCalendar();
             } catch (err) {
                 grid.innerHTML = '<div class="col-span-7 py-8 text-center text-slate-500">Chyba načtení</div>';
@@ -353,9 +388,11 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 const hasSlots = avail && (avail.free > 0 || avail.pending > 0 || avail.confirmed > 0);
                 const slotsDetail = blockCalData.slots_detail?.[dateStr];
                 const hasBlocked = slotsDetail && Object.values(slotsDetail).includes('blocked');
+                const hasPending = slotsDetail && Object.values(slotsDetail).includes('pending');
                 let bg = 'bg-slate-100';
                 if (!isWeekend && !isPast && slotsDetail) {
                     if (hasBlocked) bg = 'bg-red-100 hover:bg-red-200';
+                    else if (hasPending) bg = 'bg-amber-50 hover:bg-amber-100';
                     else if (hasSlots) bg = 'bg-emerald-50 hover:bg-emerald-100';
                     else bg = 'bg-slate-50 hover:bg-slate-100';
                 }
@@ -390,8 +427,12 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
             const list = document.getElementById('block-slots-list');
             list.innerHTML = '';
             list.dataset.date = dateStr;
+            const bookingsByTime = blockCalData.bookings?.[dateStr] || {};
             allTimes.forEach(t => {
                 const status = slotsDetail[t];
+                let bookings = bookingsByTime[t];
+                if (bookings && !Array.isArray(bookings)) bookings = [bookings];
+                const hasRejected = bookings && bookings.length > 0 && bookings.every(b => b.status === 'cancelled');
                 const span = document.createElement('button');
                 span.type = 'button';
                 span.textContent = t;
@@ -400,6 +441,17 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 if (status === 'blocked') {
                     span.className += ' bg-red-200 hover:bg-red-300 text-red-900 cursor-pointer';
                     span.title = 'Klik pro odblokování';
+                } else if (status === 'pending') {
+                    span.className += ' bg-amber-200 text-amber-900 cursor-default';
+                    span.disabled = true;
+                    span.title = 'Čeká na potvrzení';
+                } else if (status === 'confirmed') {
+                    span.className += ' bg-slate-200 text-slate-600 cursor-default';
+                    span.disabled = true;
+                    span.title = 'Obsazeno rezervací';
+                } else if (status === 'free' && hasRejected) {
+                    span.className += ' bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border-2 border-slate-400 cursor-pointer';
+                    span.title = 'Volné (bylo zamítnuto): ' + bookings.map(b => b.name).join(', ');
                 } else if (status === 'free') {
                     span.className += ' bg-emerald-100 hover:bg-emerald-200 text-emerald-800 cursor-pointer';
                     span.title = 'Klik pro blokování';
