@@ -38,7 +38,6 @@ jobs:
           sftpArgs: '-o ConnectTimeout=10'
 
       - name: Spustit migraci databáze
-        if: vars.ENABLE_AUTO_MIGRATE == 'true'
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://walance.cz' }}
         run: |
