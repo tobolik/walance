@@ -30,6 +30,22 @@ function getAvailabilitySettings(): array {
     return $default;
 }
 
+/** Odebere slot z ruční blokace – při zamítnutí rezervace uvolní termín pro ostatní */
+function removeExcludedSlot(string $date, string $time): bool {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) || !preg_match('/^\d{2}:\d{2}$/', $time)) {
+        return false;
+    }
+    $settings = getAvailabilitySettings();
+    $excluded = $settings['excluded_slots'] ?? [];
+    $dateSlots = $excluded[$date] ?? [];
+    $idx = array_search($time, $dateSlots);
+    if ($idx === false) return true; // už není blokovaný
+    array_splice($dateSlots, $idx, 1);
+    if (empty($dateSlots)) unset($excluded[$date]);
+    else $excluded[$date] = array_values($dateSlots);
+    return saveExcludedSlots($excluded);
+}
+
 /** Přepne blokovaný slot (přidá/odebere) – vrací nový stav true=blokováno, false=volné */
 function toggleExcludedSlot(string $date, string $time): bool {
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) || !preg_match('/^\d{2}:\d{2}$/', $time)) {

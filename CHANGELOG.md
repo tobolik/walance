@@ -5,6 +5,12 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.14] – 14.02.2026 15:30
+
+### Přidáno
+- **Rezervace:** při zamítnutí rezervace se automaticky odblokuje daný slot – termín je ihned k dispozici na webu pro ostatní klienty
+- **api/availability.php:** funkce `removeExcludedSlot()` pro odebrání slotu z ruční blokace
+
 ## [1.0.13] – 14.02.2026 15:15
 
 ### Přidáno

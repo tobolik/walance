@@ -7,6 +7,7 @@ if (!isset($_SESSION['walance_admin'])) {
 require_once __DIR__ . '/../api/config.php';
 require_once __DIR__ . '/../api/db.php';
 require_once __DIR__ . '/../api/crud.php';
+require_once __DIR__ . '/../api/availability.php';
 
 $db = getDb();
 $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
@@ -17,8 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
     if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
         $status = $action === 'restore' ? 'pending' : ($action === 'confirm' ? 'confirmed' : 'cancelled');
+        $row = null;
+        if ($action === 'cancel') {
+            $stmt = $db->prepare("SELECT booking_date, booking_time FROM bookings WHERE id = ?");
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
         try {
             softUpdate('bookings', $id, ['status' => $status]);
+            if ($action === 'cancel' && $row) {
+                removeExcludedSlot($row['booking_date'], $row['booking_time']);
+            }
         } catch (Exception $e) { /* log */ }
     }
     header('Location: bookings.php' . (isset($_GET['status']) ? '?status=' . urlencode($_GET['status']) : ''));
@@ -33,8 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
     $action = $_POST['ajax_action'];
     if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
         $status = $action === 'restore' ? 'pending' : ($action === 'confirm' ? 'confirmed' : 'cancelled');
+        $row = null;
+        if ($action === 'cancel') {
+            $stmt = $db->prepare("SELECT booking_date, booking_time FROM bookings WHERE id = ?");
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
         try {
             softUpdate('bookings', $id, ['status' => $status]);
+            if ($action === 'cancel' && $row) {
+                removeExcludedSlot($row['booking_date'], $row['booking_time']);
+            }
             echo json_encode(['success' => true, 'status' => $status]);
         } catch (Exception $e) {
             echo json_encode(['success' => false]);
