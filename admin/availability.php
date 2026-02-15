@@ -13,21 +13,32 @@ $saved = false;
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $slotStart = (int)($_POST['slot_start'] ?? 9);
-    $slotEnd = (int)($_POST['slot_end'] ?? 17);
     $slotInterval = (int)($_POST['slot_interval'] ?? 30);
     $workDays = isset($_POST['work_days']) ? array_map('intval', (array)$_POST['work_days']) : [1,2,3,4,5];
     $excludedDates = trim($_POST['excluded_dates'] ?? '');
     $googleCalendarId = trim($_POST['google_calendar_id'] ?? '');
     
-    if ($slotStart < 0 || $slotStart > 23) $slotStart = 9;
-    if ($slotEnd < 1 || $slotEnd > 24) $slotEnd = 17;
-    if ($slotEnd <= $slotStart) $slotEnd = $slotStart + 1;
+    $slotRanges = [];
+    $starts = (array)($_POST['slot_range_start'] ?? []);
+    $ends = (array)($_POST['slot_range_end'] ?? []);
+    foreach ($starts as $i => $s) {
+        $s = (int)$s;
+        $e = (int)($ends[$i] ?? $s);
+        if ($s < 0 || $s > 23) $s = 9;
+        if ($e < 1 || $e > 24) $e = 17;
+        if ($e <= $s) $e = $s + 1;
+        $slotRanges[] = [(string)$s, (string)$e];
+    }
+    if (empty($slotRanges)) {
+        $slotRanges = [['9', '17']];
+    }
+    
     if (!in_array($slotInterval, [15, 30, 60])) $slotInterval = 30;
     
     $data = [
-        'slot_start' => $slotStart,
-        'slot_end' => $slotEnd,
+        'slot_start' => (int)($slotRanges[0][0] ?? 9),
+        'slot_end' => (int)($slotRanges[count($slotRanges) - 1][1] ?? 17),
+        'slot_ranges' => $slotRanges,
         'slot_interval' => $slotInterval,
         'work_days' => $workDays,
         'excluded_dates' => array_filter(array_map('trim', explode("\n", $excludedDates))),
@@ -42,6 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
+$slotRanges = $settings['slot_ranges'] ?? [];
+if (empty($slotRanges)) {
+    $slotRanges = [[(string)($settings['slot_start'] ?? 9), (string)($settings['slot_end'] ?? 17)]];
+}
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -126,18 +141,25 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
                 <?php endif; ?>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Pracovní doba</label>
-                    <div class="flex items-center gap-4">
-                        <div class="flex items-center gap-2">
+                    <p class="text-slate-500 text-xs mb-2">Můžete přidat více rozsahů (např. 9–12 a 15–19).</p>
+                    <div id="slot-ranges-container" class="space-y-2">
+                        <?php foreach ($slotRanges as $i => $r): ?>
+                        <div class="slot-range-row flex items-center gap-2">
                             <span class="text-slate-500 text-sm">Od</span>
-                            <input type="number" name="slot_start" min="0" max="23" value="<?= (int)$settings['slot_start'] ?>" class="w-16 px-2 py-1.5 border border-slate-300 rounded-lg">
+                            <input type="number" name="slot_range_start[]" min="0" max="23" value="<?= (int)($r[0] ?? 9) ?>" class="w-16 px-2 py-1.5 border border-slate-300 rounded-lg">
                             <span class="text-slate-500 text-sm">hod</span>
-                        </div>
-                        <div class="flex items-center gap-2">
                             <span class="text-slate-500 text-sm">Do</span>
-                            <input type="number" name="slot_end" min="1" max="24" value="<?= (int)$settings['slot_end'] ?>" class="w-16 px-2 py-1.5 border border-slate-300 rounded-lg">
+                            <input type="number" name="slot_range_end[]" min="1" max="24" value="<?= (int)($r[1] ?? 17) ?>" class="w-16 px-2 py-1.5 border border-slate-300 rounded-lg">
                             <span class="text-slate-500 text-sm">hod</span>
+                            <button type="button" class="slot-range-remove p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded" title="Odebrat rozsah">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
                         </div>
+                        <?php endforeach; ?>
                     </div>
+                    <button type="button" id="slot-range-add" class="mt-2 text-sm text-teal-600 hover:text-teal-700 font-medium flex items-center gap-1">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Přidat rozsah
+                    </button>
                 </div>
 
                 <div>
@@ -248,6 +270,19 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
 
     <script>
         lucide.createIcons();
+
+        document.getElementById('slot-range-add').addEventListener('click', () => {
+            const tpl = document.querySelector('.slot-range-row');
+            if (!tpl) return;
+            const row = tpl.cloneNode(true);
+            row.querySelectorAll('input').forEach(inp => { inp.value = inp.name.includes('start') ? '9' : '17'; });
+            row.querySelector('.slot-range-remove').addEventListener('click', () => row.remove());
+            document.getElementById('slot-ranges-container').appendChild(row);
+            lucide.createIcons();
+        });
+        document.querySelectorAll('.slot-range-remove').forEach(btn => {
+            btn.addEventListener('click', () => btn.closest('.slot-range-row').remove());
+        });
 
         const apiBase = '../api';
         let blockCalMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');

@@ -14,21 +14,28 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/availability.php';
 
 $settings = getAvailabilitySettings();
-$startHour = (int)($settings['slot_start'] ?? SLOT_START);
-$endHour = (int)($settings['slot_end'] ?? SLOT_END);
 $interval = (int)($settings['slot_interval'] ?? SLOT_INTERVAL);
 $workDays = $settings['work_days'] ?? [1, 2, 3, 4, 5];
 $excludedDates = array_flip($settings['excluded_dates'] ?? []);
 $excludedSlots = $settings['excluded_slots'] ?? []; // ['date' => ['09:00', ...]]
 
-// Generování všech slotů pro jeden pracovní den
-$allDaySlots = [];
-for ($h = $startHour; $h < $endHour; $h++) {
-    for ($m = 0; $m < 60; $m += $interval) {
-        $allDaySlots[] = sprintf('%02d:%02d', $h, $m);
-    }
-}
+$allDaySlots = buildSlotsFromRanges($settings, $interval);
 $totalSlotsPerDay = count($allDaySlots);
+
+// Pro Google Calendar: min/max hodina pro dotaz na obsazenost
+$ranges = $settings['slot_ranges'] ?? [];
+if (empty($ranges)) {
+    $startHour = (int)($settings['slot_start'] ?? SLOT_START);
+    $endHour = (int)($settings['slot_end'] ?? SLOT_END);
+} else {
+    $hours = [];
+    foreach ($ranges as $r) {
+        $hours[] = (int)($r[0] ?? 0);
+        $hours[] = (int)($r[1] ?? 0);
+    }
+    $startHour = min($hours);
+    $endHour = max($hours);
+}
 
 // Načíst rezervace z DB (soft-update: valid_to IS NULL)
 $booked = [];

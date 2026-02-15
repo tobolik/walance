@@ -90,14 +90,26 @@ try {
     exit;
 }
 
-// E-mail notifikace
-$to = CONTACT_EMAIL;
-$subject = 'Nová rezervace: ' . $name . ' - ' . $date . ' ' . $time;
-$body = "Nová rezervace z webu WALANCE\n\n";
-$body .= "Jméno: $name\nE-mail: $email\nTelefon: $phone\n";
-$body .= "Datum: $date\nČas: $time\n\n";
-if ($message) $body .= "Zpráva: $message\n";
-@mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, 'Content-Type: text/plain; charset=UTF-8');
+// E-mail klientovi (s BCC konzultantovi)
+$dateFormatted = date('d.m.Y', strtotime($date));
+$timeFormatted = $time;
+
+$clientSubject = 'Rezervace termínu u WALANCE – potvrzení';
+$clientBody = "Dobrý den, $name,\n\n";
+$clientBody .= "děkujeme za rezervaci termínu. Vaše žádost byla přijata a brzy vás budeme kontaktovat s potvrzením.\n\n";
+$clientBody .= "Shrnutí rezervace:\n";
+$clientBody .= "• Datum: $dateFormatted\n";
+$clientBody .= "• Čas: $timeFormatted\n";
+if ($message) $clientBody .= "• Vaše zpráva: $message\n\n";
+$clientBody .= "---\n\n";
+$clientBody .= "WALANCE – Anatomie udržitelného výkonu\n\n";
+$clientBody .= "Metoda WALANCE spojuje koučink, fyzioterapii a provozní manuál pro lídry a týmy. Pomáháme vám udržet výkon bez vyhoření – protože byznys není sprint, je to maraton v pohybu.\n\n";
+$clientBody .= "Těšíme se na setkání!\n\n";
+$clientBody .= "S pozdravem,\ntým WALANCE";
+
+$headers = "Content-Type: text/plain; charset=UTF-8\r\n";
+$headers .= "Bcc: " . CONTACT_EMAIL . "\r\n";
+@mail($email, '=?UTF-8?B?' . base64_encode($clientSubject) . '?=', $clientBody, $headers);
 
 echo json_encode([
     'success' => true,

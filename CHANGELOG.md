@@ -5,6 +5,16 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.26] – 14.02.2026 19:00
+
+### Přidáno
+- **Rezervace:** po odeslání rezervace dostane klient potvrzovací e-mail s marketingovým textem; konzultant v BCC
+
+## [1.0.25] – 14.02.2026 18:30
+
+### Přidáno
+- **Nastavení dostupnosti:** více rozsahů pracovní doby (např. 9–12 a 15–19) – tlačítko „Přidat rozsah“, možnost odebrat rozsah
+
 ## [1.0.24] – 14.02.2026 18:00
 
 ### Opraveno
