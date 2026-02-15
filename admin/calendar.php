@@ -223,7 +223,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 span.className += ' bg-red-100 text-red-800';
                 span.title = 'Blokováno (Dostupnost)';
             } else if (status === 'pending') {
-                span.className += ' bg-amber-100 text-amber-800';
+                span.className += ' bg-amber-400 text-amber-900';
                 span.title = 'Čeká na potvrzení – klikněte pro úpravu';
             } else {
                 span.className += ' bg-teal-100 text-teal-800';

@@ -5,6 +5,11 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.2] – 14.02.2026
+
+### Opraveno
+- **Admin Kalendář:** barva „Čeká na potvrzení“ – sjednocení legendy a slotů (bg-amber-400)
+
 ## [1.1.1] – 14.02.2026
 
 ### Přidáno
