@@ -1,6 +1,7 @@
+<?php require_once __DIR__ . '/api/config.php'; $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0'; ?>
 <!DOCTYPE html>
 <html lang="cs" class="scroll-smooth">
-<!-- VERSION: 1.0.1 - při změně zvyš PATCH, aktualizuj ?v= a patičku -->
+<!-- VERSION: <?= htmlspecialchars($v) ?> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,10 @@
     <meta name="description" content="Byznys není sprint, je to maraton v pohybu. Metoda WALANCE pro udržitelný výkon lídrů a týmů.">
     
     <!-- Tailwind CSS (CDN for standalone usage) -->
-    <script src="https://cdn.tailwindcss.com?v=1.0.1"></script>
+    <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
     
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest?v=1.0.1"></script>
+    <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
 
     <!-- Custom Config for Tailwind -->
     <script>
@@ -49,7 +50,7 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap?v=1.0.1" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap?v=<?= htmlspecialchars($v) ?>" rel="stylesheet">
     
     <style>
         body { font-family: 'DM Sans', sans-serif; }
@@ -698,7 +699,7 @@
             </div>
             <div class="text-center md:text-right">
                 <p>© 2026 WALANCE.</p>
-                <p>Všechna práva vyhrazena. <span class="text-cream/50">v1.0.1</span></p>
+                <p>Všechna práva vyhrazena. <span class="text-cream/50">v<?= htmlspecialchars($v) ?></span></p>
             </div>
         </div>
     </footer>

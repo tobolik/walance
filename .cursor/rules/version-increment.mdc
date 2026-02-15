@@ -1,0 +1,18 @@
+---
+description: KRITICKÉ – povýšení verze při každé úpravě kódu
+alwaysApply: true
+---
+
+# Povýšení verze – KRITICKÉ
+
+**Při každé úpravě kódu vždy zvýš verzi** (PATCH: 1.0.x → 1.0.x+1).
+
+## Kde aktualizovat
+
+**Pouze api/version.php** – `define('APP_VERSION', '1.0.x');`
+
+Web i admin berou verzi automaticky.
+
+## Závěrečná hláška
+
+Po dokončení úkolů uveď: **Aktuální verze: vX.Y.Z** a zda byl projekt pushnut.

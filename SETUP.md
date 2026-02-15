@@ -84,7 +84,7 @@ walance/
 │   └── dashboard.php   # CRM kontakty
 ├── data/
 │   └── contacts.db     # SQLite (vytvoří se automaticky)
-└── index.html
+└── index.php
 ```
 
 ## Hosting
