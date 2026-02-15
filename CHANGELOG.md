@@ -5,6 +5,11 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.2.5] – 15.02.2026 00:25
+
+### Opraveno
+- **Admin Rezervace:** pruhování tabulky – odd/even místo 4n+ (správné chování při podmíněných řádcích s poznámkou)
+
 ## [1.2.4] – 15.02.2026 00:15
 
 ### Změněno

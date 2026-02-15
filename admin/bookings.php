@@ -118,7 +118,7 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
 
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full [&>tbody>tr:nth-child(4n+1)]:bg-white [&>tbody>tr:nth-child(4n+2)]:bg-white [&>tbody>tr:nth-child(4n+3)]:bg-slate-50/50 [&>tbody>tr:nth-child(4n+4)]:bg-slate-50/50">
+                <table class="w-full [&>tbody>tr:nth-child(odd)]:bg-white [&>tbody>tr:nth-child(even)]:bg-slate-50/50">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
                             <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Datum & čas</th>
