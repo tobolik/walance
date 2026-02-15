@@ -17,7 +17,7 @@ php -S localhost:8000
 
 ## 1. Kontaktní formulář
 
-- Odesílá na **info@walance.cz** (nastavte v `api/config.php`)
+- Odesílá na **info@walance.cz** (nastavte v `api/config.local.php`)
 - Ukládá kontakty do SQLite (`data/contacts.db`)
 - Funguje bez další konfigurace
 
@@ -52,9 +52,8 @@ Pro produkci doporučujeme MySQL místo SQLite:
 
 1. Vytvořte databázi a uživatele v MySQL
 2. Spusťte `api/db-mysql.sql` pro vytvoření tabulek
-3. V `api/config.php` nastavte:
-   - `DB_TYPE` = `'mysql'`
-   - `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`
+3. V `api/config.public.php` nastavte `DB_TYPE` = `'mysql'`
+4. V `api/config.local.php` nastavte `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`
 
 ### Změna hesla
 
@@ -62,14 +61,17 @@ Pro produkci doporučujeme MySQL místo SQLite:
 php api/setup-password.php vase_nove_heslo
 ```
 
-Výstup vložte do `api/config.php` jako `ADMIN_PASSWORD_HASH`.
+Výstup vložte do databázové tabulky `admin_users` (hesla se ukládají v DB).
 
 ## Struktura souborů
 
 ```
 walance/
 ├── api/
-│   ├── config.php      # Konfigurace (e-mail, heslo)
+│   ├── config.php          # Načítá version + config.public + config.local
+│   ├── version.php         # Verze aplikace (často se mění)
+│   ├── config.public.php   # Výchozí hodnoty slotů, cesty (v gitu)
+│   ├── config.local.php    # E-mail, DB hesla (není v gitu)
 │   ├── contact.php     # Kontaktní formulář
 │   ├── booking.php     # Rezervace
 │   ├── slots.php       # Dostupné sloty
@@ -90,6 +92,6 @@ walance/
 Na sdíleném hostingu (např. Wedos, Forpsi):
 
 1. Nahrajte celý projekt
-2. Nastavte `api/config.php` (e-mail, heslo)
+2. Zkopírujte `api/config.local.example.php` jako `api/config.local.php` a vyplňte (e-mail, DB)
 3. Zajistěte, že složka `data/` je zapisovatelná
 4. Pro Google Calendar: nahrajte `vendor/` (po `composer install`)

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="cs" class="scroll-smooth">
-<!-- VERSION: 1.0.0 - při změně zvyš PATCH, aktualizuj ?v= a patičku -->
+<!-- VERSION: 1.0.1 - při změně zvyš PATCH, aktualizuj ?v= a patičku -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +8,10 @@
     <meta name="description" content="Byznys není sprint, je to maraton v pohybu. Metoda WALANCE pro udržitelný výkon lídrů a týmů.">
     
     <!-- Tailwind CSS (CDN for standalone usage) -->
-    <script src="https://cdn.tailwindcss.com?v=1.0.0"></script>
+    <script src="https://cdn.tailwindcss.com?v=1.0.1"></script>
     
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest?v=1.0.0"></script>
+    <script src="https://unpkg.com/lucide@latest?v=1.0.1"></script>
 
     <!-- Custom Config for Tailwind -->
     <script>
@@ -49,7 +49,7 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap?v=1.0.0" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap?v=1.0.1" rel="stylesheet">
     
     <style>
         body { font-family: 'DM Sans', sans-serif; }
@@ -644,9 +644,7 @@
                             <!-- Dny se vygenerují v JS -->
                         </div>
                         <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-ink/60">
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> Volné</span>
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-accent/70"></span> Potvrzeno</span>
+                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> Volné termíny</span>
                         </div>
                     </div>
                     
@@ -700,7 +698,7 @@
             </div>
             <div class="text-center md:text-right">
                 <p>© 2026 WALANCE.</p>
-                <p>Všechna práva vyhrazena. <span class="text-cream/50">v1.0.0</span></p>
+                <p>Všechna práva vyhrazena. <span class="text-cream/50">v1.0.1</span></p>
             </div>
         </div>
     </footer>
@@ -885,36 +883,25 @@
                 const isPast = dateStr < today;
                 const avail = calData.availability[dateStr];
                 const percent = avail ? avail.percent : 0;
-                const pending = avail ? (avail.pending || 0) : 0;
-                const confirmed = avail ? (avail.confirmed || 0) : 0;
                 const hasSlots = avail && avail.free > 0;
 
                 let bg = 'bg-mist/30';
                 if (!isWeekend && !isPast) {
-                    if (percent === 0) {
-                        if (confirmed > 0) bg = 'bg-accent/80 hover:bg-accent';           // plný, potvrzené
-                        else if (pending > 0) bg = 'bg-amber-500/80 hover:bg-amber-600'; // plný, čeká
-                        else bg = 'bg-mist/40';
-                    } else if (confirmed > 0) {
-                        if (percent >= 50) bg = 'bg-accent/60 hover:bg-accent/70';
-                        else bg = 'bg-accent/40 hover:bg-accent/50';
-                    } else if (pending > 0) {
-                        if (percent >= 50) bg = 'bg-amber-400 hover:bg-amber-500';
-                        else bg = 'bg-amber-300 hover:bg-amber-400';
-                    } else {
+                    if (hasSlots) {
                         if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
                         else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
                         else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
                         else bg = 'bg-emerald-100 hover:bg-emerald-200';
+                    } else {
+                        bg = 'bg-mist/40';
                     }
                 }
                 if (isWeekend) bg = 'bg-mist/20';
                 if (isPast) bg = 'bg-mist/20 opacity-60';
 
                 const clickable = !isWeekend && !isPast && hasSlots ? 'cursor-pointer' : 'cursor-default';
-                const textColor = (percent === 0 || pending > 0 || confirmed > 0 || percent >= 50) ? 'text-white' : 'text-ink';
-                const title = confirmed > 0 ? (pending > 0 ? `${confirmed} potvrzeno, ${pending} čeká` : `${confirmed} potvrzeno`) : (pending > 0 ? `${pending} čeká na potvrzení` : '');
-                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" data-has-slots="${hasSlots}" title="${title}">${d}</div>`;
+                const textColor = hasSlots && percent >= 50 ? 'text-white' : 'text-ink';
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
             }
 
             grid.querySelectorAll('[data-has-slots="true"]').forEach(cell => {
@@ -924,32 +911,33 @@
         }
 
         function selectDate(dateStr) {
-            const slots = calData.slots[dateStr] || [];
+            const freeSlots = calData.slots[dateStr] || [];
             document.getElementById('booking-date').value = dateStr;
             document.getElementById('cal-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
             const timePanel = document.getElementById('cal-time-panel');
             const slotsEl = document.getElementById('cal-time-slots');
             slotsEl.innerHTML = '';
-            slots.forEach(t => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'px-4 py-2 rounded-lg bg-mist/50 hover:bg-accent/80 hover:text-cream text-ink text-sm font-medium transition-colors time-slot-btn';
-                btn.textContent = t;
-                btn.onclick = () => {
-                    document.querySelectorAll('#cal-time-slots .time-slot-btn').forEach(b => {
-                        b.classList.remove('time-slot-selected');
-                    });
-                    btn.classList.add('time-slot-selected');
-                    document.getElementById('booking-time').value = t;
-                    document.getElementById('booking-fields').classList.remove('hidden');
-                    document.getElementById('booking-submit').disabled = false;
-                };
-                slotsEl.appendChild(btn);
-            });
+            freeSlots.forEach(t => addSlotBtn(slotsEl, t));
             timePanel.classList.remove('hidden');
             document.getElementById('booking-fields').classList.add('hidden');
             document.getElementById('booking-time').value = '';
             document.getElementById('booking-submit').disabled = true;
+        }
+        function addSlotBtn(container, time) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = time;
+            btn.className = 'px-4 py-2 rounded-lg bg-mist/50 hover:bg-accent/80 hover:text-cream text-ink text-sm font-medium transition-colors time-slot-btn cursor-pointer';
+            btn.onclick = () => {
+                document.querySelectorAll('#cal-time-slots .time-slot-btn').forEach(b => {
+                    b.classList.remove('time-slot-selected');
+                });
+                btn.classList.add('time-slot-selected');
+                document.getElementById('booking-time').value = time;
+                document.getElementById('booking-fields').classList.remove('hidden');
+                document.getElementById('booking-submit').disabled = false;
+            };
+            container.appendChild(btn);
         }
 
         document.getElementById('cal-prev').addEventListener('click', () => {

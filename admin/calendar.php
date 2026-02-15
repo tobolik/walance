@@ -1,0 +1,216 @@
+<?php
+session_start();
+if (!isset($_SESSION['walance_admin'])) {
+    header('Location: index.php');
+    exit;
+}
+require_once __DIR__ . '/../api/config.php';
+
+$v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
+?>
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WALANCE CRM - Kalendář</title>
+    <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
+    <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap?v=<?= htmlspecialchars($v) ?>" rel="stylesheet">
+    <style>body { font-family: 'DM Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+    <header class="bg-white border-b border-slate-200 px-6 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-slate-800">WALANCE CRM</h1>
+            <nav class="flex items-center gap-4">
+                <a href="dashboard.php" class="text-slate-500 hover:text-teal-600 text-sm">Kontakty</a>
+                <a href="bookings.php" class="text-slate-500 hover:text-teal-600 text-sm">Rezervace</a>
+                <a href="calendar.php" class="text-teal-600 font-medium text-sm">Kalendář</a>
+                <a href="availability.php" class="text-slate-500 hover:text-teal-600 text-sm">Dostupnost</a>
+                <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
+                <span class="text-slate-400 text-xs">v<?= htmlspecialchars($v) ?></span>
+                <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
+                <a href="logout.php" class="text-red-600 hover:text-red-700 text-sm font-medium">Odhlásit</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto p-6">
+        <a href="dashboard.php" class="inline-flex items-center text-slate-600 hover:text-teal-600 text-sm mb-6">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Zpět
+        </a>
+
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-800 mb-2">Kalendář – přehled stavů</h2>
+            <p class="text-slate-600 text-sm mb-6">Zelená = volné, amber = čeká na potvrzení, teal = potvrzeno.</p>
+
+            <div class="flex items-center justify-between mb-4">
+                <button type="button" id="cal-prev" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <h3 id="cal-month-title" class="font-bold text-slate-800">Únor 2026</h3>
+                <button type="button" id="cal-next" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-slate-500 mb-2">
+                <span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span class="text-slate-300">So</span><span class="text-slate-300">Ne</span>
+            </div>
+            <div id="cal-grid" class="grid grid-cols-7 gap-1 min-h-[280px]">
+                <!-- Dny se vygenerují v JS -->
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> Volné</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-teal-500"></span> Potvrzeno</span>
+            </div>
+        </div>
+
+        <div id="cal-time-panel" class="hidden mt-6 bg-white rounded-xl shadow-sm p-6">
+            <p class="text-sm font-medium text-slate-800 mb-2">Časové sloty pro <span id="cal-selected-date"></span>:</p>
+            <div id="cal-time-slots" class="flex flex-wrap gap-2"></div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const apiBase = '../api';
+        let calCurrentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+        let calData = { slots: {}, availability: {}, slots_detail: {} };
+
+        async function loadCalendarMonth() {
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '<div class="col-span-7 py-12 text-center text-slate-500">Načítám…</div>';
+            try {
+                const r = await fetch(apiBase + '/slots.php?month=' + calCurrentMonth);
+                const data = await r.json();
+                calData = data;
+                renderCalendar();
+            } catch (err) {
+                grid.innerHTML = '<div class="col-span-7 py-12 text-center text-slate-500">Chyba načtení (spusťte PHP server)</div>';
+            }
+        }
+
+        function renderCalendar() {
+            const [y, m] = calCurrentMonth.split('-').map(Number);
+            const first = new Date(y, m - 1, 1);
+            const last = new Date(y, m - 1 + 1, 0);
+            const daysInMonth = last.getDate();
+            const startOffset = (first.getDay() + 6) % 7;
+
+            const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+            document.getElementById('cal-month-title').textContent = monthNames[m - 1] + ' ' + y;
+
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
+            const today = new Date().toISOString().slice(0, 10);
+
+            for (let i = 0; i < startOffset; i++) {
+                grid.innerHTML += '<div class="aspect-square"></div>';
+            }
+            const today = new Date().toISOString().slice(0, 10);
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                const dayOfWeek = new Date(y, m - 1, d).getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                const isPast = dateStr < today;
+                const avail = calData.availability[dateStr];
+                const percent = avail ? avail.percent : 0;
+                const pending = avail ? (avail.pending || 0) : 0;
+                const confirmed = avail ? (avail.confirmed || 0) : 0;
+                const hasSlots = avail && avail.free > 0;
+
+                let bg = 'bg-slate-100';
+                if (!isWeekend && !isPast) {
+                    if (percent === 0) {
+                        if (confirmed > 0) bg = 'bg-teal-500/80 hover:bg-teal-600';
+                        else if (pending > 0) bg = 'bg-amber-500/80 hover:bg-amber-600';
+                        else bg = 'bg-slate-200';
+                    } else if (confirmed > 0) {
+                        if (percent >= 50) bg = 'bg-teal-400 hover:bg-teal-500';
+                        else bg = 'bg-teal-300 hover:bg-teal-400';
+                    } else if (pending > 0) {
+                        if (percent >= 50) bg = 'bg-amber-400 hover:bg-amber-500';
+                        else bg = 'bg-amber-300 hover:bg-amber-400';
+                    } else {
+                        if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
+                        else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
+                        else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
+                        else bg = 'bg-emerald-100 hover:bg-emerald-200';
+                    }
+                }
+                if (isWeekend) bg = 'bg-slate-50';
+                if (isPast) bg = 'bg-slate-100 opacity-60';
+
+                const clickable = !isWeekend && !isPast ? 'cursor-pointer' : 'cursor-default';
+                const textColor = (percent === 0 || pending > 0 || confirmed > 0 || percent >= 50) ? 'text-white' : 'text-slate-800';
+                const title = confirmed > 0 ? (pending > 0 ? `${confirmed} potvrzeno, ${pending} čeká` : `${confirmed} potvrzeno`) : (pending > 0 ? `${pending} čeká na potvrzení` : '');
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" title="${title}">${d}</div>`;
+            }
+
+            grid.querySelectorAll('[data-date]').forEach(cell => {
+                const dateStr = cell.dataset.date;
+                const dayOfWeek = new Date(dateStr + 'T12:00:00').getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                const isPast = dateStr < today;
+                if (!isWeekend && !isPast) {
+                    cell.addEventListener('click', () => selectDate(dateStr));
+                }
+            });
+            lucide.createIcons();
+        }
+
+        function selectDate(dateStr) {
+            const slotsDetail = calData.slots_detail && calData.slots_detail[dateStr] ? calData.slots_detail[dateStr] : {};
+            const allTimes = Object.keys(slotsDetail).sort();
+            document.getElementById('cal-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
+            const timePanel = document.getElementById('cal-time-panel');
+            const slotsEl = document.getElementById('cal-time-slots');
+            slotsEl.innerHTML = '';
+            if (allTimes.length === 0) {
+                slotsEl.innerHTML = '<span class="text-slate-500 text-sm">Žádné sloty pro tento den.</span>';
+            } else {
+                allTimes.forEach(t => {
+                    const status = slotsDetail[t] || 'free';
+                    addSlotSpan(slotsEl, t, status);
+                });
+            }
+            timePanel.classList.remove('hidden');
+        }
+
+        function addSlotSpan(container, time, status) {
+            const span = document.createElement('span');
+            span.textContent = time;
+            span.className = 'px-4 py-2 rounded-lg text-sm font-medium inline-block';
+            if (status === 'free') {
+                span.className += ' bg-emerald-100 text-emerald-800';
+                span.title = 'Volné';
+            } else if (status === 'pending') {
+                span.className += ' bg-amber-100 text-amber-800';
+                span.title = 'Čeká na potvrzení';
+            } else {
+                span.className += ' bg-teal-100 text-teal-800';
+                span.title = 'Potvrzeno';
+            }
+            container.appendChild(span);
+        }
+
+        document.getElementById('cal-prev').addEventListener('click', () => {
+            const [y, m] = calCurrentMonth.split('-').map(Number);
+            const d = new Date(y, m - 2, 1);
+            calCurrentMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+            loadCalendarMonth();
+        });
+        document.getElementById('cal-next').addEventListener('click', () => {
+            const [y, m] = calCurrentMonth.split('-').map(Number);
+            const d = new Date(y, m, 1);
+            calCurrentMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+            loadCalendarMonth();
+        });
+
+        loadCalendarMonth();
+    </script>
+</body>
+</html>

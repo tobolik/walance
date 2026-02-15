@@ -2,6 +2,7 @@
 data/*.db
 api/credentials/*.json
 !api/credentials/.gitkeep
+api/config.local.php
 
 # Composer
 vendor/

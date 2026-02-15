@@ -27,16 +27,16 @@ V **Settings → Secrets and variables → Actions**:
 1. **Variables** – přidejte `ENABLE_AUTO_MIGRATE` = `true`
 2. **Variables** – volitelně `SITE_URL` (výchozí `https://walance.cz`)
 3. **Secrets** – přidejte `MIGRATE_TOKEN` (náhodný řetězec)
-4. V `api/config.php` na serveru nastavte stejnou hodnotu: `define('MIGRATE_TOKEN', 'váš-token');`
+4. V `api/config.local.php` na serveru nastavte stejnou hodnotu: `define('MIGRATE_TOKEN', 'váš-token');`
 
 ## Co se nasazuje
 
-- Vše kromě: `node_modules`, `.git`, `vendor`, `data/*.db`, `api/credentials/*.json`
-- Složky `data/` a `api/credentials/` se vytvoří prázdné
+- Vše kromě: `node_modules`, `.git`, `vendor`, `data/*.db`, `api/credentials/*.json`, `api/config.local.php`
+- `config.local.php` zůstává na serveru z ručního nastavení (není v gitu)
 
 ## Po nasazení na serveru
 
-1. Nastavte `api/config.php` (e-mail, heslo admin, MySQL, MIGRATE_TOKEN)
+1. Zkopírujte `api/config.local.example.php` jako `api/config.local.php` a nastavte (e-mail, MySQL, MIGRATE_TOKEN)
 2. Migrace se spustí automaticky po každém deploy (viz výše). Ručně: `php api/migrate.php` nebo `https://walance.cz/api/migrate.php?token=VAŠE_HODNOTA`
 3. Zajistěte zapisovatelnost složky `data/` (pro SQLite)
 4. Pro Google Calendar: nahrajte `api/credentials/google-calendar.json`

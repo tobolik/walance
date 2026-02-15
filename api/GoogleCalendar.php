@@ -46,4 +46,45 @@ class GoogleCalendar {
         $created = $this->service->events->insert($this->calendarId, $event);
         return $created->getId();
     }
+
+    /**
+     * Vrací obsazené časy (HH:MM) pro daný den z Google Calendar
+     * Události se mapují na sloty podle intervalu – blokuje sloty, které se s událostí překrývají
+     */
+    public function getBusySlots(string $date, int $intervalMinutes = 30, int $dayStart = 0, int $dayEnd = 24): array {
+        $start = $date . 'T00:00:00+01:00';
+        $end = $date . 'T23:59:59+01:00';
+        try {
+            $events = $this->service->events->listEvents($this->calendarId, [
+                'timeMin' => $start,
+                'timeMax' => $end,
+                'singleEvents' => true,
+                'orderBy' => 'startTime',
+            ]);
+        } catch (Exception $e) {
+            return [];
+        }
+        $busy = [];
+        foreach ($events->getItems() as $event) {
+            $startDt = $event->getStart();
+            $endDt = $event->getEnd();
+            if (!$startDt || !$endDt) continue;
+            $startTime = $startDt->getDateTime() ?: $startDt->getDate();
+            $endTime = $endDt->getDateTime() ?: $endDt->getDate();
+            if (!$startTime || !$endTime) continue;
+            $eventStart = strtotime($startTime);
+            $eventEnd = strtotime($endTime);
+            if (date('Y-m-d', $eventStart) !== $date) continue;
+            for ($h = $dayStart; $h < $dayEnd; $h++) {
+                for ($m = 0; $m < 60; $m += $intervalMinutes) {
+                    $slotStart = strtotime($date . sprintf(' %02d:%02d:00', $h, $m));
+                    $slotEnd = $slotStart + $intervalMinutes * 60;
+                    if ($eventStart < $slotEnd && $eventEnd > $slotStart) {
+                        $busy[] = sprintf('%02d:%02d', $h, $m);
+                    }
+                }
+            }
+        }
+        return array_unique($busy);
+    }
 }

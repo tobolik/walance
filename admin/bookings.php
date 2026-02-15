@@ -83,6 +83,8 @@ $statusLabels = [
             <nav class="flex items-center gap-4">
                 <a href="dashboard.php" class="text-slate-500 hover:text-teal-600 text-sm">Kontakty</a>
                 <a href="bookings.php" class="text-teal-600 font-medium text-sm">Rezervace</a>
+                <a href="calendar.php" class="text-slate-500 hover:text-teal-600 text-sm">Kalendář</a>
+                <a href="availability.php" class="text-slate-500 hover:text-teal-600 text-sm">Dostupnost</a>
                 <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
                 <span class="text-slate-400 text-xs">v<?= htmlspecialchars($v) ?></span>
                 <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
