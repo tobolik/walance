@@ -285,9 +285,14 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
                     .then(check => {
                         let sendEmail = 1;
                         if (check.already_sent) {
-                            if (!confirm('E-mail s potvrzením termínu byl již dříve odeslán. Chcete odeslat znovu?')) {
-                                sendEmail = 0;
+                            let msg = 'E-mail s potvrzením termínu byl již dříve odeslán.';
+                            if (check.sent_at) {
+                                const d = new Date(check.sent_at.replace(' ', 'T'));
+                                msg += '\n\nOdesláno: ' + d.toLocaleString('cs-CZ', { dateStyle: 'medium', timeStyle: 'short' });
                             }
+                            if (check.email) msg += '\nNa adresu: ' + check.email;
+                            msg += '\n\nChcete odeslat znovu?';
+                            if (!confirm(msg)) sendEmail = 0;
                         }
                         const fd = new FormData();
                         fd.append('id', id);

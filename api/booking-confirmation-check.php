@@ -24,8 +24,8 @@ if (!$id) {
 
 try {
     $db = getDb();
-    // Načíst bookings_id (entity) rezervace
-    $stmt = $db->prepare("SELECT bookings_id, contacts_id FROM bookings WHERE id = ? AND valid_to IS NULL");
+    // Načíst bookings_id, email a contacts_id rezervace
+    $stmt = $db->prepare("SELECT bookings_id, contacts_id, email FROM bookings WHERE id = ? AND valid_to IS NULL");
     $stmt->execute([$id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$row) {
@@ -33,18 +33,25 @@ try {
         exit;
     }
     $bookingsId = $row['bookings_id'] ?? $id;
-    $contactsId = $row['contacts_id'];
 
     // Hledat aktivitu typu booking_confirmation pro tuto rezervaci (bookings_id = entity id)
     $stmt = $db->prepare("
-        SELECT 1 FROM activities
+        SELECT valid_from FROM activities
         WHERE type = 'booking_confirmation' AND bookings_id = ? AND valid_to IS NULL
-        LIMIT 1
+        ORDER BY valid_from DESC LIMIT 1
     ");
     $stmt->execute([$bookingsId]);
-    $found = $stmt->fetch();
+    $activity = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    echo json_encode(['already_sent' => (bool)$found]);
+    if ($activity) {
+        echo json_encode([
+            'already_sent' => true,
+            'sent_at' => $activity['valid_from'],
+            'email' => $row['email'],
+        ]);
+    } else {
+        echo json_encode(['already_sent' => false]);
+    }
 } catch (Exception $e) {
     echo json_encode(['already_sent' => false]);
 }

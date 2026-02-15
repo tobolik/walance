@@ -5,6 +5,16 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.10] – 14.02.2026
+
+### Přidáno
+- **Aktivity:** u potvrzení termínu se ukládá i celý text odeslaného e-mailu
+- **Dialog „odeslat znovu“:** zobrazení data/času odeslání a e-mailové adresy
+
+### Změněno
+- **Admin Kalendář:** Zamítnuto = šedá barva (místo zelené), odlišení od tyrkysové (Potvrzeno)
+- **Admin Kalendář:** upřesněná legenda – Zamítnuto (volné), popis barev
+
 ## [1.1.9] – 14.02.2026
 
 ### Změněno

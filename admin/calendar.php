@@ -31,7 +31,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 
         <div class="bg-white rounded-xl shadow-sm p-6">
             <h2 class="text-lg font-bold text-slate-800 mb-2">Kalendář – přehled stavů</h2>
-            <p class="text-slate-600 text-sm mb-6">Zelená = volné, amber = čeká na potvrzení, teal = potvrzeno.</p>
+            <p class="text-slate-600 text-sm mb-6">Zelená = volné, oranžová = čeká na potvrzení, tyrkysová = potvrzeno, šedá = zamítnuto (slot volný).</p>
 
             <div class="flex items-center justify-between mb-4">
                 <button type="button" id="cal-prev" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600">
@@ -53,7 +53,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-300"></span> Blokováno</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-teal-500"></span> Potvrzeno</span>
-                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-400 border-2 border-slate-400"></span> Zamítnuto</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-slate-300 border-2 border-slate-500"></span> Zamítnuto (volné)</span>
             </div>
         </div>
 
@@ -224,7 +224,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             const cancelled = bookings && bookings.length > 0 && bookings.every(b => b.status === 'cancelled');
             const activeBooking = bookings && bookings.find(b => b.status !== 'cancelled') || (bookings && bookings[0]);
             if (cancelled) {
-                span.className += ' bg-emerald-400 text-white border-2 border-slate-400';
+                span.className += ' bg-slate-300 text-slate-800 border-2 border-slate-500';
                 const names = bookings.map(b => b.name).join(', ');
                 span.title = 'Zamítnuto – klikněte pro obnovení. Jména: ' + names;
             } else if (status === 'free') {
@@ -326,9 +326,14 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                     .then(check => {
                         let sendEmail = 1;
                         if (check.already_sent) {
-                            if (!confirm('E-mail s potvrzením termínu byl již dříve odeslán. Chcete odeslat znovu?')) {
-                                sendEmail = 0;
+                            let msg = 'E-mail s potvrzením termínu byl již dříve odeslán.';
+                            if (check.sent_at) {
+                                const d = new Date(check.sent_at.replace(' ', 'T'));
+                                msg += '\n\nOdesláno: ' + d.toLocaleString('cs-CZ', { dateStyle: 'medium', timeStyle: 'short' });
                             }
+                            if (check.email) msg += '\nNa adresu: ' + check.email;
+                            msg += '\n\nChcete odeslat znovu?';
+                            if (!confirm(msg)) sendEmail = 0;
                         }
                         const fd = new FormData();
                         fd.append('id', id);

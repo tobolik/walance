@@ -79,7 +79,7 @@ try {
             'bookings_id' => $bookingsId,
             'type' => 'booking_confirmation',
             'subject' => 'Potvrzení termínu – ' . $dateFormatted . ' ' . $time,
-            'body' => 'Odeslán potvrzující e-mail klientovi ' . $name . ' (' . $email . ').',
+            'body' => "Odeslán potvrzující e-mail klientovi $name ($email).\n\n---\n\n" . $clientBody,
             'direction' => 'out',
         ]);
     }
