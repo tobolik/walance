@@ -87,6 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
+$serviceAccountEmail = null;
+if (GOOGLE_CALENDAR_ENABLED && file_exists(__DIR__ . '/../api/credentials/google-calendar.json')) {
+    $creds = json_decode(file_get_contents(__DIR__ . '/../api/credentials/google-calendar.json'), true);
+    $serviceAccountEmail = $creds['client_email'] ?? null;
+}
 if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
     $slotRanges = $settings['slot_ranges'] ?? [];
     if (empty($slotRanges)) {
@@ -163,6 +168,7 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                     <p class="text-slate-600 text-sm font-medium mb-1">Calendar ID (jeden na řádek nebo oddělené čárkou) – můžete kombinovat více kalendářů:</p>
                     <textarea name="google_calendar_id_manual" id="gc-manual" rows="3" placeholder="vase@gmail.com&#10;xxx@group.calendar.google.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm"><?= htmlspecialchars($calIdsStr) ?></textarea>
                     <p class="text-slate-500 text-xs mt-1">E-mail vašeho Google účtu = váš primární kalendář. Nebo: Google Calendar → Nastavení → Váš kalendář → Integrace kalendáře → Zkopírujte ID. Rezervace se zapisují do prvního kalendáře.</p>
+                    <p class="text-slate-600 text-xs mt-2 p-2 bg-slate-50 rounded border border-slate-200"><strong>Důležité:</strong> Každý kalendář musí být sdílen s tímto Service Accountem: <code class="bg-slate-100 px-1 rounded font-mono text-xs break-all"><?= htmlspecialchars($serviceAccountEmail ?? 'walance-calendar@kalendar-pro-walance.iam.gserviceaccount.com') ?></code> – v Google Calendar → Nastavení kalendáře → Sdílet s konkrétními lidmi → přidejte tento e-mail s oprávněním „Zobrazit všechny podrobnosti události“. Sdílené kalendáře se v roletce zobrazí až po uložení.</p>
                 </div>
                 <?php endif; ?>
                 <div>
@@ -225,11 +231,6 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
         $gcEvents = ['items' => []];
         $calendarIds = getCalendarIds();
         $gcCalId = $calendarIds[0] ?? null;
-        $serviceAccountEmail = null;
-        if (file_exists(__DIR__ . '/../api/credentials/google-calendar.json')) {
-            $creds = json_decode(file_get_contents(__DIR__ . '/../api/credentials/google-calendar.json'), true);
-            $serviceAccountEmail = $creds['client_email'] ?? null;
-        }
         $effectiveCalId = $gcCalId ?: (defined('GOOGLE_CALENDAR_ID') ? GOOGLE_CALENDAR_ID : 'primary');
         try {
             require_once __DIR__ . '/../api/GoogleCalendar.php';
@@ -240,15 +241,33 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
         } catch (Exception $e) {
             $gcEvents = ['error' => $e->getMessage(), 'items' => []];
         }
+        $hasGcError = !empty($gcEvents['error']);
+        $failedCalId = $gcEvents['failed_calendar_id'] ?? null;
         ?>
+        <?php if ($hasGcError): ?>
+        <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800">
+            <strong>Problém s napojením na Google Calendar</strong>
+            <p class="mt-1"><?= htmlspecialchars($gcEvents['error']) ?></p>
+            <?php if ($failedCalId): ?>
+            <p class="mt-2 text-xs">Chyba u kalendáře: <code class="bg-red-100 px-1 rounded"><?= htmlspecialchars($failedCalId) ?></code></p>
+            <?php endif; ?>
+            <p class="mt-2 text-xs">Nastavené kalendáře: <?= htmlspecialchars(implode(', ', $calendarIds ?: ['(žádné – používá se výchozí)'])) ?> | Service Account: <code class="bg-red-100 px-1 rounded text-xs"><?= htmlspecialchars($serviceAccountEmail ?? '?') ?></code></p>
+        </div>
+        <?php else: ?>
         <div class="mt-6 p-4 bg-teal-50 rounded-lg text-sm text-teal-800">
             <strong>Google Calendar</strong> je napojen – události z kalendáře automaticky blokují sloty.
         </div>
-        <details class="mt-4 bg-white rounded-xl shadow-sm overflow-hidden">
+        <?php endif; ?>
+        <details class="mt-4 bg-white rounded-xl shadow-sm overflow-hidden" <?= $hasGcError ? 'open' : '' ?>>
             <summary class="p-4 cursor-pointer font-medium text-slate-800 hover:bg-slate-50">Události z kalendáře (kontrola)</summary>
             <div class="p-4 border-t border-slate-100">
+                <div class="mb-4 p-3 bg-slate-50 rounded-lg text-xs text-slate-600 space-y-1">
+                    <p><strong>Nastavené kalendáře:</strong> <?= !empty($calendarIds) ? htmlspecialchars(implode(', ', $calendarIds)) : '<em>(žádné – používá se výchozí z config)</em>' ?></p>
+                    <p><strong>Používá se pro dotaz:</strong> <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars($effectiveCalId ?? '?') ?></code></p>
+                    <p><strong>Service Account:</strong> <code class="bg-slate-100 px-1 rounded break-all"><?= htmlspecialchars($serviceAccountEmail ?? '?') ?></code></p>
+                </div>
                 <?php if (!empty($gcEvents['error'])): ?>
-                <p class="text-red-600 text-sm">Chyba: <?= htmlspecialchars($gcEvents['error']) ?></p>
+                <p class="text-red-600 text-sm mb-2">Chyba: <?= htmlspecialchars($gcEvents['error']) ?><?= $failedCalId ? ' (kalendář: ' . htmlspecialchars($failedCalId) . ')' : '' ?></p>
                 <?php elseif (empty($gcEvents['items'])): ?>
                 <p class="text-slate-600 font-medium mb-3">Žádné události v příštích 14 dnech.</p>
                 <p class="text-slate-600 text-sm mb-2"><?= count($calendarIds) > 1 ? 'Kalendáře' : 'Kalendář' ?>: <code class="bg-slate-100 px-1 rounded"><?= htmlspecialchars(implode(', ', !empty($calendarIds) ? $calendarIds : [$effectiveCalId ?? '?'])) ?></code></p>

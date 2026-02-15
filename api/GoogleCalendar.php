@@ -210,7 +210,10 @@ class GoogleCalendar {
         foreach ($ids as $calId) {
             if (empty($calId)) continue;
             $result = $this->getEventsForDisplaySingle($calId, $fromDate, $days);
-            if (isset($result['error'])) return $result;
+            if (isset($result['error'])) {
+                $result['failed_calendar_id'] = $calId;
+                return $result;
+            }
             $allItems = array_merge($allItems, $result['items']);
         }
         usort($allItems, fn($a, $b) => strcmp($a['date'] . $a['start'], $b['date'] . $b['start']));
@@ -234,7 +237,11 @@ class GoogleCalendar {
                 if ($pageToken) $params['pageToken'] = $pageToken;
                 $events = $this->service->events->listEvents($calId, $params);
             } catch (Exception $e) {
-                return ['error' => $e->getMessage(), 'items' => []];
+                $msg = $e->getMessage();
+                if (strpos($msg, '404') !== false || strpos($msg, 'notFound') !== false || strpos($msg, 'Not Found') !== false) {
+                    $msg = 'Kalendář nebyl nalezen (404). Zkontrolujte: 1) ID je správně (e-mail), 2) Kalendář je sdílen s Service Accountem.';
+                }
+                return ['error' => $msg, 'items' => []];
             }
             foreach ($events->getItems() as $event) {
                 $startDt = $event->getStart();
