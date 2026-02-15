@@ -830,11 +830,13 @@
         // 4. Rezervační kalendář - měsíční
         let calCurrentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
         let calData = { slots: {}, availability: {} };
+        let calSelectedDate = null;
 
         function openBookingModal() {
             document.getElementById('booking-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             calCurrentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+            calSelectedDate = null;
             loadCalendarMonth();
             document.getElementById('cal-time-panel').classList.add('hidden');
             document.getElementById('booking-fields').classList.add('hidden');
@@ -902,7 +904,8 @@
 
                 const clickable = !isWeekend && !isPast && hasSlots ? 'cursor-pointer' : 'cursor-default';
                 const textColor = hasSlots && percent >= 50 ? 'text-white' : 'text-ink';
-                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
+                const selected = dateStr === calSelectedDate ? ' ring-2 ring-accent ring-offset-2' : '';
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]${selected}" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
             }
 
             grid.querySelectorAll('[data-has-slots="true"]').forEach(cell => {
@@ -912,6 +915,12 @@
         }
 
         function selectDate(dateStr) {
+            calSelectedDate = dateStr;
+            document.querySelectorAll('#cal-grid [data-date]').forEach(cell => {
+                cell.classList.toggle('ring-2', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-accent', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-offset-2', cell.dataset.date === dateStr);
+            });
             const freeSlots = calData.slots[dateStr] || [];
             document.getElementById('booking-date').value = dateStr;
             document.getElementById('cal-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });

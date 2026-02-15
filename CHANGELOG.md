@@ -5,6 +5,18 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.16] – 14.02.2026 16:00
+
+### Změněno
+- **Kalendář (web i admin):** grafické zvýraznění vybraného dne – ring (okraj) kolem kliknutého data
+
+## [1.0.15] – 14.02.2026 15:45
+
+### Změněno
+- **Admin Kalendář:** zamítnuté sloty – zelené pozadí se šedým okrajem, title se seznamem zamítnutých jmen
+- **Admin Kalendář:** při více zamítnutých na jednom slotu – seznam jmen v modalu s tlačítkem Obnovit u každého
+- **api/calendar-bookings.php:** vrací pole rezervací per slot (podpora více zamítnutých)
+
 ## [1.0.14] – 14.02.2026 15:30
 
 ### Přidáno

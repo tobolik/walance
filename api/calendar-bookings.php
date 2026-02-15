@@ -47,12 +47,16 @@ foreach ($rows as $r) {
     $d = $r['booking_date'];
     $t = $r['booking_time'];
     if (!isset($byDate[$d])) $byDate[$d] = [];
-    $byDate[$d][$t] = [
+    $item = [
         'id' => (int) $r['id'],
         'name' => $r['name'],
         'email' => $r['email'],
         'status' => $r['status'],
     ];
+    if (!isset($byDate[$d][$t])) {
+        $byDate[$d][$t] = [];
+    }
+    $byDate[$d][$t][] = $item;
 }
 
 echo json_encode($byDate);

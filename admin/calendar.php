@@ -67,7 +67,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-300"></span> Blokováno</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-teal-500"></span> Potvrzeno</span>
-                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-slate-300"></span> Zamítnuto</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-400 border-2 border-slate-400"></span> Zamítnuto</span>
             </div>
         </div>
 
@@ -174,7 +174,8 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 const clickable = !isWeekend && !isPast ? 'cursor-pointer' : 'cursor-default';
                 const textColor = (percent === 0 || pending > 0 || confirmed > 0 || percent >= 50) ? 'text-white' : 'text-slate-800';
                 const title = confirmed > 0 ? (pending > 0 ? `${confirmed} potvrzeno, ${pending} čeká` : `${confirmed} potvrzeno`) : (pending > 0 ? `${pending} čeká na potvrzení` : '');
-                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" title="${title}">${d}</div>`;
+                const selected = dateStr === calSelectedDate ? ' ring-2 ring-slate-800 ring-offset-2' : '';
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]${selected}" data-date="${dateStr}" title="${title}">${d}</div>`;
             }
 
             grid.querySelectorAll('[data-date]').forEach(cell => {
@@ -191,6 +192,11 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 
         function selectDate(dateStr) {
             calSelectedDate = dateStr;
+            document.querySelectorAll('#cal-grid [data-date]').forEach(cell => {
+                cell.classList.toggle('ring-2', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-slate-800', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-offset-2', cell.dataset.date === dateStr);
+            });
             const slotsDetail = calData.slots_detail && calData.slots_detail[dateStr] ? calData.slots_detail[dateStr] : {};
             const bookingsByTime = calData.bookings && calData.bookings[dateStr] ? calData.bookings[dateStr] : {};
             const allTimes = Object.keys(slotsDetail).sort();
@@ -203,20 +209,25 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             } else {
                 allTimes.forEach(t => {
                     const status = slotsDetail[t] || 'free';
-                    const booking = bookingsByTime[t] || null;
-                    addSlotSpan(slotsEl, t, status, dateStr, booking);
+                    let bookings = bookingsByTime[t];
+                    if (bookings && !Array.isArray(bookings)) bookings = [bookings];
+                    if (!bookings || bookings.length === 0) bookings = null;
+                    addSlotSpan(slotsEl, t, status, dateStr, bookings);
                 });
             }
             timePanel.classList.remove('hidden');
         }
 
-        function addSlotSpan(container, time, status, dateStr, booking) {
+        function addSlotSpan(container, time, status, dateStr, bookings) {
             const span = document.createElement('span');
             span.textContent = time;
             span.className = 'px-4 py-2 rounded-lg text-sm font-medium inline-block';
-            if (booking && booking.status === 'cancelled') {
-                span.className += ' bg-slate-200 text-slate-600';
-                span.title = 'Zamítnuto – klikněte pro obnovení';
+            const cancelled = bookings && bookings.length > 0 && bookings.every(b => b.status === 'cancelled');
+            const activeBooking = bookings && bookings.find(b => b.status !== 'cancelled') || (bookings && bookings[0]);
+            if (cancelled) {
+                span.className += ' bg-emerald-100 text-emerald-800 border-2 border-slate-300';
+                const names = bookings.map(b => b.name).join(', ');
+                span.title = 'Zamítnuto – klikněte pro obnovení. Jména: ' + names;
             } else if (status === 'free') {
                 span.className += ' bg-emerald-100 text-emerald-800';
                 span.title = 'Volné';
@@ -230,30 +241,41 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 span.className += ' bg-teal-100 text-teal-800';
                 span.title = 'Potvrzeno – klikněte pro úpravu';
             }
-            if (booking) {
+            if (bookings && bookings.length > 0) {
                 span.classList.add('cursor-pointer', 'hover:ring-2', 'hover:ring-slate-400', 'hover:ring-offset-1');
-                span.dataset.bookingId = booking.id;
-                span.dataset.bookingName = booking.name;
-                span.dataset.bookingEmail = booking.email;
-                span.dataset.bookingStatus = booking.status;
                 span.dataset.date = dateStr;
                 span.dataset.time = time;
-                span.addEventListener('click', () => openBookingModal(booking, dateStr, time));
+                span.addEventListener('click', () => openBookingModal(bookings, dateStr, time));
             }
             container.appendChild(span);
         }
 
-        function openBookingModal(booking, dateStr, time) {
+        function openBookingModal(bookings, dateStr, time) {
+            const arr = Array.isArray(bookings) ? bookings : [bookings];
+            const booking = arr[0];
             const modal = document.getElementById('cal-booking-modal');
             const body = document.getElementById('cal-booking-modal-body');
             const btnConfirm = document.getElementById('cal-modal-confirm');
             const btnCancel = document.getElementById('cal-modal-cancel');
             const btnRestore = document.getElementById('cal-modal-restore');
-            body.innerHTML = `
-                <p><strong>Datum:</strong> ${new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ')} ${time}</p>
-                <p><strong>Jméno:</strong> ${escapeHtml(booking.name)}</p>
-                <p><strong>E-mail:</strong> <a href="mailto:${escapeHtml(booking.email)}" class="text-teal-600 hover:underline">${escapeHtml(booking.email)}</a></p>
-            `;
+            let html = `<p><strong>Datum:</strong> ${new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ')} ${time}</p>`;
+            if (arr.length > 1 && arr.every(b => b.status === 'cancelled')) {
+                html += '<p class="mt-2"><strong>Zamítnutá jména:</strong></p><ul class="list-disc list-inside text-slate-600 mt-1 space-y-1">';
+                arr.forEach(b => {
+                    html += `<li class="flex items-center justify-between gap-2">
+                        <span>${escapeHtml(b.name)}</span>
+                        <button type="button" class="cal-restore-btn px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs rounded" data-id="${b.id}">Obnovit</button>
+                    </li>`;
+                });
+                html += '</ul>';
+            } else {
+                html += `<p><strong>Jméno:</strong> ${escapeHtml(booking.name)}</p>
+                    <p><strong>E-mail:</strong> <a href="mailto:${escapeHtml(booking.email)}" class="text-teal-600 hover:underline">${escapeHtml(booking.email)}</a></p>`;
+            }
+            body.innerHTML = html;
+            body.querySelectorAll('.cal-restore-btn').forEach(btn => {
+                btn.addEventListener('click', () => updateBookingFromCalendar(parseInt(btn.dataset.id), 'restore'));
+            });
             btnConfirm.classList.add('hidden');
             btnCancel.classList.add('hidden');
             btnRestore.classList.add('hidden');

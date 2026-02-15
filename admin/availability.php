@@ -252,6 +252,7 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
         const apiBase = '../api';
         let blockCalMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
         let blockCalData = { slots_detail: {}, availability: {} };
+        let blockCalSelectedDate = null;
 
         async function loadBlockCalendar() {
             const grid = document.getElementById('block-cal-grid');
@@ -296,7 +297,8 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
                 if (isWeekend) bg = 'bg-slate-50';
                 if (isPast) bg = 'bg-slate-100 opacity-60';
                 const clickable = !isWeekend && !isPast && slotsDetail ? 'cursor-pointer' : 'cursor-default';
-                grid.innerHTML += `<div class="aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${bg} ${clickable} min-h-[28px]" data-date="${dateStr}">${d}</div>`;
+                const selected = dateStr === blockCalSelectedDate ? ' ring-2 ring-slate-800 ring-offset-2' : '';
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${bg} ${clickable} min-h-[28px]${selected}" data-date="${dateStr}">${d}</div>`;
             }
             grid.querySelectorAll('[data-date]').forEach(cell => {
                 const dateStr = cell.dataset.date;
@@ -311,6 +313,12 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
         }
 
         function showBlockSlots(dateStr) {
+            blockCalSelectedDate = dateStr;
+            document.querySelectorAll('#block-cal-grid [data-date]').forEach(cell => {
+                cell.classList.toggle('ring-2', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-slate-800', cell.dataset.date === dateStr);
+                cell.classList.toggle('ring-offset-2', cell.dataset.date === dateStr);
+            });
             const slotsDetail = blockCalData.slots_detail?.[dateStr] || {};
             const allTimes = Object.keys(slotsDetail).sort();
             document.getElementById('block-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
