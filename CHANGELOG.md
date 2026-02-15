@@ -4,6 +4,16 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 
+## [1.0.9] – 2026-02-14
+
+### Přidáno
+- **Admin Kalendář:** propojení se schvalováním rezervací – klik na slot s rezervací otevře modal s akcemi (Potvrdit/Zamítnout/Zrušit zamítnutí)
+- **api/calendar-bookings.php:** endpoint vrací rezervace s booking ID pro admin kalendář
+
+### Změněno
+- **Admin Kalendář:** sjednocené barvy – amber pro „Čeká na potvrzení“, teal pro „Potvrzeno“, šedá pro „Zamítnuto“
+- **Admin Kalendář:** po akci na rezervaci se kalendář automaticky obnoví
+
 ## [1.0.8] – 2026-02-14
 
 ### Přidáno

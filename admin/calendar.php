@@ -64,6 +64,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-300"></span> Blokováno</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
                 <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-teal-500"></span> Potvrzeno</span>
+                <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-slate-300"></span> Zamítnuto</span>
             </div>
         </div>
 
@@ -72,6 +73,20 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             <div id="cal-time-slots" class="flex flex-wrap gap-2"></div>
         </div>
     </main>
+
+    <!-- Modal pro editaci rezervace -->
+    <div id="cal-booking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onclick="if(event.target===this) closeBookingModal()">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-bold text-slate-800 mb-3">Rezervace</h3>
+            <div id="cal-booking-modal-body" class="text-sm text-slate-600 space-y-2 mb-4"></div>
+            <div class="flex flex-wrap gap-2">
+                <button type="button" id="cal-modal-confirm" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg hidden">Potvrdit</button>
+                <button type="button" id="cal-modal-cancel" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg hidden">Zamítnout</button>
+                <button type="button" id="cal-modal-restore" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg hidden">Zrušit zamítnutí</button>
+                <button type="button" onclick="closeBookingModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-medium rounded-lg">Zavřít</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="max-w-2xl mx-auto px-6 py-4 text-center text-slate-400 text-xs">
         v<?= htmlspecialchars($v) ?>
@@ -82,16 +97,22 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 
         const apiBase = '../api';
         let calCurrentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
-        let calData = { slots: {}, availability: {}, slots_detail: {} };
+        let calData = { slots: {}, availability: {}, slots_detail: {}, bookings: {} };
+        let calSelectedDate = null;
 
         async function loadCalendarMonth() {
             const grid = document.getElementById('cal-grid');
             grid.innerHTML = '<div class="col-span-7 py-12 text-center text-slate-500">Načítám…</div>';
             try {
-                const r = await fetch(apiBase + '/slots.php?month=' + calCurrentMonth);
-                const data = await r.json();
+                const [slotsRes, bookingsRes] = await Promise.all([
+                    fetch(apiBase + '/slots.php?month=' + calCurrentMonth),
+                    fetch(apiBase + '/calendar-bookings.php?month=' + calCurrentMonth)
+                ]);
+                const data = await slotsRes.json();
+                data.bookings = bookingsRes.ok ? await bookingsRes.json() : {};
                 calData = data;
                 renderCalendar();
+                if (calSelectedDate) selectDate(calSelectedDate);
             } catch (err) {
                 grid.innerHTML = '<div class="col-span-7 py-12 text-center text-slate-500">Chyba načtení (spusťte PHP server)</div>';
             }
@@ -166,7 +187,9 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
         }
 
         function selectDate(dateStr) {
+            calSelectedDate = dateStr;
             const slotsDetail = calData.slots_detail && calData.slots_detail[dateStr] ? calData.slots_detail[dateStr] : {};
+            const bookingsByTime = calData.bookings && calData.bookings[dateStr] ? calData.bookings[dateStr] : {};
             const allTimes = Object.keys(slotsDetail).sort();
             document.getElementById('cal-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
             const timePanel = document.getElementById('cal-time-panel');
@@ -177,17 +200,21 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             } else {
                 allTimes.forEach(t => {
                     const status = slotsDetail[t] || 'free';
-                    addSlotSpan(slotsEl, t, status);
+                    const booking = bookingsByTime[t] || null;
+                    addSlotSpan(slotsEl, t, status, dateStr, booking);
                 });
             }
             timePanel.classList.remove('hidden');
         }
 
-        function addSlotSpan(container, time, status) {
+        function addSlotSpan(container, time, status, dateStr, booking) {
             const span = document.createElement('span');
             span.textContent = time;
             span.className = 'px-4 py-2 rounded-lg text-sm font-medium inline-block';
-            if (status === 'free') {
+            if (booking && booking.status === 'cancelled') {
+                span.className += ' bg-slate-200 text-slate-600';
+                span.title = 'Zamítnuto – klikněte pro obnovení';
+            } else if (status === 'free') {
                 span.className += ' bg-emerald-100 text-emerald-800';
                 span.title = 'Volné';
             } else if (status === 'blocked') {
@@ -195,12 +222,79 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 span.title = 'Blokováno (Dostupnost)';
             } else if (status === 'pending') {
                 span.className += ' bg-amber-100 text-amber-800';
-                span.title = 'Čeká na potvrzení';
+                span.title = 'Čeká na potvrzení – klikněte pro úpravu';
             } else {
                 span.className += ' bg-teal-100 text-teal-800';
-                span.title = 'Potvrzeno';
+                span.title = 'Potvrzeno – klikněte pro úpravu';
+            }
+            if (booking) {
+                span.classList.add('cursor-pointer', 'hover:ring-2', 'hover:ring-slate-400', 'hover:ring-offset-1');
+                span.dataset.bookingId = booking.id;
+                span.dataset.bookingName = booking.name;
+                span.dataset.bookingEmail = booking.email;
+                span.dataset.bookingStatus = booking.status;
+                span.dataset.date = dateStr;
+                span.dataset.time = time;
+                span.addEventListener('click', () => openBookingModal(booking, dateStr, time));
             }
             container.appendChild(span);
+        }
+
+        function openBookingModal(booking, dateStr, time) {
+            const modal = document.getElementById('cal-booking-modal');
+            const body = document.getElementById('cal-booking-modal-body');
+            const btnConfirm = document.getElementById('cal-modal-confirm');
+            const btnCancel = document.getElementById('cal-modal-cancel');
+            const btnRestore = document.getElementById('cal-modal-restore');
+            body.innerHTML = `
+                <p><strong>Datum:</strong> ${new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ')} ${time}</p>
+                <p><strong>Jméno:</strong> ${escapeHtml(booking.name)}</p>
+                <p><strong>E-mail:</strong> <a href="mailto:${escapeHtml(booking.email)}" class="text-teal-600 hover:underline">${escapeHtml(booking.email)}</a></p>
+            `;
+            btnConfirm.classList.add('hidden');
+            btnCancel.classList.add('hidden');
+            btnRestore.classList.add('hidden');
+            if (booking.status === 'pending') {
+                btnConfirm.classList.remove('hidden');
+                btnCancel.classList.remove('hidden');
+            } else if (booking.status === 'confirmed') {
+                btnCancel.classList.remove('hidden');
+            } else if (booking.status === 'cancelled') {
+                btnRestore.classList.remove('hidden');
+            }
+            btnConfirm.onclick = () => updateBookingFromCalendar(booking.id, 'confirm');
+            btnCancel.onclick = () => updateBookingFromCalendar(booking.id, 'cancel');
+            btnRestore.onclick = () => updateBookingFromCalendar(booking.id, 'restore');
+            modal.classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('cal-booking-modal').classList.add('hidden');
+        }
+
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        function updateBookingFromCalendar(id, action) {
+            const btn = event.target;
+            btn.disabled = true;
+            fetch('bookings.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'ajax_action=' + action + '&id=' + id
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    closeBookingModal();
+                    loadCalendarMonth();
+                }
+            })
+            .catch(() => {})
+            .finally(() => { btn.disabled = false; });
         }
 
         document.getElementById('cal-prev').addEventListener('click', () => {
