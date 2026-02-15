@@ -13,7 +13,7 @@ V repozitáři: **Settings → Secrets and variables → Actions** přidejte:
 | `SFTP_HOST` | ano | Adresa serveru (např. `sftp.walance.cz` nebo IP) |
 | `SFTP_USERNAME` | ano | SFTP uživatel |
 | `SFTP_PASSWORD` | ano* | SFTP heslo |
-| `SFTP_REMOTE_PATH` | ano | Cesta na serveru (např. `/www/walance` nebo `/public_html`) |
+| `SFTP_REMOTE_PATH` | ano | Cesta na serveru – **povinné!** (např. `/www/walance` nebo `/public_html`) |
 | `SFTP_PORT` | ne | Port (výchozí 22) |
 | `SSH_PRIVATE_KEY` | ano* | SSH privátní klíč (alternativa k heslu) |
 
