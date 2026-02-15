@@ -4,6 +4,9 @@
  * Upravte hodnoty podle vašeho prostředí
  */
 
+// Verze aplikace (vMAJOR.MINOR.PATCH) – při změně zvyš PATCH, cache busting ?v=
+define('APP_VERSION', '1.0.0');
+
 // E-mail pro příjem zpráv
 define('CONTACT_EMAIL', 'info@walance.cz');
 

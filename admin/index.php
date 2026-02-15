@@ -5,6 +5,7 @@
 session_start();
 require_once __DIR__ . '/../api/config.php';
 require_once __DIR__ . '/../api/db.php';
+$v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
@@ -27,8 +28,8 @@ if (isset($_SESSION['walance_admin'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WALANCE Admin - Přihlášení</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap?v=<?= htmlspecialchars($v) ?>" rel="stylesheet">
     <style>body { font-family: 'DM Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
