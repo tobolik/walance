@@ -5,6 +5,13 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.11] – 14.02.2026
+
+### Změněno
+- **Admin Kalendář – sloty:** title vždy zobrazuje stav a jméno (Volné, Zamítnuto: jména, Čeká: jména, Potvrzeno: jména, Obsazeno: událost z GC)
+- **Admin Kalendář:** Blokováno → „Blokováno ručně v administraci Dostupnost“
+- **Admin Kalendář:** sloty obsazené z Google Calendar (bez rezervace v DB) = šedá barva, neklikatelné, title se zdrojem
+
 ## [1.1.10] – 14.02.2026
 
 ### Přidáno

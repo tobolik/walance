@@ -92,7 +92,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             try {
                 const [slotsRes, bookingsRes] = await Promise.all([
                     fetch(apiBase + '/slots.php?month=' + calCurrentMonth, { cache: 'no-store' }),
-                    fetch(apiBase + '/calendar-bookings.php?month=' + calCurrentMonth, { cache: 'no-store' })
+                    fetch(apiBase + '/calendar-bookings.php?month=' + calCurrentMonth, { cache: 'no-store', credentials: 'same-origin' })
                 ]);
                 const data = await slotsRes.json();
                 data.bookings = bookingsRes.ok ? await bookingsRes.json() : {};
@@ -195,12 +195,14 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             if (allTimes.length === 0) {
                 slotsEl.innerHTML = '<span class="text-slate-500 text-sm">Žádné sloty pro tento den.</span>';
             } else {
+                const slotsDetailInfo = calData.slots_detail_info?.[dateStr] ?? {};
                 allTimes.forEach(t => {
                     const status = slotsDetail[t] || 'free';
                     let bookings = bookingsByTime[t];
                     if (bookings && !Array.isArray(bookings)) bookings = [bookings];
                     if (!bookings || bookings.length === 0) bookings = null;
-                    addSlotSpan(slotsEl, t, status, dateStr, bookings);
+                    const detailInfo = slotsDetailInfo[t] || null;
+                    addSlotSpan(slotsEl, t, status, dateStr, bookings, detailInfo);
                 });
             }
             timePanel.classList.remove('hidden');
@@ -217,30 +219,48 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             });
         }
 
-        function addSlotSpan(container, time, status, dateStr, bookings) {
+        function addSlotSpan(container, time, status, dateStr, bookings, detailInfo) {
             const span = document.createElement('span');
             span.textContent = time;
             span.className = 'px-4 py-2 rounded-lg text-sm font-medium inline-block';
             const cancelled = bookings && bookings.length > 0 && bookings.every(b => b.status === 'cancelled');
-            const activeBooking = bookings && bookings.find(b => b.status !== 'cancelled') || (bookings && bookings[0]);
-            if (cancelled) {
+            const hasBookings = bookings && bookings.length > 0;
+            const names = hasBookings ? bookings.map(b => b.name).join(', ') : '';
+
+            let title = '';
+            let clickable = false;
+
+            if (status === 'blocked') {
+                span.className += ' bg-red-100 text-red-800';
+                title = 'Blokováno ručně v administraci Dostupnost';
+            } else if (cancelled) {
                 span.className += ' bg-slate-300 text-slate-800 border-2 border-slate-500';
-                const names = bookings.map(b => b.name).join(', ');
-                span.title = 'Zamítnuto – klikněte pro obnovení. Jména: ' + names;
+                title = 'Zamítnuto. Jména: ' + names + '. Klikněte pro obnovení.';
+                clickable = true;
             } else if (status === 'free') {
                 span.className += ' bg-emerald-100 text-emerald-800';
-                span.title = 'Volné';
-            } else if (status === 'blocked') {
-                span.className += ' bg-red-100 text-red-800';
-                span.title = 'Blokováno (Dostupnost)';
+                title = 'Volné';
             } else if (status === 'pending') {
                 span.className += ' bg-amber-400 text-amber-900';
-                span.title = 'Čeká na potvrzení – klikněte pro úpravu';
+                title = hasBookings ? 'Čeká na potvrzení: ' + names + '. Klikněte pro úpravu.' : 'Čeká na potvrzení.';
+                clickable = hasBookings;
+            } else if (status === 'confirmed') {
+                if (hasBookings) {
+                    span.className += ' bg-teal-100 text-teal-800';
+                    title = 'Potvrzeno: ' + names + '. Klikněte pro úpravu.';
+                    clickable = true;
+                } else {
+                    span.className += ' bg-slate-200 text-slate-700 cursor-default';
+                    const label = detailInfo && detailInfo.label ? detailInfo.label : 'Událost z Google Calendar';
+                    title = 'Obsazeno: ' + label + '. Nelze upravovat v rezervacích.';
+                }
             } else {
-                span.className += ' bg-teal-100 text-teal-800';
-                span.title = 'Potvrzeno – klikněte pro úpravu';
+                span.className += ' bg-slate-100 text-slate-600';
+                title = 'Stav: ' + status;
             }
-            if (bookings && bookings.length > 0) {
+
+            span.title = title;
+            if (clickable) {
                 span.classList.add('cursor-pointer', 'hover:ring-2', 'hover:ring-slate-400', 'hover:ring-offset-1');
                 span.dataset.date = dateStr;
                 span.dataset.time = time;
