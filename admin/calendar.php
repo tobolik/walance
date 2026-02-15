@@ -115,7 +115,12 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 data.bookings = bookingsRes.ok ? await bookingsRes.json() : {};
                 calData = data;
                 renderCalendar();
-                if (calSelectedDate) selectDate(calSelectedDate);
+                if (calSelectedDate && calSelectedDate.startsWith(calCurrentMonth + '-')) {
+                    selectDate(calSelectedDate);
+                } else {
+                    calSelectedDate = null;
+                    document.getElementById('cal-time-panel').classList.add('hidden');
+                }
             } catch (err) {
                 grid.innerHTML = '<div class="col-span-7 py-12 text-center text-slate-500">Chyba načtení (spusťte PHP server)</div>';
             }
@@ -197,7 +202,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 cell.classList.toggle('ring-slate-800', cell.dataset.date === dateStr);
                 cell.classList.toggle('ring-offset-2', cell.dataset.date === dateStr);
             });
-            const slotsDetail = calData.slots_detail && calData.slots_detail[dateStr] ? calData.slots_detail[dateStr] : {};
+            const slotsDetail = calData.slots_detail?.[dateStr] ?? {};
             const bookingsByTime = calData.bookings && calData.bookings[dateStr] ? calData.bookings[dateStr] : {};
             const allTimes = Object.keys(slotsDetail).sort();
             document.getElementById('cal-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -225,7 +230,7 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             const cancelled = bookings && bookings.length > 0 && bookings.every(b => b.status === 'cancelled');
             const activeBooking = bookings && bookings.find(b => b.status !== 'cancelled') || (bookings && bookings[0]);
             if (cancelled) {
-                span.className += ' bg-emerald-100 text-emerald-800 border-2 border-slate-300';
+                span.className += ' bg-emerald-400 text-white border-2 border-slate-400';
                 const names = bookings.map(b => b.name).join(', ');
                 span.title = 'Zamítnuto – klikněte pro obnovení. Jména: ' + names;
             } else if (status === 'free') {

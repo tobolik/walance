@@ -5,6 +5,20 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.24] – 14.02.2026 18:00
+
+### Opraveno
+- **Admin Kalendář:** při přepnutí měsíce – reset výběru data, aby nedocházelo k TypeError (Object.keys undefined)
+- **Admin Kalendář:** zamítnuté sloty – sjednocení stylů s legendou (bg-emerald-400, border-slate-400)
+
+## [1.0.23] – 14.02.2026 17:30
+
+### Změněno
+- **Rezervační modal:** zavírací křížek – sticky, zůstává vidět při scrollování dolů
+
+### Přidáno
+- **Rezervační modal:** klávesa ESC zavře modal
+
 ## [1.0.22] – 14.02.2026 17:15
 
 ### Změněno

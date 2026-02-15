@@ -1,0 +1,31 @@
+---
+description: Při navýšení verze vždy aktualizovat CHANGELOG
+alwaysApply: true
+---
+
+# Verze a Changelog
+
+**Kritické pravidlo:** Při každé změně `api/version.php` (zvýšení PATCH/MINOR/MAJOR) musíš zároveň přidat odpovídající záznam do `CHANGELOG.md`.
+
+## Postup
+
+1. Zvyš verzi v `api/version.php` (např. 1.0.24 → 1.0.25)
+2. Přidej novou sekci na začátek CHANGELOG (hned za úvodní text, před předchozí verzi):
+
+```markdown
+## [1.0.25] – DD.MM.YYYY HH:MM
+
+### Změněno
+- **Soubor:** popis změny
+
+### Přidáno
+- **Soubor:** popis nové funkce
+
+### Opraveno
+- **Soubor:** popis opravy
+```
+
+3. Použij aktuální datum a čas ve formátu `DD.MM.YYYY HH:MM`
+4. Sekce `Změněno`, `Přidáno`, `Opraveno` – použij jen ty, které jsou relevantní
+
+Verze v CHANGELOG musí odpovídat hodnotě v `api/version.php`.
