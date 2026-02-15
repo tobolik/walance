@@ -627,7 +627,7 @@
                 </div>
                 <div class="p-8 lg:p-12 pt-2">
                     <h2 class="font-display text-2xl font-bold text-ink mb-2">Rezervace termínu</h2>
-                    <p class="text-ink/70 mb-6 text-sm">Zelená = volné termíny. Čím sytější zelená, tím více volných slotů.</p>
+                    <p class="text-ink/70 mb-6 text-sm">Zelená = volné termíny. Sytější zelená = více volných slotů. Světlejší zelená = den má už nějaké rezervace.</p>
                     
                     <!-- Měsíční kalendář -->
                     <div class="mb-8">
@@ -894,14 +894,22 @@
                 const avail = calData.availability[dateStr];
                 const percent = avail ? avail.percent : 0;
                 const hasSlots = avail && avail.free > 0;
+                const hasReservations = avail && ((avail.pending || 0) + (avail.confirmed || 0) > 0);
 
                 let bg = 'bg-mist/30';
                 if (!isWeekend && !isPast) {
                     if (hasSlots) {
-                        if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
-                        else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
-                        else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
-                        else bg = 'bg-emerald-100 hover:bg-emerald-200';
+                        if (hasReservations) {
+                            if (percent >= 75) bg = 'bg-emerald-400 hover:bg-emerald-500';
+                            else if (percent >= 50) bg = 'bg-emerald-300 hover:bg-emerald-400';
+                            else if (percent >= 25) bg = 'bg-emerald-200 hover:bg-emerald-300';
+                            else bg = 'bg-emerald-100 hover:bg-emerald-200';
+                        } else {
+                            if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
+                            else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
+                            else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
+                            else bg = 'bg-emerald-100 hover:bg-emerald-200';
+                        }
                     } else {
                         bg = 'bg-mist/40';
                     }
@@ -910,7 +918,7 @@
                 if (isPast) bg = 'bg-mist/20 opacity-60';
 
                 const clickable = !isWeekend && !isPast && hasSlots ? 'cursor-pointer' : 'cursor-default';
-                const textColor = hasSlots && percent >= 50 ? 'text-white' : 'text-ink';
+                const textColor = hasSlots && (percent >= 75 || (percent >= 50 && !hasReservations)) ? 'text-white' : 'text-ink';
                 const selected = dateStr === calSelectedDate ? ' ring-2 ring-teal-500 ring-offset-2' : '';
                 grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]${selected}" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
             }
@@ -936,6 +944,7 @@
             slotsEl.innerHTML = '';
             freeSlots.forEach(t => addSlotBtn(slotsEl, t));
             timePanel.classList.remove('hidden');
+            timePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             document.getElementById('booking-fields').classList.add('hidden');
             document.getElementById('booking-time').value = '';
             document.getElementById('booking-submit').disabled = true;

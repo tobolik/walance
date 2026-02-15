@@ -465,7 +465,19 @@ if (!($error && $_SERVER['REQUEST_METHOD'] === 'POST')) {
                 }
                 list.appendChild(span);
             });
-            document.getElementById('block-slots-panel').classList.remove('hidden');
+            const panel = document.getElementById('block-slots-panel');
+            panel.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                const main = document.querySelector('main');
+                if (main && main.scrollHeight > main.clientHeight) {
+                    const mr = main.getBoundingClientRect();
+                    const pr = panel.getBoundingClientRect();
+                    const scrollTarget = main.scrollTop + (pr.top - mr.top) - 24;
+                    main.scrollTo({ top: Math.max(0, scrollTarget), behavior: 'smooth' });
+                } else {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         }
 
         async function toggleBlock(dateStr, time, el) {

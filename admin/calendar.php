@@ -204,6 +204,17 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 });
             }
             timePanel.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                const main = document.querySelector('main');
+                if (main && main.scrollHeight > main.clientHeight) {
+                    const mr = main.getBoundingClientRect();
+                    const pr = timePanel.getBoundingClientRect();
+                    const scrollTarget = main.scrollTop + (pr.top - mr.top) - 24;
+                    main.scrollTo({ top: Math.max(0, scrollTarget), behavior: 'smooth' });
+                } else {
+                    timePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         }
 
         function addSlotSpan(container, time, status, dateStr, bookings) {
