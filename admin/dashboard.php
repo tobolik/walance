@@ -30,7 +30,7 @@ if ($search) {
     $p = "%$search%";
     $params = array_merge($params, [$p, $p, $p]);
 }
-$sql .= " ORDER BY c.created_at DESC";
+$sql .= " ORDER BY c.valid_from DESC";
 
 $stmt = $db->prepare($sql);
 $stmt->execute($params);
@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 <a href="bookings.php" class="text-slate-500 hover:text-teal-600 text-sm">Rezervace</a>
                 <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
                 <span class="text-slate-400 text-xs">v<?= htmlspecialchars($v) ?></span>
+                <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
                 <a href="logout.php" class="text-red-600 hover:text-red-700 text-sm font-medium">Odhlásit</a>
             </nav>
         </div>
@@ -124,7 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             <td class="py-4 px-6 text-sm text-slate-600">
                                 <?= date('d.m.Y H:i', strtotime($c['valid_from'] ?? $c['created_at'] ?? 'now')) ?>
                             </td>
-                            <td class="py-4 px-6 font-medium text-slate-800"><?= htmlspecialchars($c['name']) ?></td>
+                            <td class="py-4 px-6 font-medium text-slate-800">
+                                <a href="contact.php?id=<?= (int)$c['id'] ?>" class="text-teal-600 hover:underline"><?= htmlspecialchars($c['name']) ?></a>
+                            </td>
                             <td class="py-4 px-6">
                                 <a href="mailto:<?= htmlspecialchars($c['email']) ?>" class="text-teal-600 hover:underline">
                                     <?= htmlspecialchars($c['email']) ?>

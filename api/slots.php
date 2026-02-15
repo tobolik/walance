@@ -23,17 +23,24 @@ for ($h = $startHour; $h < $endHour; $h++) {
 }
 $totalSlotsPerDay = count($allDaySlots);
 
-// Načíst rezervované sloty z DB
+// Načíst rezervace z DB (soft-update: valid_to IS NULL)
 $booked = [];
 try {
     $db = getDb();
-    $stmt = $db->query("SELECT booking_date, booking_time FROM bookings WHERE status = 'confirmed' OR status = 'pending'");
+    $stmt = $db->query("SELECT booking_date, booking_time, status FROM bookings WHERE valid_to IS NULL AND (status = 'confirmed' OR status = 'pending')");
     $booked = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {}
 
-$bookedByDate = [];
+$bookedByDate = [];      // datum => [čas] (pro blokování slotů)
+$pendingByDate = [];    // datum => [čas] (čekající)
+$confirmedByDate = [];  // datum => [čas] (potvrzené)
 foreach ($booked as $b) {
     $bookedByDate[$b['booking_date']][] = $b['booking_time'];
+    if ($b['status'] === 'pending') {
+        $pendingByDate[$b['booking_date']][] = $b['booking_time'];
+    } else {
+        $confirmedByDate[$b['booking_date']][] = $b['booking_time'];
+    }
 }
 
 $monthParam = $_GET['month'] ?? null;
@@ -62,9 +69,11 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         
         $free = count($daySlots);
         $percent = $totalSlotsPerDay > 0 ? round(100 * $free / $totalSlotsPerDay) : 0;
+        $pending = isset($pendingByDate[$dateStr]) ? count($pendingByDate[$dateStr]) : 0;
+        $confirmed = isset($confirmedByDate[$dateStr]) ? count($confirmedByDate[$dateStr]) : 0;
         
         $slots[$dateStr] = $daySlots;
-        $availability[$dateStr] = ['free' => $free, 'total' => $totalSlotsPerDay, 'percent' => $percent];
+        $availability[$dateStr] = ['free' => $free, 'total' => $totalSlotsPerDay, 'percent' => $percent, 'pending' => $pending, 'confirmed' => $confirmed];
     }
     
     echo json_encode(['slots' => $slots, 'availability' => $availability, 'month' => $monthParam]);

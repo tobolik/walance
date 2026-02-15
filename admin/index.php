@@ -1,6 +1,6 @@
 <?php
 /**
- * Přihlášení do CRM administrace
+ * Přihlášení do CRM administrace – email + heslo
  */
 session_start();
 require_once __DIR__ . '/../api/config.php';
@@ -8,13 +8,22 @@ require_once __DIR__ . '/../api/db.php';
 $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
-    if (password_verify($password, ADMIN_PASSWORD_HASH)) {
-        $_SESSION['walance_admin'] = true;
-        header('Location: dashboard.php');
-        exit;
+    if ($email && $password) {
+        $db = getDb();
+        $stmt = $db->prepare("SELECT id, name, password_hash FROM admin_users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($user && password_verify($password, $user['password_hash'])) {
+            $_SESSION['walance_admin'] = true;
+            $_SESSION['walance_admin_user_id'] = (int)$user['id'];
+            $_SESSION['walance_admin_name'] = $user['name'];
+            header('Location: dashboard.php');
+            exit;
+        }
     }
-    $error = 'Nesprávné heslo.';
+    $error = 'Nesprávný e-mail nebo heslo.';
 }
 
 if (isset($_SESSION['walance_admin'])) {
@@ -40,6 +49,12 @@ if (isset($_SESSION['walance_admin'])) {
             <div class="bg-red-50 text-red-700 p-3 rounded-lg mb-4 text-sm"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
         <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
+                <input type="email" name="email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    placeholder="vas@email.cz">
+            </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Heslo</label>
                 <input type="password" name="password" required

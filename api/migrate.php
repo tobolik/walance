@@ -85,6 +85,52 @@ try {
         ");
         $messages[] = "Tabulka bookings OK.";
 
+        // admin_users – přihlášení
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS admin_users (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                password_hash VARCHAR(255) NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_email (email)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ");
+        $messages[] = "Tabulka admin_users OK.";
+
+        // Seed uživatelů (jen pokud tabulka prázdná)
+        $cnt = $pdo->query("SELECT COUNT(*) FROM admin_users")->fetchColumn();
+        if ($cnt == 0) {
+            $hash1 = password_hash('honzaq4e', PASSWORD_BCRYPT);
+            $hash2 = password_hash('Jana2026', PASSWORD_BCRYPT);
+            $pdo->exec("INSERT INTO admin_users (id, name, email, password_hash) VALUES 
+                (1, 'Honza Tobolík', 'jan.tobolik@nwpro.cz', " . $pdo->quote($hash1) . "),
+                (2, 'Jana Štěpaníková', 'jana@walance.cz', " . $pdo->quote($hash2) . ")");
+            $messages[] = "Uživatelé Honza, Jana vytvořeni.";
+        }
+
+        // activities – aktivity u kontaktů (telefonáty, e-maily, schůzky, poznámky)
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS activities (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                activities_id INT UNSIGNED NULL,
+                contacts_id INT UNSIGNED NULL,
+                type VARCHAR(20) NOT NULL,
+                subject VARCHAR(255),
+                body TEXT,
+                direction VARCHAR(10),
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME NULL DEFAULT NULL,
+                valid_user_from INT UNSIGNED NULL,
+                valid_user_to INT UNSIGNED NULL,
+                INDEX idx_activities_id (activities_id, valid_to),
+                INDEX idx_contacts_id (contacts_id, valid_to),
+                INDEX idx_v (valid_to),
+                INDEX idx_type (type)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ");
+        $messages[] = "Tabulka activities OK.";
+
         $bCols = $pdo->query("SHOW COLUMNS FROM bookings LIKE 'valid_from'")->fetch();
         if (!$bCols) {
             $pdo->exec("ALTER TABLE bookings ADD COLUMN bookings_id INT UNSIGNED NULL AFTER id,
@@ -144,6 +190,44 @@ try {
         ");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bookings_valid ON bookings(bookings_id, valid_to)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bookings_v ON bookings(valid_to)");
+
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS admin_users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ");
+        $pdo->exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_admin_users_email ON admin_users(email)");
+        $cnt = $pdo->query("SELECT COUNT(*) FROM admin_users")->fetchColumn();
+        if ($cnt == 0) {
+            $hash1 = password_hash('honzaq4e', PASSWORD_BCRYPT);
+            $hash2 = password_hash('Jana2026', PASSWORD_BCRYPT);
+            $stmt = $pdo->prepare("INSERT INTO admin_users (id, name, email, password_hash) VALUES (?, ?, ?, ?)");
+            $stmt->execute([1, 'Honza Tobolík', 'jan.tobolik@nwpro.cz', $hash1]);
+            $stmt->execute([2, 'Jana Štěpaníková', 'jana@walance.cz', $hash2]);
+            $messages[] = "Uživatelé Honza, Jana vytvořeni.";
+        }
+
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS activities (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                activities_id INTEGER,
+                contacts_id INTEGER,
+                type TEXT NOT NULL,
+                subject TEXT,
+                body TEXT,
+                direction TEXT,
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME,
+                valid_user_from INTEGER,
+                valid_user_to INTEGER
+            )
+        ");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_activities_contacts ON activities(contacts_id, valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_activities_v ON activities(valid_to)");
 
         $messages[] = "SQLite tabulky OK.";
     }

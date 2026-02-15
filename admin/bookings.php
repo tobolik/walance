@@ -85,6 +85,7 @@ $statusLabels = [
                 <a href="bookings.php" class="text-teal-600 font-medium text-sm">Rezervace</a>
                 <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
                 <span class="text-slate-400 text-xs">v<?= htmlspecialchars($v) ?></span>
+                <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
                 <a href="logout.php" class="text-red-600 hover:text-red-700 text-sm font-medium">Odhlásit</a>
             </nav>
         </div>

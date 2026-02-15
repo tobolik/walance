@@ -643,11 +643,10 @@
                         <div id="cal-grid" class="grid grid-cols-7 gap-1 min-h-[280px]">
                             <!-- Dny se vygenerují v JS -->
                         </div>
-                        <div class="mt-3 flex items-center gap-4 text-xs text-ink/60">
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-100"></span> 0–25 % volných</span>
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-300"></span> 25–50 %</span>
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> 50–75 %</span>
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-700"></span> 75–100 %</span>
+                        <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-ink/60">
+                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> Volné</span>
+                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400"></span> Čeká na potvrzení</span>
+                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-accent/70"></span> Potvrzeno</span>
                         </div>
                     </div>
                     
@@ -886,21 +885,36 @@
                 const isPast = dateStr < today;
                 const avail = calData.availability[dateStr];
                 const percent = avail ? avail.percent : 0;
+                const pending = avail ? (avail.pending || 0) : 0;
+                const confirmed = avail ? (avail.confirmed || 0) : 0;
                 const hasSlots = avail && avail.free > 0;
 
                 let bg = 'bg-mist/30';
                 if (!isWeekend && !isPast) {
-                    if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
-                    else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
-                    else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
-                    else if (percent > 0) bg = 'bg-emerald-100 hover:bg-emerald-200';
+                    if (percent === 0) {
+                        if (confirmed > 0) bg = 'bg-accent/80 hover:bg-accent';           // plný, potvrzené
+                        else if (pending > 0) bg = 'bg-amber-500/80 hover:bg-amber-600'; // plný, čeká
+                        else bg = 'bg-mist/40';
+                    } else if (confirmed > 0) {
+                        if (percent >= 50) bg = 'bg-accent/60 hover:bg-accent/70';
+                        else bg = 'bg-accent/40 hover:bg-accent/50';
+                    } else if (pending > 0) {
+                        if (percent >= 50) bg = 'bg-amber-400 hover:bg-amber-500';
+                        else bg = 'bg-amber-300 hover:bg-amber-400';
+                    } else {
+                        if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
+                        else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
+                        else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
+                        else bg = 'bg-emerald-100 hover:bg-emerald-200';
+                    }
                 }
                 if (isWeekend) bg = 'bg-mist/20';
                 if (isPast) bg = 'bg-mist/20 opacity-60';
 
                 const clickable = !isWeekend && !isPast && hasSlots ? 'cursor-pointer' : 'cursor-default';
-                const textColor = percent >= 50 ? 'text-white' : 'text-ink';
-                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
+                const textColor = (percent === 0 || pending > 0 || confirmed > 0 || percent >= 50) ? 'text-white' : 'text-ink';
+                const title = confirmed > 0 ? (pending > 0 ? `${confirmed} potvrzeno, ${pending} čeká` : `${confirmed} potvrzeno`) : (pending > 0 ? `${pending} čeká na potvrzení` : '');
+                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]" data-date="${dateStr}" data-has-slots="${hasSlots}" title="${title}">${d}</div>`;
             }
 
             grid.querySelectorAll('[data-has-slots="true"]').forEach(cell => {

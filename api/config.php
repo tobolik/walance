@@ -22,9 +22,6 @@ define('DB_NAME', 'walancecz');
 define('DB_USER', 'walancecz001');
 define('DB_PASS', 'ThlCRD9v');
 
-// Admin - heslo: Jana2026
-define('ADMIN_PASSWORD_HASH', '$2b$10$jtmKFFne7iDWtCFsupaKlezBLJoEIUjy62SCJKSQZY4ybZRgKPVye');
-
 // Token pro spuštění migrace přes HTTP (deploy) – nastavte stejnou hodnotu v GitHub Secrets jako MIGRATE_TOKEN
 define('MIGRATE_TOKEN', 'Jana2026'); // např. 'váš-náhodný-token-xyz'
 
