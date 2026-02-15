@@ -679,9 +679,13 @@
                             </div>
                         </div>
                         <div id="booking-message" class="hidden p-4 rounded-xl text-sm"></div>
-                        <button type="submit" id="booking-submit" disabled class="w-full bg-accent hover:bg-accent/90 text-cream py-3.5 rounded-full font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                            REZERVOVAT
-                        </button>
+                        <div id="booking-submit-wrap" class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out overflow-hidden">
+                            <div class="min-h-0 overflow-hidden">
+                                <button type="submit" id="booking-submit" disabled class="w-full bg-accent hover:bg-accent/90 text-cream py-3.5 rounded-full font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4">
+                                    REZERVOVAT
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -944,10 +948,17 @@
             slotsEl.innerHTML = '';
             freeSlots.forEach(t => addSlotBtn(slotsEl, t));
             timePanel.classList.remove('hidden');
-            timePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             document.getElementById('booking-fields').classList.add('hidden');
             document.getElementById('booking-time').value = '';
             document.getElementById('booking-submit').disabled = true;
+            document.getElementById('booking-submit-wrap').classList.replace('grid-rows-[1fr]', 'grid-rows-[0fr]');
+            requestAnimationFrame(() => {
+                const r = timePanel.getBoundingClientRect();
+                const vh = window.innerHeight;
+                if (r.bottom > vh || r.top < 0) {
+                    timePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
         }
         function addSlotBtn(container, time) {
             const btn = document.createElement('button');
@@ -962,6 +973,15 @@
                 document.getElementById('booking-time').value = time;
                 document.getElementById('booking-fields').classList.remove('hidden');
                 document.getElementById('booking-submit').disabled = false;
+                const wrap = document.getElementById('booking-submit-wrap');
+                wrap.classList.replace('grid-rows-[0fr]', 'grid-rows-[1fr]');
+                requestAnimationFrame(() => {
+                    const r = wrap.getBoundingClientRect();
+                    const vh = window.innerHeight;
+                    if (r.bottom > vh || r.top < 0) {
+                        wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
             };
             container.appendChild(btn);
         }
@@ -1011,6 +1031,7 @@
                     document.getElementById('booking-time').value = '';
                     document.getElementById('booking-fields').classList.add('hidden');
                     document.getElementById('cal-time-panel').classList.add('hidden');
+                    document.getElementById('booking-submit-wrap').classList.replace('grid-rows-[1fr]', 'grid-rows-[0fr]');
                     loadCalendarMonth();
                     setTimeout(closeBookingModal, 2000);
                 } else {

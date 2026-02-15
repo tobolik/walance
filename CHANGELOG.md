@@ -5,6 +5,12 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.4] – 14.02.2026
+
+### Změněno
+- **Rezervační formulář:** tlačítko REZERVOVAT se zobrazí až po výběru času (plynulé vyrolování)
+- **Rezervační formulář:** scroll jen když je potřeba – na velkých monitorech se nic neposouvá
+
 ## [1.1.3] – 14.02.2026
 
 ### Přidáno
