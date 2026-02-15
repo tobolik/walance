@@ -112,12 +112,13 @@ if ($monthParam && preg_match('/^\d{4}-\d{2}$/', $monthParam)) {
         $blockedByAdmin = $excludedSlots[$dateStr] ?? [];
         $slotsDetail = [];
         foreach ($allDaySlots as $t) {
-            if (in_array($t, $blockedByAdmin)) {
-                $slotsDetail[$t] = 'blocked';
-            } elseif (isset($confirmedByDate[$dateStr]) && in_array($t, $confirmedByDate[$dateStr])) {
+            // Rezervace má přednost před blokací – slot s rezervací zobrazíme podle stavu rezervace
+            if (isset($confirmedByDate[$dateStr]) && in_array($t, $confirmedByDate[$dateStr])) {
                 $slotsDetail[$t] = 'confirmed';
             } elseif (isset($pendingByDate[$dateStr]) && in_array($t, $pendingByDate[$dateStr])) {
                 $slotsDetail[$t] = 'pending';
+            } elseif (in_array($t, $blockedByAdmin)) {
+                $slotsDetail[$t] = 'blocked';
             } elseif (isset($gcBusyByDate[$dateStr]) && in_array($t, $gcBusyByDate[$dateStr])) {
                 $slotsDetail[$t] = 'confirmed';
             } else {

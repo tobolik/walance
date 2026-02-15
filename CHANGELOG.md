@@ -3,8 +3,24 @@
 Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto souboru.
 
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
+Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
-## [1.0.9] – 2026-02-14
+## [1.0.12] – 14.02.2026 15:00
+
+### Změněno
+- **CHANGELOG:** český formát data a času (DD.MM.YYYY HH:MM)
+
+## [1.0.11] – 14.02.2026 14:45
+
+### Změněno
+- **CHANGELOG:** přidán čas ke každému záznamu (český formát DD.MM.YYYY HH:MM)
+
+## [1.0.10] – 14.02.2026 14:30
+
+### Opraveno
+- **Admin Kalendář:** slot s rezervací ve stavu „Čeká“ se zobrazoval červeně (blokováno) místo amber – rezervace má nyní přednost před ruční blokací
+
+## [1.0.9] – 14.02.2026 12:15
 
 ### Přidáno
 - **Admin Kalendář:** propojení se schvalováním rezervací – klik na slot s rezervací otevře modal s akcemi (Potvrdit/Zamítnout/Zrušit zamítnutí)
@@ -14,7 +30,7 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 - **Admin Kalendář:** sjednocené barvy – amber pro „Čeká na potvrzení“, teal pro „Potvrzeno“, šedá pro „Zamítnuto“
 - **Admin Kalendář:** po akci na rezervaci se kalendář automaticky obnoví
 
-## [1.0.8] – 2026-02-14
+## [1.0.8] – 14.02.2026 11:45
 
 ### Přidáno
 - **Rezervace:** tlačítko „Zrušit zamítnutí“ u zamítnutých rezervací – vrací stav na „Čeká“
@@ -22,25 +38,25 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 ### Změněno
 - **Migrace:** odstranění redundantního sloupce `contact_id` z tabulky `bookings` (aplikace používá `contacts_id`)
 
-## [1.0.7] – 2026-02-14
+## [1.0.7] – 14.02.2026 11:20
 
 ### Přidáno
 - **CHANGELOG.md** – historie změn projektu
 - **docs/APLIKACE.md** – popis aplikace, architektura, tok dat, konfigurace
 
-## [1.0.6] – 2026-02-14
+## [1.0.6] – 14.02.2026 10:55
 
 ### Změněno
 - **Deploy:** `composer install` běží v CI před nasazením, složka `vendor/` se nahrává na server (Google Calendar API funguje bez ručního composer na serveru)
 - **Admin Dostupnost:** výběr Google Calendar – dropdown se seznamem sdílených kalendářů nebo ruční zadání ID
 - **Admin Kalendář:** oprava JavaScript chyby – duplicitní deklarace proměnné `today`
 
-## [1.0.5] – 2026-02-14
+## [1.0.5] – 14.02.2026 10:30
 
 ### Opraveno
 - **Admin Kalendář:** oprava chyby „Identifier 'today' has already been declared“ – prázdná mřížka kalendáře
 
-## [1.0.4] – 2026-02-14
+## [1.0.4] – 14.02.2026 10:00
 
 ### Přidáno
 - **Google Calendar:** výběr kalendáře v admin Dostupnost – možnost testovat na vlastním kalendáři a přepnout na kalendář kolegy
@@ -48,20 +64,20 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 - **GoogleCalendar:** konstruktor přijímá volitelný parametr `$calendarId` pro přepnutí kalendáře
 - **availability.json:** nové pole `google_calendar_id` – uložený výběr kalendáře
 
-## [1.0.3] – 2026-02-14
+## [1.0.3] – 14.02.2026 09:45
 
 ### Přidáno
 - **Admin Dostupnost:** rozbalovací sekce „Události z kalendáře (kontrola)“ – výpis událostí z Google Calendar na příštích 14 dní pro ověření napojení
 - **GoogleCalendar:** metoda `getEventsForDisplay()` pro zobrazení událostí
 
-## [1.0.2] – 2026-02-14
+## [1.0.2] – 14.02.2026 09:30
 
 ### Změněno
 - **Konfigurace:** verze pouze v `api/version.php` – web i admin berou verzi automaticky
 - **index.html → index.php:** hlavní stránka načítá verzi z PHP, žádné natvrdo
 - **Dokumentace:** `.cursor/rules/version-increment.mdc` – kritické pravidlo pro povýšení verze
 
-## [1.0.1] – 2026-02-14
+## [1.0.1] – 14.02.2026 09:00
 
 ### Přidáno
 - **Admin:** verze aplikace v patičce místo v hlavičce
@@ -77,7 +93,7 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 - **Admin Kalendář:** nová stránka `calendar.php` s barevnými stavy (zelená / amber / teal)
 - **Admin navigace:** odkaz „Kalendář“
 
-## [1.0.0] – 2026-02
+## [1.0.0] – 02.2026
 
 ### Přidáno
 - Web WALANCE – prezentace metody, kontaktní formulář
