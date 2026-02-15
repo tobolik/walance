@@ -1,11 +1,9 @@
--- WALANCE - vytvoření databáze pro MySQL
--- 1. Vytvořte DB a uživatele (jako root):
---    CREATE DATABASE walance CHARACTER SET utf8mb4;
---    CREATE USER 'walance'@'localhost' IDENTIFIED BY 'vase_heslo';
---    GRANT ALL ON walance.* TO 'walance'@'localhost';
--- 2. Spusťte tento soubor: mysql -u walance -p walance < api/db-mysql.sql
+-- WALANCE - migrační SQL pro MySQL (jen tabulky)
+-- Spuštění: mysql -u UZIVATEL -p walancecz < api/db-mysql.sql
+-- Nebo: php api/migrate.php (použije config.php)
+-- Předpoklad: databáze walancecz již existuje
 
-USE walance;
+USE walancecz;
 
 CREATE TABLE IF NOT EXISTS contacts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +15,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     notes TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,4 +32,4 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE SET NULL,
     INDEX idx_status (status),
     INDEX idx_date (booking_date)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

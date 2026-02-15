@@ -8,7 +8,7 @@
 define('CONTACT_EMAIL', 'info@walance.cz');
 
 // Databáze: 'sqlite' nebo 'mysql'
-define('DB_TYPE', 'sqlite'); // změňte na 'mysql' pro MySQL
+define('DB_TYPE', 'mysql'); // změňte na 'mysql' pro MySQL
 
 // SQLite (použije se když DB_TYPE = 'sqlite')
 define('DB_PATH', __DIR__ . '/../data/contacts.db');
@@ -21,6 +21,9 @@ define('DB_PASS', 'ThlCRD9v');
 
 // Admin - heslo: Jana2026
 define('ADMIN_PASSWORD_HASH', '$2b$10$jtmKFFne7iDWtCFsupaKlezBLJoEIUjy62SCJKSQZY4ybZRgKPVye');
+
+// Token pro spuštění migrace přes HTTP (deploy) – nastavte stejnou hodnotu v GitHub Secrets jako MIGRATE_TOKEN
+define('MIGRATE_TOKEN', 'Jana2026'); // např. 'váš-náhodný-token-xyz'
 
 // Google Calendar (volitelné - pro napojení rezervací)
 // 1. Vytvořte projekt na https://console.cloud.google.com/

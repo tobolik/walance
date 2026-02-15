@@ -36,3 +36,20 @@ jobs:
           remote_path: ${{ secrets.SFTP_REMOTE_PATH }}
           sftp_only: true
           sftpArgs: '-o ConnectTimeout=10'
+
+      - name: Spustit migraci databáze
+        if: vars.ENABLE_AUTO_MIGRATE == 'true'
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://walance.cz' }}
+        run: |
+          URL="${{ env.SITE_URL }}/api/migrate.php"
+          echo "Volám migraci..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" "$URL?token=${{ secrets.MIGRATE_TOKEN }}")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          echo "$BODY"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Migrace selhala (HTTP $HTTP_CODE)"
+            exit 1
+          fi
+          echo "Migrace dokončena."
