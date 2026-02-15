@@ -50,6 +50,7 @@ foreach ($contacts as $c) {
 // Update notes (AJAX) – softUpdate
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json');
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     if ($_POST['action'] === 'update_notes') {
         $id = (int)($_POST['id'] ?? 0);
         $notes = trim($_POST['notes'] ?? '');
@@ -68,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>WALANCE CRM - Kontakty</title>
     <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
     <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
@@ -183,7 +187,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 fetch('dashboard.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=update_notes&id=' + id + '&notes=' + encodeURIComponent(notes)
+                    body: 'action=update_notes&id=' + id + '&notes=' + encodeURIComponent(notes),
+                    cache: 'no-store'
                 });
             });
         });

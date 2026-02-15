@@ -48,6 +48,9 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>WALANCE CRM - Dostupnost</title>
     <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
     <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
@@ -254,7 +257,7 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
             const grid = document.getElementById('block-cal-grid');
             grid.innerHTML = '<div class="col-span-7 py-8 text-center text-slate-500">Načítám…</div>';
             try {
-                const r = await fetch(apiBase + '/slots.php?month=' + blockCalMonth);
+                const r = await fetch(apiBase + '/slots.php?month=' + blockCalMonth, { cache: 'no-store' });
                 const data = await r.json();
                 blockCalData = data;
                 renderBlockCalendar();
@@ -346,7 +349,7 @@ $dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
                 const fd = new FormData();
                 fd.append('date', dateStr);
                 fd.append('time', time);
-                const r = await fetch(apiBase + '/availability-block.php', { method: 'POST', body: fd });
+                const r = await fetch(apiBase + '/availability-block.php', { method: 'POST', body: fd, cache: 'no-store' });
                 const data = await r.json();
                 if (data.success) {
                     blockCalData.slots_detail[dateStr] = blockCalData.slots_detail[dateStr] || {};

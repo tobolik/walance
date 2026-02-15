@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 // AJAX pro rychlé akce
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
     header('Content-Type: application/json');
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['ajax_action'];
     if ($id && in_array($action, ['confirm', 'cancel', 'restore'])) {
@@ -70,6 +71,9 @@ $statusLabels = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>WALANCE CRM - Rezervace</title>
     <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
     <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
@@ -189,7 +193,8 @@ $statusLabels = [
             fetch('bookings.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'ajax_action=' + action + '&id=' + id
+                body: 'ajax_action=' + action + '&id=' + id,
+                cache: 'no-store'
             })
             .then(r => r.json())
             .then(data => {

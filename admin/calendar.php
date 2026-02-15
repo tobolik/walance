@@ -13,6 +13,9 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>WALANCE CRM - Kalendář</title>
     <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
     <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
@@ -105,8 +108,8 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             grid.innerHTML = '<div class="col-span-7 py-12 text-center text-slate-500">Načítám…</div>';
             try {
                 const [slotsRes, bookingsRes] = await Promise.all([
-                    fetch(apiBase + '/slots.php?month=' + calCurrentMonth),
-                    fetch(apiBase + '/calendar-bookings.php?month=' + calCurrentMonth)
+                    fetch(apiBase + '/slots.php?month=' + calCurrentMonth, { cache: 'no-store' }),
+                    fetch(apiBase + '/calendar-bookings.php?month=' + calCurrentMonth, { cache: 'no-store' })
                 ]);
                 const data = await slotsRes.json();
                 data.bookings = bookingsRes.ok ? await bookingsRes.json() : {};
@@ -284,7 +287,8 @@ $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
             fetch('bookings.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'ajax_action=' + action + '&id=' + id
+                body: 'ajax_action=' + action + '&id=' + id,
+                cache: 'no-store'
             })
             .then(r => r.json())
             .then(data => {

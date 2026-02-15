@@ -5,6 +5,13 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.0.13] – 14.02.2026 15:15
+
+### Přidáno
+- **Anti-caching:** Cache-Control hlavičky na API (slots, calendar-bookings, availability-block, bookings AJAX)
+- **Anti-caching:** meta no-cache na admin stránkách (kalendář, rezervace, dostupnost, kontakty, dashboard)
+- **Anti-caching:** `cache: 'no-store'` u fetch() volání pro dynamická data
+
 ## [1.0.12] – 14.02.2026 15:00
 
 ### Změněno

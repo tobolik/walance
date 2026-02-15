@@ -851,7 +851,7 @@
             const grid = document.getElementById('cal-grid');
             grid.innerHTML = '<div class="col-span-7 py-12 text-center text-ink/50">Načítám…</div>';
             try {
-                const r = await fetch(apiBase + '/slots.php?month=' + calCurrentMonth);
+                const r = await fetch(apiBase + '/slots.php?month=' + calCurrentMonth, { cache: 'no-store' });
                 const data = await r.json();
                 calData = data;
                 renderCalendar();
