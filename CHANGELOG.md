@@ -5,6 +5,12 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.9] – 14.02.2026
+
+### Změněno
+- **E-maily:** odesílatel From/Reply-To z `info@walance.cz` (konstanta MAIL_FROM v config.local.php)
+- **Potvrzení termínu:** oprava feedback tlačítka – robustnější parsování JSON, zobrazení chyby při selhání
+
 ## [1.1.8] – 14.02.2026
 
 ### Přidáno
