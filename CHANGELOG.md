@@ -5,6 +5,13 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.1.1] – 14.02.2026
+
+### Přidáno
+- **Google Calendar:** podpora více kalendářů – textarea (jeden ID na řádek), sjednocení obsazených slotů ze všech
+- **Google Calendar:** ručně zadané Calendar ID se při uložení přidá do seznamu (addCalendarToList) – objeví se v dropdownu
+- **Admin Blokování časů:** rozlišení stavů – Čeká (amber), Obsazeno (šedé), Volné bylo zamítnuto (zelené se šedým okrajem, title se seznamem jmen)
+
 ## [1.1.0] – 14.02.2026 20:20
 
 ### Změněno
