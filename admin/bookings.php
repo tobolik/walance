@@ -86,7 +86,6 @@ $statusLabels = [
                 <a href="calendar.php" class="text-slate-500 hover:text-teal-600 text-sm">Kalendář</a>
                 <a href="availability.php" class="text-slate-500 hover:text-teal-600 text-sm">Dostupnost</a>
                 <a href="../" class="text-slate-500 hover:text-teal-600 text-sm">Web</a>
-                <span class="text-slate-400 text-xs">v<?= htmlspecialchars($v) ?></span>
                 <span class="text-slate-500 text-sm"><?= htmlspecialchars($_SESSION['walance_admin_name'] ?? 'Admin') ?></span>
                 <a href="logout.php" class="text-red-600 hover:text-red-700 text-sm font-medium">Odhlásit</a>
             </nav>
@@ -171,6 +170,10 @@ $statusLabels = [
             <?php endif; ?>
         </div>
     </main>
+
+    <footer class="max-w-6xl mx-auto px-6 py-4 text-center text-slate-400 text-xs">
+        v<?= htmlspecialchars($v) ?>
+    </footer>
 
     <script>
         lucide.createIcons();

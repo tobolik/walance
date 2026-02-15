@@ -7,7 +7,7 @@ Při každé úpravě kódu **vždy** zvýš verzi (PATCH: 1.0.0 → 1.0.1).
 1. **api/version.php** – `define('APP_VERSION', '1.0.1');`
 2. **index.html** – komentář `<!-- VERSION: 1.0.1 -->`, `?v=1.0.1` u CSS/JS, patička `v1.0.1`
 
-Admin stránky čtou verzi z config automaticky.
+Admin stránky čtou verzi z version.php a zobrazují ji v patičce.
 
 ## Formát
 
