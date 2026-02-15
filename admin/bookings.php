@@ -225,24 +225,37 @@ $timeSlots = buildSlotsFromRanges($settings, (int)($settings['slot_interval'] ??
             if (id) {
                 const row = document.querySelector('.booking-row[data-id="' + id + '"]');
                 if (row) {
-                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    row.classList.add('bg-teal-50');
-                    setTimeout(() => row.classList.remove('bg-teal-50'), 2000);
                     const date = row.dataset.date, time = row.dataset.time, name = row.dataset.name;
                     if (date && time && name) openEditModal(id, date, time, name);
                 }
             }
         })();
 
+        function escEditHandler(e) {
+            if (e.key === 'Escape') {
+                document.removeEventListener('keydown', escEditHandler);
+                closeEditModal();
+            }
+        }
+
         function openEditModal(id, date, time, name) {
+            document.querySelectorAll('.booking-row.editing').forEach(r => r.classList.remove('editing', 'bg-teal-50'));
+            const row = document.querySelector('.booking-row[data-id="' + id + '"]');
+            if (row) {
+                row.classList.add('editing', 'bg-teal-50');
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             document.getElementById('edit-booking-id').value = id;
             document.getElementById('edit-booking-date').value = date;
             document.getElementById('edit-booking-time').value = time;
             document.getElementById('edit-modal-name').textContent = name;
             document.getElementById('edit-booking-modal').classList.remove('hidden');
+            document.addEventListener('keydown', escEditHandler);
         }
 
         function closeEditModal() {
+            document.removeEventListener('keydown', escEditHandler);
+            document.querySelectorAll('.booking-row.editing').forEach(r => r.classList.remove('editing', 'bg-teal-50'));
             document.getElementById('edit-booking-modal').classList.add('hidden');
         }
 

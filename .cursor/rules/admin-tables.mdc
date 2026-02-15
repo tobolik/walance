@@ -1,0 +1,44 @@
+---
+description: Zvyklosti pro tabulky v admin rozhraní
+globs: admin/**/*.php
+alwaysApply: false
+---
+
+# Admin tabulky
+
+Při vytváření nebo úpravě tabulek v admin stránkách dodržuj tento konzistentní styl.
+
+## Struktura
+
+```html
+<div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Sloupec</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td class="py-4 px-6">Obsah</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+```
+
+## Konvence
+
+- **Wrapper:** `bg-white rounded-xl shadow-sm overflow-hidden`
+- **Scroll:** `overflow-x-auto` pro responsivní horizontální scroll
+- **Tabulka:** `w-full`
+- **Hlavička:** `bg-slate-50 border-b border-slate-200`
+- **Th:** `text-left py-4 px-6 text-sm font-semibold text-slate-600`
+- **Řádky:** `border-b border-slate-100 hover:bg-slate-50/50`
+- **Buňky:** `py-4 px-6` + příslušné textové třídy (např. `text-slate-800`, `text-slate-600`)
+
+## Zvýraznění řádku při editaci
+
+Při otevření modalu pro editaci položky přidej řádku třídu `bg-teal-50` a odstraň ji při zavření modalu.

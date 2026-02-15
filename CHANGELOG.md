@@ -5,6 +5,13 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.2.3] – 14.02.2026 23:45
+
+### Přidáno
+- **Admin Rezervace – modal Upravit:** zavření klávesou ESC
+- **Admin Rezervace:** při kliknutí na Upravit se řádek podbarví (bg-teal-50) až do zavření modalu
+- **cursor-rules:** `admin-tables.mdc` – zvyklosti pro tabulky v admin rozhraní
+
 ## [1.2.2] – 14.02.2026 23:15
 
 ### Přidáno
