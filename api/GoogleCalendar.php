@@ -1,0 +1,49 @@
+<?php
+/**
+ * Integrace s Google Calendar API
+ * Vyžaduje: composer require google/apiclient
+ * Nastavení: api/credentials/google-calendar.json (Service Account)
+ */
+require_once __DIR__ . '/config.php';
+
+if (!GOOGLE_CALENDAR_ENABLED) {
+    throw new Exception('Google Calendar není nakonfigurován.');
+}
+
+class GoogleCalendar {
+    private $client;
+    private $service;
+    private $calendarId;
+
+    public function __construct() {
+        if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+            throw new Exception('Spusťte: composer require google/apiclient v kořenovém adresáři projektu.');
+        }
+        require_once __DIR__ . '/../vendor/autoload.php';
+
+        $this->client = new Google_Client();
+        $this->client->setAuthConfig(GOOGLE_CALENDAR_CREDENTIALS);
+        $this->client->addScope(Google_Service_Calendar::CALENDAR);
+        $this->client->setAccessType('offline');
+        $this->calendarId = GOOGLE_CALENDAR_ID;
+
+        $this->service = new Google_Service_Calendar($this->client);
+    }
+
+    public function createEvent(string $date, string $time, string $name, string $email, string $description = ''): string {
+        $start = $date . 'T' . $time . ':00';
+        $endTime = date('H:i', strtotime($time . ' +1 hour'));
+        $end = $date . 'T' . $endTime . ':00';
+
+        $event = new Google_Service_Calendar_Event([
+            'summary' => 'WALANCE: ' . $name,
+            'description' => "Rezervace z webu\nE-mail: $email\n\n$description",
+            'start' => ['dateTime' => $start, 'timeZone' => 'Europe/Prague'],
+            'end' => ['dateTime' => $end, 'timeZone' => 'Europe/Prague'],
+            'attendees' => [['email' => $email], ['email' => CONTACT_EMAIL]],
+        ]);
+
+        $created = $this->service->events->insert($this->calendarId, $event);
+        return $created->getId();
+    }
+}

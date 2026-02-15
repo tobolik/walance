@@ -1,0 +1,10 @@
+# Data a citlivé soubory
+data/*.db
+api/credentials/*.json
+!api/credentials/.gitkeep
+
+# Composer
+vendor/
+
+# Node
+node_modules/
