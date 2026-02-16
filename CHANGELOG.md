@@ -5,6 +5,11 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.3.1] – 15.02.2026 13:30
+
+### Změněno
+- **Story obrázek:** vyměněn za `hero-story-origin.jpg` + optimalizace načítání (`decoding="async"`, `fetchpriority="low"`)
+
 ## [1.3.0] – 15.02.2026 01:30
 
 ### Změněno
@@ -14,7 +19,6 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 - **Kontaktní formulář:** převeden z Tailwind tříd na V2 inline CSS
 - **Česká diakritika:** opraveny všechny texty převzaté z homepage-v2.html
 - **Open Graph meta tagy:** přidány/aktualizovány
-- **Story obrázek:** vyměněn za `hero-story-origin.jpg` + optimalizace načítání (`decoding="async"`, `fetchpriority="low"`)
 
 ### Opraveno
 - **Booking modál:** reset stavu při znovuotevření — vyčištění stale date/time hodnot z předchozí interakce
