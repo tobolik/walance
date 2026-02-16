@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WALANCE — Anatomie udržitelného výkonu</title>
     <meta name="description" content="Zvyšte výkon týmu i sebe. Ne tím, že budete pracovat víc, ale tím, že přestanete bojovat s vlastní biologií. Metoda WALANCE: 7 pilířů pro udržitelný výkon lídrů.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231e293b'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='sans-serif' font-weight='700' font-size='20' fill='%234a7c59'%3EW%3C/text%3E%3Ccircle cx='27' cy='24' r='2.5' fill='%234a7c59'/%3E%3C/svg%3E">
 
     <!-- Open Graph -->
     <meta property="og:title" content="WALANCE — Anatomie udržitelného výkonu">
@@ -1434,7 +1435,7 @@
                 <p class="section-label">Metoda WALANCE</p>
                 <h2 class="section-title">Neučím vás cvičit.<br>Učím vás pracovat.</h2>
                 <p class="section-subtitle">
-                    Metoda WALANCE není wellness benefit. Je to <strong>provozní manuál k vašemu tělu</strong>. Propojuje fyzioterapii, neurovědu a leadership.
+                    Metoda WALANCE je <strong>provozní manuál k vašemu tělu</strong>. Propojuji fyzioterapii, neurovědu a leadership.
                 </p>
             </div>
 
@@ -1442,12 +1443,12 @@
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 1</p>
                     <h3>Hardware</h3>
-                    <p>Tělo &amp; Fyzio. Odstraníme fyzické tření. Konec bolestí zad znamená lepší prokrvení mozku. Opravíme šasi, aby motor mohl běžet naplno.</p>
+                    <p>Tělo &amp; Fyzio. Odstraním fyzické tření. Konec bolestí zad znamená lepší prokrvení mozku. Opravím šasi, aby motor mohl běžet naplno.</p>
                 </div>
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 2</p>
                     <h3>Software</h3>
-                    <p>Job Crafting. Designujeme práci tak, aby vás nabíjela, ne vysávala. Sladíme vaše silné stránky s náplní práce.</p>
+                    <p>Job Crafting. Designuji práci tak, aby vás nabíjela, ne vysávala. Sladím vaše silné stránky s náplní práce.</p>
                 </div>
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 3</p>
@@ -1565,7 +1566,7 @@
             <p class="roi-unit">MINUT</p>
             <p class="roi-text">Tolik času denně stačí ušetřit (díky absenci bolestí zad), aby se investice vrátila.</p>
             <div class="roi-highlight">
-                <p>My cílíme na <strong>60 MINUT</strong> denně navíc.</p>
+                <p>Cílím na <strong>60 MINUT</strong> denně navíc.</p>
                 <small>Vynásobte si to hodinovou sazbou vašich klíčových lidí.</small>
             </div>
         </div>
@@ -1680,8 +1681,8 @@
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">Kontakt</p>
-                <h2 class="section-title">Napište nám</h2>
-                <p class="section-subtitle">Máte dotaz nebo chcete rezervovat termín? Ozvěte se nám.</p>
+                <h2 class="section-title">Napište mi</h2>
+                <p class="section-subtitle">Máte dotaz nebo chcete rezervovat termín? Ozvěte se mi.</p>
             </div>
 
             <div class="contact-grid">
@@ -1698,7 +1699,7 @@
                         </div>
                         <div class="form-group">
                             <label for="c-message">Zpráva *</label>
-                            <textarea id="c-message" name="message" required placeholder="Jak vám můžeme pomoci?"></textarea>
+                            <textarea id="c-message" name="message" required placeholder="Jak vám mohu pomoci?"></textarea>
                         </div>
                         <div id="contact-message" style="display:none; padding: 12px 16px; border-radius: 12px; font-size: 0.875rem; margin-bottom: 16px;"></div>
                         <button type="submit" class="btn-primary" style="width: 100%;">
@@ -1717,8 +1718,9 @@
                         OTEVŘÍT KALENDÁŘ
                     </button>
                     <div>
-                        <p>Nebo napište přímo na</p>
-                        <a href="mailto:info@walance.cz" class="contact-email">info@walance.cz</a>
+                        <p><strong>Jana Štěpaníková</strong></p>
+                        <a href="mailto:jana@walance.cz" class="contact-email">jana@walance.cz</a>
+                        <p style="margin-top: 4px;"><a href="tel:+420601584901" style="color: var(--accent); text-decoration: none;">+420 601 584 901</a></p>
                     </div>
                 </div>
             </div>
@@ -1753,14 +1755,14 @@
                         Jak se liší WALANCE od klasického koučingu?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">WALANCE propojuje fyzioterapii s leadershipem. Nepracujeme jen s myšlením, ale i s tělem. Začínáte od hardware (tělo) a postupujete k software (mysl) a operačnímu systému (návyky). Žádný jiný kouč toto nepropojuje.</div>
+                    <div class="faq-answer">WALANCE propojuje fyzioterapii s leadershipem. Pracuji s myšlením i s tělem zároveň. Začínáte od hardware (tělo) a postupujete k software (mysl) a operačnímu systému (návyky). Žádný jiný kouč toto nepropojuje.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Jak začít?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Napište nám přes formulář nebo si rovnou rezervujte termín v kalendáři. Začneme krátkým auditem vaší situace — zdarma a nezávazně.</div>
+                    <div class="faq-answer">Napište mi přes formulář nebo si rovnou rezervujte termín v kalendáři. Začneme krátkým auditem vaší situace — zdarma a nezávazně.</div>
                 </details>
             </div>
         </div>
@@ -1844,7 +1846,17 @@
         <div class="container footer-inner">
             <div>
                 <div class="footer-brand">WALANCE.</div>
-                <p class="footer-tagline">Byznys není sprint. Je to maraton v pohybu.</p>
+                <p class="footer-tagline" style="margin-bottom: 6px;">NetWalking Pro s.r.o.</p>
+                <p style="font-size: 0.8125rem; line-height: 1.6;">
+                    Jana Štěpaníková<br>
+                    <a href="mailto:jana@walance.cz" style="color: rgba(250,249,247,0.6); text-decoration: none;">jana@walance.cz</a><br>
+                    <a href="tel:+420601584901" style="color: rgba(250,249,247,0.6); text-decoration: none;">+420 601 584 901</a>
+                </p>
+                <p style="font-size: 0.75rem; margin-top: 8px; opacity: 0.5; line-height: 1.5;">
+                    IČ: 22107321 · DIČ: CZ22107321<br>
+                    Na Hrázi 1139/13, 750 02 Přerov<br>
+                    DS: 9khhxiv · Zapsáno u KOS, oddíl C, vložka 97337
+                </p>
             </div>
             <div class="footer-links">
                 <a href="#" aria-label="LinkedIn">
@@ -1854,7 +1866,7 @@
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 </a>
             </div>
-            <div class="footer-copy">&copy; 2026 WALANCE. Všechna práva vyhrazena. <span style="margin-left: 8px; opacity: 0.5;">v<?= htmlspecialchars($v) ?></span></div>
+            <div class="footer-copy">&copy; 2026 NetWalking Pro s.r.o. Všechna práva vyhrazena. <span style="margin-left: 8px; opacity: 0.5;">v<?= htmlspecialchars($v) ?></span></div>
         </div>
     </footer>
 
@@ -1962,7 +1974,7 @@
                 contactMsg.style.display = 'block';
                 contactMsg.style.background = '#fef2f2';
                 contactMsg.style.color = '#991b1b';
-                contactMsg.textContent = 'Chyba připojení. Zkuste to později nebo napište na info@walance.cz';
+                contactMsg.textContent = 'Chyba připojení. Zkuste to později nebo napište na jana@walance.cz';
             }
             btn.disabled = false;
         });
@@ -2164,7 +2176,7 @@
                 msg.style.display = 'block';
                 msg.style.background = '#fef2f2';
                 msg.style.color = '#991b1b';
-                msg.textContent = 'Chyba připojení. Zkuste to později nebo napište na info@walance.cz';
+                msg.textContent = 'Chyba připojení. Zkuste to později nebo napište na jana@walance.cz';
                 btn.disabled = false;
             }
         });

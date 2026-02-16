@@ -6,7 +6,18 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
-## [1.3.3] – 16.02.2026 12:35
+## [1.4.0] – 16.02.2026 14:15
+> Nepushnuto
+
+### Změněno
+- **Personalizace (ich-forma):** celý web přepsán z „my-formy" do první osoby (Jana Štěpaníková) — „Napište mi", „Ozvěte se mi", „Cílím na", „Pracuji s myšlením i s tělem"
+- **Kontaktní sekce:** doplněno jméno Jana Štěpaníková, telefon +420 601 584 901, e-mail jana@walance.cz
+- **Patička:** NetWalking Pro s.r.o. — IČ, DIČ, adresa, datová schránka, zápis v OR; kontaktní údaje Jany
+- **E-mail:** info@walance.cz → jana@walance.cz (index.php, config)
+- **Texty:** pozitivní vyznění — „co to je" místo „co to není" (odstraněno „Metoda WALANCE není wellness benefit", nahrazeno pozitivním tvrzením)
+- **FAQ:** ich-forma + pozitivní formulace („Pracuji s myšlením i s tělem zároveň")
+
+## [1.3.3] – 16.02.2026 12:30
 > Pushed: 16.02.2026 12:36, aktualizace 16.02.2026 13:00
 
 ### Změněno
