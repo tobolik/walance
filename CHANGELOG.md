@@ -5,12 +5,12 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
-## [1.3.1] – 15.02.2026 13:30
+## [1.3.1] – 16.02.2026 11:46
 
 ### Změněno
 - **Story obrázek:** vyměněn za `hero-story-origin.jpg` + optimalizace načítání (`decoding="async"`, `fetchpriority="low"`)
 
-## [1.3.0] – 15.02.2026 01:30
+## [1.3.0] – 16.02.2026 11:42
 
 ### Změněno
 - **Homepage redesign V2:** kompletní přepis `index.php` — inline CSS + inline SVG místo Tailwind CDN + Lucide CDN
