@@ -1745,10 +1745,10 @@
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
-                        Potřebuji být fyzicky v Praze?
+                        Přijedete k nám do firmy?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Ne. Spolupráce probíhá hybridně — online konzultace, video hovory a fyzio cvičení na video. Osobní setkání je možné, ale není nutné.</div>
+                    <div class="faq-answer">Ano, za klientem přijedu osobně. Spolupráce zároveň probíhá hybridně — online konzultace, video hovory i fyzio cvičení na video. Kombinujeme podle toho, co vám vyhovuje.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
