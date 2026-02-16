@@ -1722,6 +1722,9 @@
             document.getElementById('booking-fields').style.display = 'none';
             document.getElementById('booking-submit').style.display = 'none';
             document.getElementById('booking-message').style.display = 'none';
+            document.getElementById('booking-date').value = '';
+            document.getElementById('booking-time').value = '';
+            document.getElementById('booking-form').reset();
             const now = new Date();
             calCurrentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
             loadCalendarMonth();
