@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [1.4.1] – 16.02.2026 14:35
-> Nepushnuto
+> Pushed: 16.02.2026 14:36
 
 ### Změněno
 - **FAQ „Jak začít?":** text „Napište mi přes formulář" a „rezervujte termín v kalendáři" jsou klikací odkazy (kontakt / booking modal)
