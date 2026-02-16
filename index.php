@@ -125,6 +125,16 @@
 
         .nav-links a:hover { color: var(--ink); }
 
+        .nav-links a::after,
+        .mobile-menu a::after {
+            content: '.';
+            color: var(--accent);
+            font-weight: 900;
+            margin-left: 1px;
+        }
+
+        .nav-cta::after { color: var(--cream); }
+
         .nav-cta {
             background: var(--accent);
             color: var(--cream) !important;
@@ -1308,7 +1318,7 @@
                 <li><a href="#story">Příběh</a></li>
                 <li><a href="#products">Nabídka</a></li>
                 <li><a href="#contact">Kontakt</a></li>
-                <li><a href="#contact" class="nav-cta">Audit zdarma</a></li>
+                <li><a href="#contact" class="nav-cta">Konzultace zdarma</a></li>
             </ul>
             <button class="nav-mobile-btn" id="mobile-toggle" aria-label="Menu">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="hamburger-icon">
@@ -1328,7 +1338,7 @@
             <a href="#story" class="mobile-link">Příběh</a>
             <a href="#products" class="mobile-link">Nabídka</a>
             <a href="#contact" class="mobile-link">Kontakt</a>
-            <a href="#contact" class="mobile-link" style="color: var(--accent);">Audit zdarma</a>
+            <a href="#contact" class="mobile-link" style="color: var(--accent);">Konzultace zdarma</a>
         </div>
     </nav>
 

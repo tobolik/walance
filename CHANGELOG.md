@@ -5,6 +5,12 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.3.3] – 16.02.2026 12:30
+
+### Změněno
+- **Navigace:** zelená tečka (`.`) za každým nav odkazem jako brand element (CSS `::after`)
+- **Navigace CTA:** „Audit zdarma" přejmenováno na „Konzultace zdarma"
+
 ## [1.3.2] – 16.02.2026 12:15
 
 ### Přidáno
