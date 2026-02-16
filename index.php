@@ -1,997 +1,1856 @@
 <?php require_once __DIR__ . '/api/config.php'; $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0'; ?>
 <!DOCTYPE html>
-<html lang="cs" class="scroll-smooth">
+<html lang="cs">
 <!-- VERSION: <?= htmlspecialchars($v) ?> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WALANCE - Anatomie udržitelného výkonu</title>
-    <meta name="description" content="Byznys není sprint, je to maraton v pohybu. Metoda WALANCE pro udržitelný výkon lídrů a týmů.">
-    
-    <!-- Tailwind CSS (CDN for standalone usage) -->
-    <script src="https://cdn.tailwindcss.com?v=<?= htmlspecialchars($v) ?>"></script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest?v=<?= htmlspecialchars($v) ?>"></script>
+    <title>WALANCE — Anatomie udržitelného výkonu</title>
+    <meta name="description" content="Zvyšte výkon týmu i sebe. Ne tím, že budete pracovat víc, ale tím, že přestanete bojovat s vlastní biologií. Metoda WALANCE: 7 pilířů pro udržitelný výkon lídrů.">
 
-    <!-- Custom Config for Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['DM Sans', 'sans-serif'],
-                        display: ['Fraunces', 'serif'],
-                    },
-                    colors: {
-                        cream: '#FAF9F7',
-                        ink: '#1e293b',
-                        sage: '#5a7d5a',
-                        accent: '#0d9488',
-                        mist: '#e2e8f0',
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'fade-up': 'fadeUp 0.6s ease-out forwards',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        fadeUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
+    <!-- Open Graph -->
+    <meta property="og:title" content="WALANCE — Anatomie udržitelného výkonu">
+    <meta property="og:description" content="Váš byznys software je geniální. Ale váš lidský hardware hoří. Metoda WALANCE pro udržitelný výkon lídrů a týmů.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://walance.cz">
+    <meta property="og:locale" content="cs_CZ">
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap&v=<?= htmlspecialchars($v) ?>" rel="stylesheet">
+
+    <style>
+        /* ============================================
+           WALANCE HOMEPAGE V2 — Minimalist Design
+           Inline critical CSS (no Tailwind CDN needed)
+           ============================================ */
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream: #FAF9F7;
+            --ink: #1e293b;
+            --ink-light: #475569;
+            --ink-muted: #94a3b8;
+            --accent: #0d9488;
+            --accent-dark: #0a7a70;
+            --accent-light: #14b8a6;
+            --sage: #5a7d5a;
+            --mist: #e2e8f0;
+            --mist-light: #f1f5f9;
+            --white: #ffffff;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Fraunces', Georgia, serif;
+        }
+
+        ::selection { background-color: var(--accent); color: var(--cream); }
+
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--cream);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ---- TYPOGRAPHY ---- */
+        .font-display { font-family: var(--font-display); }
+        h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.15; }
+
+        a { color: inherit; text-decoration: none; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        @media (min-width: 768px) {
+            .container { padding: 0 40px; }
+        }
+
+        /* ---- NAVIGATION ---- */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 249, 247, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--mist);
+            transition: all 0.3s ease;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+        }
+
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-links a {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ink-light);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--ink); }
+
+        .nav-cta {
+            background: var(--accent);
+            color: var(--cream) !important;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.8125rem;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.25);
+        }
+
+        .nav-cta:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(13, 148, 136, 0.3);
+        }
+
+        /* Mobile menu */
+        .nav-mobile-btn {
+            display: flex;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--ink);
+        }
+
+        @media (min-width: 768px) {
+            .nav-mobile-btn { display: none; }
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--cream);
+            z-index: 99;
+            padding: 32px 24px;
+        }
+
+        .mobile-menu.open { display: flex; flex-direction: column; gap: 4px; }
+
+        .mobile-menu a {
+            display: block;
+            padding: 16px 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--ink);
+            border-bottom: 1px solid var(--mist);
+            transition: color 0.2s;
+        }
+
+        .mobile-menu a:hover { color: var(--accent); }
+
+        /* ---- HERO ---- */
+        .hero {
+            padding: 160px 0 100px;
+            position: relative;
+            overflow: hidden;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .hero { padding: 180px 0 120px; }
+        }
+
+        .hero-accent-line {
+            display: inline-block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            max-width: 680px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--ink-light);
+            max-width: 520px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        @media (min-width: 768px) {
+            .hero-sub { font-size: 1.25rem; }
+        }
+
+        .hero-sub strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .hero-cta-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 480px) {
+            .hero-cta-row { flex-direction: row; gap: 16px; }
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--accent);
+            color: var(--cream);
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 24px rgba(13, 148, 136, 0.3);
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(13, 148, 136, 0.35);
+        }
+
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--ink);
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid var(--mist);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(13, 148, 136, 0.04);
+        }
+
+        /* Hero decorative */
+        .hero-deco {
+            position: absolute;
+            top: 50%;
+            right: -5%;
+            transform: translateY(-50%);
+            font-family: var(--font-display);
+            font-size: 28rem;
+            font-weight: 900;
+            color: var(--mist);
+            opacity: 0.3;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-deco { display: block; }
+        }
+
+        /* ---- TRUST BAR ---- */
+        .trust-bar {
+            padding: 48px 0;
+            border-top: 1px solid var(--mist);
+            border-bottom: 1px solid var(--mist);
+            background: var(--white);
+        }
+
+        .trust-bar-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .trust-bar-inner {
+                flex-direction: row;
+                justify-content: center;
+                gap: 64px;
+                text-align: left;
             }
         }
-    </script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap?v=<?= htmlspecialchars($v) ?>" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'DM Sans', sans-serif; }
-        .font-display { font-family: 'Fraunces', serif; }
-        ::selection { background-color: #0d9488; color: #FAF9F7; }
-        /* Organic blob shape */
-        .blob { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-        /* Angled section */
-        .section-angle { transform: skewY(-2deg); }
-        .section-angle > * { transform: skewY(2deg); }
-        /* Vybraný čas v rezervaci */
-        .time-slot-selected { background-color: #0d9488 !important; color: #FAF9F7 !important; }
+
+        .trust-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .trust-number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .trust-label {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px;
+        }
+
+        /* ---- SECTIONS ---- */
+        .section { padding: 96px 0; }
+
+        @media (min-width: 768px) {
+            .section { padding: 120px 0; }
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--ink-light);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        /* Problem cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .cards-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .card {
+            padding: 40px 32px;
+            background: var(--white);
+            border-radius: 24px;
+            border: 1px solid var(--mist);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(30, 41, 59, 0.08);
+            border-color: transparent;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: rgba(13, 148, 136, 0.08);
+        }
+
+        .card-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--accent);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: var(--ink-light);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+
+        .verdict-box {
+            margin-top: 48px;
+            padding: 40px;
+            background: var(--ink);
+            border-radius: 24px;
+            text-align: center;
+        }
+
+        .verdict-box h3 {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--cream);
+            margin-bottom: 8px;
+        }
+
+        .verdict-box p {
+            color: rgba(250, 249, 247, 0.7);
+            font-size: 1.0625rem;
+        }
+
+        /* ---- SOLUTION / METHOD ---- */
+        .solution-section {
+            background: var(--white);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .solution-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .solution-card {
+            padding: 48px 32px;
+            border-radius: 24px;
+            background: var(--mist-light);
+            border: 1px solid var(--mist);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover::before { opacity: 1; }
+
+        .solution-tag {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .solution-card p {
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+
+        /* ---- STORY ---- */
+        .story-section {
+            background: var(--ink);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .story-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
+        }
+
+        .story-image-wrap {
+            position: relative;
+            order: -1;
+        }
+
+        @media (min-width: 1024px) {
+            .story-image-wrap { order: 0; }
+        }
+
+        .story-image-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 8px -8px -8px 8px;
+            background: var(--accent);
+            border-radius: 20px;
+            z-index: 0;
+        }
+
+        .story-image {
+            width: 100%;
+            aspect-ratio: 3/2;
+            object-fit: cover;
+            border-radius: 20px;
+            position: relative;
+            z-index: 1;
+            display: block;
+        }
+
+        .story-label {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--cream);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+        }
+
+        .story-section h2 {
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 700;
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        .story-section h2 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .story-text {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .story-text p {
+            font-size: 1.0625rem;
+            color: rgba(250, 249, 247, 0.8);
+            line-height: 1.7;
+        }
+
+        .story-text strong { color: var(--cream); }
+
+        .story-quote {
+            border-left: 3px solid var(--accent);
+            padding-left: 24px;
+            font-style: italic;
+            color: var(--cream) !important;
+        }
+
+        /* ---- ROI HIGHLIGHT ---- */
+        .roi-section {
+            background: linear-gradient(135deg, var(--ink) 0%, #0f172a 100%);
+            color: var(--cream);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roi-number {
+            font-family: var(--font-display);
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(180deg, var(--cream) 0%, rgba(250,249,247,0.4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .roi-unit {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .roi-text {
+            font-size: 1.125rem;
+            color: rgba(250, 249, 247, 0.7);
+            max-width: 560px;
+            margin: 0 auto 32px;
+            line-height: 1.7;
+        }
+
+        .roi-highlight {
+            display: inline-block;
+            background: rgba(250, 249, 247, 0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(250, 249, 247, 0.15);
+            border-radius: 20px;
+            padding: 24px 40px;
+        }
+
+        .roi-highlight p {
+            font-size: 1.125rem;
+            color: var(--cream);
+        }
+
+        .roi-highlight strong {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-light);
+        }
+
+        .roi-highlight small {
+            display: block;
+            color: rgba(250, 249, 247, 0.5);
+            font-size: 0.8125rem;
+            margin-top: 4px;
+        }
+
+        /* ---- PRODUCTS ---- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .products-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .product-card {
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover { transform: translateY(-4px); }
+
+        .product-card--default {
+            background: var(--white);
+            border: 1px solid var(--mist);
+        }
+
+        .product-card--default:hover {
+            box-shadow: 0 16px 48px rgba(30, 41, 59, 0.08);
+        }
+
+        .product-card--featured {
+            background: var(--ink);
+            border: 2px solid var(--accent);
+            position: relative;
+            box-shadow: 0 8px 40px rgba(13, 148, 136, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .product-card--featured { transform: translateY(-12px); }
+            .product-card--featured:hover { transform: translateY(-16px); }
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--accent);
+            color: var(--cream);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .product-header {
+            padding: 12px 0;
+            text-align: center;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .product-card--default .product-header {
+            background: var(--mist-light);
+            color: var(--ink-muted);
+        }
+
+        .product-card--featured .product-header {
+            background: rgba(13, 148, 136, 0.2);
+            color: var(--cream);
+        }
+
+        .product-body {
+            padding: 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-body h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .product-card--featured .product-body h3 { color: var(--cream); }
+
+        .product-body .desc {
+            font-size: 0.875rem;
+            color: var(--ink-light);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .product-card--featured .product-body .desc { color: rgba(250, 249, 247, 0.7); }
+
+        .product-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex: 1;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9375rem;
+        }
+
+        .product-card--featured .product-features li { color: rgba(250, 249, 247, 0.9); }
+
+        .product-features li svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            stroke: var(--accent);
+            stroke-width: 2.5;
+            fill: none;
+        }
+
+        .product-cta {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            letter-spacing: 0.02em;
+            transition: all 0.25s;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+
+        .product-cta--primary {
+            background: var(--accent);
+            color: var(--cream);
+            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
+        }
+
+        .product-cta--primary:hover { background: var(--accent-dark); }
+
+        .product-cta--outline {
+            background: transparent;
+            border: 2px solid var(--mist);
+            color: var(--ink);
+        }
+
+        .product-cta--outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .product-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            margin-top: 8px;
+        }
+
+        .product-card--featured .product-note { color: rgba(250, 249, 247, 0.5); }
+
+        /* ---- CONTACT ---- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+        }
+
+        @media (min-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
+        }
+
+        .contact-form-wrap {
+            background: var(--white);
+            border-radius: 24px;
+            border: 1px solid var(--mist);
+            padding: 40px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--mist);
+            border-radius: 12px;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            color: var(--ink);
+            background: var(--cream);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 32px;
+        }
+
+        .contact-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .contact-info p {
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+
+        .contact-booking-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--ink);
+            color: var(--cream);
+            padding: 18px 32px;
+            border-radius: 16px;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            width: fit-content;
+        }
+
+        .contact-booking-btn:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .contact-booking-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .contact-email {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .contact-email:hover { text-decoration: underline; }
+
+        /* ---- FAQ ---- */
+        .faq-section {
+            background: var(--mist-light);
+        }
+
+        .faq-list {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid var(--mist);
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .faq-item:hover { border-color: rgba(13, 148, 136, 0.3); }
+
+        .faq-item summary {
+            padding: 20px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            user-select: none;
+        }
+
+        .faq-item summary::-webkit-details-marker { display: none; }
+
+        .faq-item summary svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--ink-muted);
+            stroke-width: 2;
+            fill: none;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .faq-item[open] summary svg { transform: rotate(180deg); }
+
+        .faq-answer {
+            padding: 0 24px 20px;
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            background: var(--ink);
+            color: rgba(250, 249, 247, 0.6);
+            padding: 64px 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+
+        .footer-tagline {
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(250, 249, 247, 0.5);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--accent); }
+
+        .footer-links svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .footer-copy {
+            font-size: 0.8125rem;
+        }
+
+        /* ---- ANIMATIONS ---- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---- BOOKING MODAL ---- */
+        #cal-grid > div {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
+        .cal-day-clickable { cursor: pointer; }
+        .cal-day-clickable:hover { opacity: 0.85; transform: scale(1.05); }
+        .cal-day-selected { box-shadow: 0 0 0 2px var(--accent) !important; }
+
+        .time-slot-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--mist);
+            background: var(--mist-light);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: var(--ink);
+            font-family: var(--font-body);
+        }
+
+        .time-slot-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .time-slot-selected { background: var(--accent) !important; color: var(--cream) !important; border-color: var(--accent) !important; }
+
+        /* ---- UTILITIES ---- */
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 8px; }
+        .mt-4 { margin-top: 16px; }
+        .mb-2 { margin-bottom: 8px; }
     </style>
 </head>
-<body class="bg-cream text-ink antialiased">
+<body>
 
-    <!-- NAVIGATION -->
-    <nav class="fixed w-full z-50 bg-cream/95 backdrop-blur-md border-b border-mist">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="text-2xl font-display font-bold tracking-tight text-ink">
-                    WALANCE<span class="text-accent">.</span>
-                </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#problem" class="text-ink/70 hover:text-ink transition-colors text-sm uppercase tracking-wider font-medium">Problém</a>
-                    <a href="#about" class="text-ink/70 hover:text-ink transition-colors text-sm uppercase tracking-wider font-medium">O metodě</a>
-                    <a href="#method" class="text-ink/70 hover:text-ink transition-colors text-sm uppercase tracking-wider font-medium">Metoda</a>
-                    <a href="#products" class="text-ink/70 hover:text-ink transition-colors text-sm uppercase tracking-wider font-medium">Spolupráce</a>
-                    <a href="#faq" class="text-ink/70 hover:text-ink transition-colors text-sm uppercase tracking-wider font-medium">FAQ</a>
-                    <a href="#contact" class="text-ink/70 hover:text-ink transition-colors text-sm uppercase tracking-wider font-medium">Kontakt</a>
-                    <a href="#products" class="bg-accent hover:bg-accent/90 text-cream px-5 py-2.5 rounded-full font-bold uppercase tracking-wide transition-all shadow-lg shadow-accent/20">
-                        Audit Zdarma
-                    </a>
-                </div>
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-ink focus:outline-none">
-                        <i data-lucide="menu" id="menu-icon" class="w-7 h-7"></i>
-                        <i data-lucide="x" id="close-icon" class="hidden w-7 h-7"></i>
-                    </button>
-                </div>
-            </div>
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="nav">
+        <div class="container nav-inner">
+            <a href="#" class="nav-logo">WALANCE<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problém</a></li>
+                <li><a href="#method">Metoda</a></li>
+                <li><a href="#story">Příběh</a></li>
+                <li><a href="#products">Nabídka</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+                <li><a href="#contact" class="nav-cta">Audit zdarma</a></li>
+            </ul>
+            <button class="nav-mobile-btn" id="mobile-toggle" aria-label="Menu">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="hamburger-icon">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="close-icon" style="display:none">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-mist/80 border-b border-mist p-4">
-            <div class="flex flex-col space-y-4">
-                <a href="#problem" class="mobile-link text-ink hover:text-accent font-medium py-2">Problém</a>
-                <a href="#about" class="mobile-link text-ink hover:text-accent font-medium py-2">O metodě</a>
-                <a href="#method" class="mobile-link text-ink hover:text-accent font-medium py-2">Metoda</a>
-                <a href="#products" class="mobile-link text-ink hover:text-accent font-medium py-2">Spolupráce</a>
-                <a href="#faq" class="mobile-link text-ink hover:text-accent font-medium py-2">FAQ</a>
-                <a href="#contact" class="mobile-link text-ink hover:text-accent font-medium py-2">Kontakt</a>
-            </div>
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#problem" class="mobile-link">Problém</a>
+            <a href="#method" class="mobile-link">Metoda</a>
+            <a href="#story" class="mobile-link">Příběh</a>
+            <a href="#products" class="mobile-link">Nabídka</a>
+            <a href="#contact" class="mobile-link">Kontakt</a>
+            <a href="#contact" class="mobile-link" style="color: var(--accent);">Audit zdarma</a>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <header class="relative pt-32 pb-24 lg:pt-48 lg:pb-40 overflow-hidden bg-cream">
-        <!-- Organic blob background -->
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] blob bg-gradient-to-br from-accent/10 via-sage/5 to-transparent -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
-        <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] blob bg-gradient-to-tr from-mist/80 to-transparent pointer-events-none"></div>
-        <!-- Large W decorative - "valící se balvan" -->
-        <div class="absolute right-8 lg:right-20 top-1/2 -translate-y-1/2 text-[20rem] font-display font-black text-mist/50 pointer-events-none select-none leading-none hidden lg:block">W</div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="max-w-2xl">
-                <p class="text-accent text-sm md:text-base mb-6 font-medium uppercase tracking-[0.3em]">Váš byznys software je geniální.</p>
-                <h1 class="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-ink">
-                    Ale váš lidský <span class="text-accent">hardware hoří.</span>
-                </h1>
-                <p class="text-lg md:text-xl text-ink/80 mb-10 max-w-xl leading-relaxed">
-                    Zvyšte výkon týmu i sebe ne tím, že budete pracovat víc, ale tím, že přestanete bojovat s vlastní biologií.
-                    <span class="text-ink font-semibold block mt-2">Metoda WALANCE: 7 pilířů pro udržitelný výkon.</span>
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#products" class="flex items-center justify-center bg-accent hover:bg-accent/90 text-cream px-8 py-4 rounded-full font-bold text-lg transition-all shadow-xl shadow-accent/25 hover:-translate-y-0.5">
-                        ZASTAVIT VYHOŘENÍ
-                        <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
-                    </a>
-                    <a href="#story" class="flex items-center justify-center border-2 border-ink/30 hover:border-accent text-ink px-8 py-4 rounded-full font-bold text-lg transition-all hover:bg-ink/5">
-                        PŘÍBĚH KLIENTA 0
-                    </a>
-                </div>
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+        <div class="hero-deco">W</div>
+        <div class="container">
+            <span class="hero-accent-line">Anatomie udržitelného výkonu</span>
+            <h1>Váš lidský<br><em>hardware hoří.</em></h1>
+            <p class="hero-sub">
+                Zvyšte výkon týmu i sebe ne tím, že budete pracovat víc, ale tím, že <strong>přestanete bojovat s vlastní biologií</strong>.
+            </p>
+            <div class="hero-cta-row">
+                <a href="#contact" class="btn-primary">
+                    ZASTAVIT VYHOŘENÍ
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+                <a href="#story" class="btn-secondary">PŘÍBĚH ZAKLADATELKY</a>
             </div>
         </div>
     </header>
 
-    <!-- O METODĚ - Úvodní informační sekce -->
-    <section id="about" class="py-20 bg-cream relative overflow-hidden">
-        <!-- DOPLNIT: Krátký úvodní odstavec o metodě WALANCE - pro koho je, co řeší, proč vznikla -->
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl md:text-4xl font-bold text-ink mb-8 text-center">Co je metoda WALANCE?</h2>
-            <div class="prose prose-lg max-w-none text-ink/80 space-y-6">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Metoda WALANCE vznikla jako odpověď na systémovou krizi výkonnosti v moderním byznysu. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — kombinuje poznatky z fyzioterapie, neurovědy a leadershipu.</p>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                <p class="font-semibold text-ink">Metoda je postavena na 7 pilířích, které tvoří akronym WALANCE. Každý pilíř adresuje konkrétní oblast — od fyzického nastavení těla po management energie a informační hygienu.</p>
-            </div>
-            <!-- DOPLNIT: Klíčové benefity metody (3-5 bodů) -->
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="p-6 bg-mist/30 rounded-2xl border border-mist">
-                    <p class="text-sm uppercase tracking-wider text-accent font-bold mb-2">Benefit 1</p>
-                    <p class="text-ink/80">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DOPLNIT: Konkrétní benefit.</p>
+    <!-- ============ TRUST BAR ============ -->
+    <section class="trust-bar fade-in">
+        <div class="container">
+            <div class="trust-bar-inner">
+                <div class="trust-item">
+                    <span class="trust-number">7</span>
+                    <span class="trust-label">Pilířů metody</span>
                 </div>
-                <div class="p-6 bg-mist/30 rounded-2xl border border-mist">
-                    <p class="text-sm uppercase tracking-wider text-accent font-bold mb-2">Benefit 2</p>
-                    <p class="text-ink/80">Sed do eiusmod tempor incididunt ut labore. DOPLNIT: Konkrétní benefit.</p>
+                <div class="trust-item">
+                    <span class="trust-number">60 min</span>
+                    <span class="trust-label">Ušetřený čas denně</span>
                 </div>
-                <div class="p-6 bg-mist/30 rounded-2xl border border-mist">
-                    <p class="text-sm uppercase tracking-wider text-accent font-bold mb-2">Benefit 3</p>
-                    <p class="text-ink/80">Ut enim ad minim veniam quis nostrud. DOPLNIT: Konkrétní benefit.</p>
+                <div class="trust-item">
+                    <span class="trust-number">3</span>
+                    <span class="trust-label">Vrstvy přístupu</span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-number">4 týdny</span>
+                    <span class="trust-label">Program Office Reset</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- REALITY CHECK - Problém, který metoda řeší -->
-    <section id="problem" class="py-24 bg-mist/40 text-ink section-angle">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="text-center mb-20">
-                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4 text-ink">Poznáváte se?</h2>
-                <div class="w-20 h-1 bg-accent rounded-full mx-auto"></div>
+    <!-- ============ PROBLEM ============ -->
+    <section id="problem" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Poznáváte se?</p>
+                <h2 class="section-title">Váš byznys software je geniální.<br>Ale co hardware?</h2>
+                <p class="section-subtitle">
+                    Snažíte se řídit formuli 1 se zataženou ruční brzdou. To není stáří. To je systémová chyba.
+                </p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 bg-cream rounded-3xl shadow-lg shadow-ink/5 border border-mist hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                        <i data-lucide="brain" class="w-7 h-7 text-accent"></i>
+
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 3.9 2.5 7.1 6 8.4V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.6c3.5-1.3 6-4.5 6-8.4a9 9 0 0 0-9-9z"/><path d="M10 17h4"/></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold mb-3 text-ink">Hlava (Software)</h3>
-                    <p class="text-ink/70 leading-relaxed">
-                        Mozková mlha po obědě. Rozhodovací paralýza. Neschopnost "vypnout" práci doma. Jedete na autopilot.
-                    </p>
+                    <h3>Hlava (Software)</h3>
+                    <p>Mozková mlha po obědě. Rozhodovací paralýza. Neschopnost „vypnout" práci doma. Jedete na autopilot.</p>
                 </div>
-                <div class="p-8 bg-cream rounded-3xl shadow-lg shadow-ink/5 border border-mist hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                        <i data-lucide="activity" class="w-7 h-7 text-accent"></i>
+                <div class="card fade-in">
+                    <div class="card-icon" style="background: rgba(90, 125, 90, 0.1);">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--sage);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold mb-3 text-ink">Tělo (Hardware)</h3>
-                    <p class="text-ink/70 leading-relaxed">
-                        Bolest krční páteře vystřelující do rukou. Mělké dýchání. Chronická únava, kterou spánek neřeší.
-                    </p>
+                    <h3>Tělo (Hardware)</h3>
+                    <p>Bolest krční páteře vystřelující do rukou. Mělké dýchání. Chronická únava, kterou spánek neřeší.</p>
                 </div>
-                <div class="p-8 bg-cream rounded-3xl shadow-lg shadow-ink/5 border border-mist hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                        <i data-lucide="users" class="w-7 h-7 text-accent"></i>
+                <div class="card fade-in">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold mb-3 text-ink">Tým (Výkon)</h3>
-                    <p class="text-ink/70 leading-relaxed">
-                        Prezentismus – lidé sedí u počítačů, ale jejich kognitivní výkon je na 40 %. Vyhořelí lidé netvoří hodnoty.
-                    </p>
+                    <h3>Tým (Výkon)</h3>
+                    <p>Prezentismus: lidé sedí u počítačů, ale jejich kognitivní výkon je na 40 %. Vyhořelí lidé netvoří hodnoty.</p>
                 </div>
             </div>
-            
-            <div class="mt-20 text-center max-w-3xl mx-auto p-8 bg-ink/5 rounded-3xl border border-mist">
-                <h3 class="font-display text-2xl font-bold text-ink mb-2">VERDIKT: To není stáří. To je systémová chyba.</h3>
-                <p class="text-ink/70 text-lg">Snažíte se řídit formuli 1 (svou firmu) se zataženou ruční brzdou (vaše tělo).</p>
-            </div>
-            <!-- DOPLNIT: Rozšířený text o dopadech vyhoření na firmu - statistiky, náklady, studie -->
-            <div class="mt-16 max-w-3xl mx-auto">
-                <p class="text-ink/70 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DOPLNIT: Krátký odstavec o tom, kolik vyhoření stojí firmy (např. dle WHO), jak se projevuje v produktivitě, fluktuaci. Ut enim ad minim veniam.</p>
+
+            <div class="verdict-box fade-in">
+                <h3>To není stáří. To je systémová chyba.</h3>
+                <p>Metoda WALANCE opravuje všechny tři vrstvy najednou — tělo, mysl i návyky.</p>
             </div>
         </div>
     </section>
 
-    <!-- PRO KOHO JE WALANCE -->
-    <section class="py-20 bg-cream">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl md:text-4xl font-bold text-ink mb-4 text-center">Pro koho je metoda WALANCE?</h2>
-            <p class="text-ink/70 text-center max-w-2xl mx-auto mb-16">DOPLNIT: Úvodní věta - pro jaké typy klientů/situací je metoda vhodná.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="p-6 rounded-2xl bg-mist/30 border border-mist hover:border-accent/30 transition-colors">
-                    <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4"><i data-lucide="briefcase" class="w-6 h-6 text-accent"></i></div>
-                    <h3 class="font-display font-bold text-ink mb-2">Lídři a manažeři</h3>
-                    <p class="text-ink/70 text-sm">DOPLNIT: Proč jsou lídři cílovou skupinou. Lorem ipsum dolor sit amet.</p>
+    <!-- ============ SOLUTION / METHOD ============ -->
+    <section id="method" class="section solution-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Metoda WALANCE</p>
+                <h2 class="section-title">Neučím vás cvičit.<br>Učím vás pracovat.</h2>
+                <p class="section-subtitle">
+                    Metoda WALANCE není wellness benefit. Je to <strong>provozní manuál k vašemu tělu</strong>. Propojuje fyzioterapii, neurovědu a leadership.
+                </p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-card fade-in">
+                    <p class="solution-tag">Vrstva 1</p>
+                    <h3>Hardware</h3>
+                    <p>Tělo &amp; Fyzio. Odstraníme fyzické tření. Konec bolestí zad znamená lepší prokrvení mozku. Opravíme šasi, aby motor mohl běžet naplno.</p>
                 </div>
-                <div class="p-6 rounded-2xl bg-mist/30 border border-mist hover:border-accent/30 transition-colors">
-                    <div class="w-12 h-12 rounded-xl bg-sage/20 flex items-center justify-center mb-4"><i data-lucide="users" class="w-6 h-6 text-sage"></i></div>
-                    <h3 class="font-display font-bold text-ink mb-2">Firemní týmy</h3>
-                    <p class="text-ink/70 text-sm">DOPLNIT: Proč celé týmy. Lorem ipsum dolor sit amet consectetur.</p>
+                <div class="solution-card fade-in">
+                    <p class="solution-tag">Vrstva 2</p>
+                    <h3>Software</h3>
+                    <p>Job Crafting. Designujeme práci tak, aby vás nabíjela, ne vysávala. Sladíme vaše silné stránky s náplní práce.</p>
                 </div>
-                <div class="p-6 rounded-2xl bg-mist/30 border border-mist hover:border-accent/30 transition-colors">
-                    <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4"><i data-lucide="trending-up" class="w-6 h-6 text-accent"></i></div>
-                    <h3 class="font-display font-bold text-ink mb-2">Rychle rostoucí firmy</h3>
-                    <p class="text-ink/70 text-sm">DOPLNIT: Scale-up, startupy. Lorem ipsum dolor sit amet.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-mist/30 border border-mist hover:border-accent/30 transition-colors">
-                    <div class="w-12 h-12 rounded-xl bg-sage/20 flex items-center justify-center mb-4"><i data-lucide="heart" class="w-6 h-6 text-sage"></i></div>
-                    <h3 class="font-display font-bold text-ink mb-2">Ti, kdo už cítí únavu</h3>
-                    <p class="text-ink/70 text-sm">DOPLNIT: Preventivní vs. krizová intervence. Lorem ipsum.</p>
+                <div class="solution-card fade-in">
+                    <p class="solution-tag">Vrstva 3</p>
+                    <h3>Operační systém</h3>
+                    <p>Návyky &amp; Rituály. Mikrozměny, které běží na pozadí a šetří vaši energii. Automatizace zdraví, abyste na něj nemuseli myslet.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- STORY SECTION -->
-    <section id="story" class="py-24 bg-ink relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 blob bg-accent/20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 blob bg-sage/10 pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <div class="lg:w-1/2 relative order-2 lg:order-1">
-                    <div class="absolute inset-0 bg-accent rounded-3xl transform translate-x-5 translate-y-5"></div>
-                    <div class="relative aspect-[3/2] rounded-3xl overflow-hidden border-2 border-cream/20">
-                        <img src="assets/images/hero-story.jpg" alt="Jana na lůžku s ortézou a laptopem – autentický záběr Klienta 0 při práci z domova" class="w-full h-full object-cover" width="1800" height="1200" loading="lazy">
-                    </div>
-                </div>
-                <div class="lg:w-1/2 order-1 lg:order-2">
-                    <span class="inline-block bg-accent text-cream text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">Případová studie</span>
-                    <h2 class="font-display text-3xl md:text-5xl font-bold mb-8 leading-tight text-cream">
-                        Teorie končí, když si zraníte koleno. <br/>
-                        <span class="text-accent">Já to teď žiju.</span>
-                    </h2>
-                    <div class="space-y-6 text-lg text-cream/80">
-                        <p>Jmenuji se <strong class="text-cream">Jana</strong>. Jsem fyzioterapeutka a manažerka. Roky jsem učila firmy, jak nevyhořet. A pak přišla lekce pokory.</p>
-                        <p>V lednu 2026 mě těžký úraz kolene a následná operace upoutaly na lůžko. Mohla jsem zavřít firmu. Místo toho jsem se stala <strong class="text-cream">Klientem 0</strong>.</p>
-                        <p class="border-l-4 border-accent pl-6 italic text-cream">
-                            "Aplikuji metodu WALANCE v extrémních podmínkách. Řídím byznys horizontálně. A funguje to. Mám čistší hlavu než vy v kanceláři."
-                        </p>
+    <!-- ============ STORY ============ -->
+    <section id="story" class="section story-section">
+        <div class="container">
+            <div class="story-grid">
+                <div class="fade-in">
+                    <span class="story-label">Případová studie</span>
+                    <h2>Teorie končí, když si zraníte koleno.<br><em>Já to teď žiju.</em></h2>
+                    <div class="story-text">
+                        <p>Jmenuji se <strong>Jana</strong>. Jsem fyzioterapeutka a manažerka. Roky jsem učila firmy, jak nevyhořet. A pak přišla lekce pokory.</p>
+                        <p>V lednu 2026 mě těžký úraz kolene upoutal na lůžko. Mohla jsem zavřít firmu. Místo toho jsem se stala <strong>Klientem 0</strong>.</p>
+                        <p class="story-quote">„Aplikuji metodu WALANCE v extrémních podmínkách. Řídím byznys horizontálně. A funguje to. Mám čistší hlavu než vy v kanceláři."</p>
                         <p>Pokud dokážu udržet vysoký výkon já z postele, naučím to i vás.</p>
                     </div>
                 </div>
-            </div>
-            <!-- Druhá fotka: zvířecí léčitelka – lidský rozměr rekonvalescence -->
-            <div class="mt-16 max-w-2xl mx-auto">
-                <div class="relative rounded-2xl overflow-hidden border-2 border-cream/20 shadow-xl">
-                    <img src="assets/images/story-cat-healer.jpg" alt="Koleno a kočka – zvířecí léčitelka v akci během rekonvalescence" class="w-full aspect-[4/3] object-cover" width="800" height="600" loading="lazy">
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink/80 to-transparent p-4">
-                        <p class="text-cream/90 text-sm italic">Zvířecí léčitelka v akci. I léčení má své tváře.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- DOPLNIT: Credentials Jany - vzdělání, certifikace, zkušenosti, proč je důvěryhodná -->
-            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="p-6">
-                    <p class="text-accent font-bold text-sm uppercase tracking-wider mb-2">Vzdělání</p>
-                    <p class="text-cream/80">DOPLNIT: Školy, obory, roky</p>
-                </div>
-                <div class="p-6">
-                    <p class="text-accent font-bold text-sm uppercase tracking-wider mb-2">Certifikace</p>
-                    <p class="text-cream/80">DOPLNIT: Kurzy, certifikáty</p>
-                </div>
-                <div class="p-6">
-                    <p class="text-accent font-bold text-sm uppercase tracking-wider mb-2">Zkušenosti</p>
-                    <p class="text-cream/80">DOPLNIT: Počet let, typy klientů, firmy</p>
+                <div class="story-image-wrap fade-in">
+                    <img src="assets/images/hero-story.jpg"
+                         alt="Jana na lůžku s ortézou a laptopem — autentický záběr zakladatelky WALANCE"
+                         class="story-image"
+                         width="1800" height="1200"
+                         loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- METHOD EXPLANATION - Hardware, Software, OS -->
-    <section id="method" class="py-24 bg-cream">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4 text-ink">NEUČÍM VÁS CVIČIT. UČÍM VÁS PRACOVAT.</h2>
-                <p class="text-ink/70 max-w-2xl mx-auto text-lg">Metoda WALANCE není wellness benefit. Je to <span class="text-ink font-bold">provozní manuál k vašemu tělu</span>.</p>
-                <!-- DOPLNIT: Rozšířený úvod k metodě - odkud vychází, jaké obory propojuje -->
-                <p class="text-ink/60 max-w-3xl mx-auto mt-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DOPLNIT: Metoda propojuje fyzioterapii, neurovědu, psychologii práce a leadership. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-mist/50 p-10 rounded-3xl border border-mist hover:border-accent/50 transition-all duration-300 group hover:-translate-y-1">
-                    <div class="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                        <i data-lucide="cpu" class="w-8 h-8 text-accent"></i>
-                    </div>
-                    <h3 class="font-display text-2xl font-bold text-ink mb-2">HARDWARE</h3>
-                    <p class="text-accent text-sm font-bold uppercase tracking-widest mb-4">Tělo & Fyzio</p>
-                    <p class="text-ink/70">Odstraníme fyzické tření. Konec bolestí zad znamená lepší prokrvení mozku. Opravíme šasi, aby motor mohl běžet naplno.</p>
-                </div>
-                <div class="bg-mist/50 p-10 rounded-3xl border border-mist hover:border-accent/50 transition-all duration-300 group hover:-translate-y-1">
-                    <div class="w-16 h-16 rounded-2xl bg-sage/20 flex items-center justify-center mb-6 group-hover:bg-sage/30 transition-colors">
-                        <i data-lucide="code" class="w-8 h-8 text-sage"></i>
-                    </div>
-                    <h3 class="font-display text-2xl font-bold text-ink mb-2">SOFTWARE</h3>
-                    <p class="text-sage text-sm font-bold uppercase tracking-widest mb-4">Job Crafting</p>
-                    <p class="text-ink/70">Designujeme práci tak, aby vás nabíjela, ne vysávala. Sladíme vaše silné stránky s náplní práce.</p>
-                </div>
-                <div class="bg-mist/50 p-10 rounded-3xl border border-mist hover:border-accent/50 transition-all duration-300 group hover:-translate-y-1">
-                    <div class="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                        <i data-lucide="refresh-cw" class="w-8 h-8 text-accent"></i>
-                    </div>
-                    <h3 class="font-display text-2xl font-bold text-ink mb-2">OPERAČNÍ SYSTÉM</h3>
-                    <p class="text-accent text-sm font-bold uppercase tracking-widest mb-4">Návyky & Rituály</p>
-                    <p class="text-ink/70">Mikrozměny, které běží na pozadí a šetří vaši energii. Automatizace zdraví, abyste na něj nemuseli myslet.</p>
-                </div>
-            </div>
-            <!-- DOPLNIT: Jak tyto 3 vrstvy spolu souvisí - metafora počítače, proč je potřeba všechny tři -->
-            <div class="mt-16 p-8 bg-mist/30 rounded-2xl border border-mist max-w-3xl mx-auto text-center">
-                <p class="text-ink/70">DOPLNIT: Hardware bez software neběží. Software bez OS padá. Všechny tři vrstvy musí být v souladu. Krátký odstavec o synergii.</p>
+    <!-- ============ ROI ============ -->
+    <section class="section roi-section fade-in">
+        <div class="container">
+            <p class="section-label" style="color: rgba(250,249,247,0.5);">Matematika je neúprosná</p>
+            <div class="roi-number">8</div>
+            <p class="roi-unit">MINUT</p>
+            <p class="roi-text">Tolik času denně stačí ušetřit (díky absenci bolestí zad), aby se investice vrátila.</p>
+            <div class="roi-highlight">
+                <p>My cílíme na <strong>60 MINUT</strong> denně navíc.</p>
+                <small>Vynásobte si to hodinovou sazbou vašich klíčových lidí.</small>
             </div>
         </div>
     </section>
 
-    <!-- 7 PILLARS INTERACTIVE -->
-    <section class="py-24 bg-ink relative overflow-hidden">
-        <div class="absolute inset-0 blob bg-accent/10 w-1/2 h-full top-0 right-0 pointer-events-none opacity-50"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <h2 class="font-display text-3xl md:text-4xl font-bold mb-16 text-center text-cream"><span class="text-accent">WALANCE</span> — ANATOMIE UDRŽITELNÉHO LÍDRA</h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                <div class="space-y-3" id="pillar-buttons">
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/10 border-accent" data-index="0">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-accent btn-letter">W</span>
-                        <span class="block font-bold text-lg text-cream btn-title">Walk & Work</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent btn-arrow"></i>
-                    </button>
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10" data-index="1">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter">A</span>
-                        <span class="block font-bold text-lg text-cream/70 group-hover:text-cream btn-title">Awareness</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent opacity-0 btn-arrow"></i>
-                    </button>
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10" data-index="2">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter">L</span>
-                        <span class="block font-bold text-lg text-cream/70 group-hover:text-cream btn-title">Longevity</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent opacity-0 btn-arrow"></i>
-                    </button>
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10" data-index="3">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter">A</span>
-                        <span class="block font-bold text-lg text-cream/70 group-hover:text-cream btn-title">Alignment</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent opacity-0 btn-arrow"></i>
-                    </button>
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10" data-index="4">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter">N</span>
-                        <span class="block font-bold text-lg text-cream/70 group-hover:text-cream btn-title">New Habits</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent opacity-0 btn-arrow"></i>
-                    </button>
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10" data-index="5">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter">C</span>
-                        <span class="block font-bold text-lg text-cream/70 group-hover:text-cream btn-title">Clarity</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent opacity-0 btn-arrow"></i>
-                    </button>
-                    <button class="pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10" data-index="6">
-                        <span class="text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter">E</span>
-                        <span class="block font-bold text-lg text-cream/70 group-hover:text-cream btn-title">Energy</span>
-                        <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-accent opacity-0 btn-arrow"></i>
-                    </button>
-                </div>
-
-                <div class="bg-cream/10 backdrop-blur-sm p-8 lg:p-12 rounded-3xl border border-cream/20 shadow-2xl h-full flex flex-col justify-center min-h-[400px] relative overflow-hidden">
-                    <div id="pillar-content" class="animate-fade-in relative z-10">
-                        <div id="p-bg-letter" class="text-9xl font-display font-black text-cream/10 absolute top-0 right-0 pointer-events-none -mt-8 -mr-8 select-none">
-                            W
-                        </div>
-                        <h3 id="p-title" class="text-accent text-sm font-bold uppercase tracking-widest mb-2">Walk & Work</h3>
-                        <h4 id="p-subtitle" class="font-display text-3xl font-bold text-cream mb-6">Pohyb jako nástroj myšlení</h4>
-                        <p id="p-desc" class="text-xl text-cream/80 leading-relaxed">Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Ukončete mozkovou mlhu.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- DOPLNIT: Rozšířený úvodní text k 7 pilířům - proč zrovna těchto 7, jak spolu souvisí -->
-            <div class="mt-16 max-w-3xl mx-auto text-center">
-                <p class="text-cream/70">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DOPLNIT: Krátký text o tom, jak se všechny pilíře doplňují a tvoří celostní systém. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- REFERENCE / TESTIMONIALS -->
-    <section class="py-20 bg-cream">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl md:text-4xl font-bold text-ink mb-4 text-center">Co říkají klienti</h2>
-            <p class="text-ink/70 text-center max-w-2xl mx-auto mb-16">DOPLNIT: Úvodní věta k referencím. Lorem ipsum dolor sit amet.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- DOPLNIT: Skutečné reference - jméno, role, firma, citace, foto (volitelně) -->
-                <div class="p-8 bg-mist/30 rounded-2xl border border-mist">
-                    <p class="text-ink/80 italic mb-6">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Metoda WALANCE mi změnila přístup k práci. Sed do eiusmod tempor incididunt ut labore."</p>
-                    <p class="font-bold text-ink">— Jméno Příjmení</p>
-                    <p class="text-sm text-ink/60">DOPLNIT: Role, firma</p>
-                </div>
-                <div class="p-8 bg-mist/30 rounded-2xl border border-mist">
-                    <p class="text-ink/80 italic mb-6">"Ut enim ad minim veniam, quis nostrud exercitation. Duis aute irure dolor in reprehenderit. Velmi doporučuji."</p>
-                    <p class="font-bold text-ink">— Jméno Příjmení</p>
-                    <p class="text-sm text-ink/60">DOPLNIT: Role, firma</p>
-                </div>
-                <div class="p-8 bg-mist/30 rounded-2xl border border-mist">
-                    <p class="text-ink/80 italic mb-6">"DOPLNIT: Třetí reference. Lorem ipsum dolor sit amet."</p>
-                    <p class="font-bold text-ink">— Jméno Příjmení</p>
-                    <p class="text-sm text-ink/60">DOPLNIT: Role, firma</p>
-                </div>
-            </div>
-            <!-- DOPLNIT: Loga firem, se kterými jste spolupracovali (volitelné) -->
-            <div class="mt-16 text-center">
-                <p class="text-sm uppercase tracking-wider text-ink/50 mb-8">Spolupracovali jsme s</p>
-                <div class="flex flex-wrap justify-center gap-12 items-center opacity-60">
-                    <span class="text-ink/40 font-display text-xl">DOPLNIT: Logo firmy 1</span>
-                    <span class="text-ink/40 font-display text-xl">DOPLNIT: Logo firmy 2</span>
-                    <span class="text-ink/40 font-display text-xl">DOPLNIT: Logo firmy 3</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PRODUCTS / OFFER - Bento Grid -->
-    <section id="products" class="py-24 bg-cream relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 text-ink">JAK MŮŽEME SPOLUPRACOVAT?</h2>
-                <p class="text-ink/70 text-lg">Strategie šitá na míru vaší aktuální situaci.</p>
+    <!-- ============ PRODUCTS ============ -->
+    <section id="products" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Spolupráce</p>
+                <h2 class="section-title">Jak můžeme spolupracovat?</h2>
+                <p class="section-subtitle">Strategie šitá na míru vaší aktuální situaci.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-fr">
-                <!-- Product 1: B2B - smaller -->
-                <div class="md:col-span-4 bg-mist/50 rounded-3xl overflow-hidden border border-mist hover:border-accent/30 transition-all flex flex-col hover:-translate-y-1 hover:shadow-xl group">
-                    <div class="bg-ink/5 p-4 text-center text-xs font-bold uppercase tracking-widest text-ink/70">
-                        Pro Firmy
-                    </div>
-                    <div class="p-8 flex-1 flex flex-col">
-                        <h3 class="font-display text-2xl font-bold text-ink mb-2">OFFICE RESET™</h3>
-                        <p class="text-ink/60 text-sm mb-6">Pro týmy, které jedou na dluh a potřebují zastavit úniky energie.</p>
-                        <ul class="space-y-4 mb-8 text-ink/80 flex-1">
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>Audit "energetických děr"</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>Fyzio-ergonomie pracoviště</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>4 týdny hybridního mentoringu</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>Tvrdá data, žádné ezo</span></li>
+            <div class="products-grid">
+                <!-- Product 1: Office Reset -->
+                <div class="product-card product-card--default fade-in">
+                    <div class="product-header">Pro firmy</div>
+                    <div class="product-body">
+                        <h3>OFFICE RESET&trade;</h3>
+                        <p class="desc">Pro týmy, které jedou na dluh a potřebují zastavit úniky energie.</p>
+                        <ul class="product-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Audit „energetických děr"</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Fyzio-ergonomie pracoviště</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>4 týdny hybridního mentoringu</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Tvrdá data, žádné ezo</span>
+                            </li>
                         </ul>
-                        <a href="mailto:jana@walance.cz?subject=Poptávka%20Office%20Reset" class="block w-full text-center bg-ink/10 hover:bg-accent text-cream py-3.5 rounded-full font-bold transition-all border-2 border-ink/20 hover:border-accent">
+                        <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
                             POPTAT AUDIT
                         </a>
                     </div>
                 </div>
 
-                <!-- Product 2: B2C - Highlighted, larger -->
-                <div class="md:col-span-4 bg-ink rounded-3xl overflow-hidden border-2 border-accent relative transform md:-translate-y-4 shadow-2xl shadow-accent/20 flex flex-col">
-                    <div class="absolute top-0 right-0 bg-accent text-cream text-xs font-bold px-4 py-1.5 rounded-bl-2xl">
-                        BESTSELLER
-                    </div>
-                    <div class="bg-accent/20 p-4 text-center text-xs font-bold uppercase tracking-widest text-cream">
-                        Pro Lídry (1-on-1)
-                    </div>
-                    <div class="p-8 flex-1 flex flex-col">
-                        <h3 class="font-display text-2xl font-bold text-cream mb-2">CRISIS MENTORING</h3>
-                        <p class="text-cream/80 text-sm mb-6">Strategická konzultace s Janou (Klient 0). Krizové řízení vás samotných.</p>
-                        <ul class="space-y-4 mb-8 text-cream/90 flex-1">
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-accent mr-2 shrink-0"></i> <span>Hloubková diagnostika</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-accent mr-2 shrink-0"></i> <span>Redesign pracovního kalendáře</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-accent mr-2 shrink-0"></i> <span>Okamžitá úleva od tlaku</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-accent mr-2 shrink-0"></i> <span>Systém, jak fungovat horizontálně</span></li>
+                <!-- Product 2: Crisis Mentoring (Featured) -->
+                <div class="product-card product-card--featured fade-in">
+                    <span class="product-badge">Bestseller</span>
+                    <div class="product-header">Pro lídry (1-on-1)</div>
+                    <div class="product-body">
+                        <h3>CRISIS MENTORING</h3>
+                        <p class="desc">Strategická konzultace s Janou (Klient 0). Krizové řízení vás samotných.</p>
+                        <ul class="product-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Hloubková diagnostika</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Redesign pracovního kalendáře</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Okamžitá úleva od tlaku</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Systém, jak fungovat horizontálně</span>
+                            </li>
                         </ul>
-                        <button type="button" onclick="openBookingModal()" class="block w-full text-center bg-accent hover:bg-accent/90 text-cream py-3.5 rounded-full font-bold transition-all shadow-lg">
+                        <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">
                             REZERVOVAT TERMÍN
                         </button>
-                        <p class="text-center text-xs text-cream/60 mt-2">Kapacita omezena (Úraz)</p>
+                        <p class="product-note">Kapacita omezena (Úraz)</p>
                     </div>
                 </div>
 
-                <!-- Product 3: Lead Magnet -->
-                <div class="md:col-span-4 bg-mist/50 rounded-3xl overflow-hidden border border-mist hover:border-sage/30 transition-all flex flex-col hover:-translate-y-1 hover:shadow-xl">
-                    <div class="bg-sage/10 p-4 text-center text-xs font-bold uppercase tracking-widest text-sage">
-                        Start (Zdarma)
-                    </div>
-                    <div class="p-8 flex-1 flex flex-col">
-                        <h3 class="font-display text-2xl font-bold text-ink mb-2">BYZNYS Z POSTELE</h3>
-                        <p class="text-ink/60 text-sm mb-6">Webinář: Jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
-                        <ul class="space-y-4 mb-8 text-ink/80 flex-1">
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>3 okamžité techniky</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>E-book s manuálem</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>Přístup do komunity</span></li>
-                            <li class="flex items-start"><i data-lucide="shield-check" class="w-5 h-5 text-sage mr-2 shrink-0"></i> <span>Záznam masterclass</span></li>
+                <!-- Product 3: Byznys z postele -->
+                <div class="product-card product-card--default fade-in">
+                    <div class="product-header" style="color: var(--sage);">Start (zdarma)</div>
+                    <div class="product-body">
+                        <h3>BYZNYS Z POSTELE</h3>
+                        <p class="desc">Webinář: Jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
+                        <ul class="product-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>3 okamžité techniky</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>E-book s manuálem</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Přístup do komunity</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Záznam masterclass</span>
+                            </li>
                         </ul>
-                        <a href="#products" class="block w-full text-center border-2 border-ink/30 hover:bg-ink/10 text-ink py-3.5 rounded-full font-bold transition-all">
+                        <a href="#contact" class="product-cta product-cta--outline">
                             STÁHNOUT ZDARMA
                         </a>
                     </div>
                 </div>
             </div>
-            <!-- DOPLNIT: Detailní popis každého produktu - co přesně zahrnuje, délka, cena (volitelně), proces -->
-            <div class="mt-16 max-w-3xl mx-auto text-center text-ink/70">
-                <p>DOPLNIT: Krátký text o tom, že každá spolupráce začíná konzultací/auditem. Jak probíhá první krok. Kam se obrátit.</p>
-            </div>
         </div>
     </section>
 
-    <!-- ROI SECTION -->
-    <section class="py-24 bg-ink relative overflow-hidden">
-        <div class="absolute inset-0 blob bg-accent/10 w-full h-full pointer-events-none opacity-30"></div>
-        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <h2 class="text-sm uppercase tracking-[0.3em] text-cream/60 mb-8">Matematika je neúprosná</h2>
-            <div class="font-display text-8xl md:text-[10rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-cream to-cream/60 mb-6">
-                8
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Kontakt</p>
+                <h2 class="section-title">Napište nám</h2>
+                <p class="section-subtitle">Máte dotaz nebo chcete rezervovat termín? Ozvěte se nám.</p>
             </div>
-            <p class="text-2xl md:text-3xl font-display font-bold text-cream mb-2">MINUT</p>
-            <p class="text-lg md:text-xl text-cream/80 mb-10 max-w-2xl mx-auto">
-                Tolik času denně stačí ušetřit (díky absenci bolesti zad), aby se investice vrátila.
-            </p>
-            <div class="bg-cream/10 backdrop-blur-sm inline-block p-8 rounded-3xl border border-cream/20">
-                <p class="text-cream text-xl">My cílíme na <span class="font-display font-bold text-3xl text-accent">60 MINUT</span> denně navíc.</p>
-                <p class="text-cream/60 text-sm mt-2">Vynásobte si to hodinovou sazbou vašich klíčových lidí.</p>
-            </div>
-            <div class="mt-12">
-                <a href="#products" class="text-accent hover:text-cream font-bold text-lg transition-colors inline-flex items-center gap-2">
-                    Spočítat návratnost pro mou firmu <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                </a>
-            </div>
-        </div>
-    </section>
 
-    <!-- KONTAKT A REZERVACE -->
-    <section id="contact" class="py-24 bg-cream">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl md:text-4xl font-bold text-ink mb-4 text-center">Napište nám</h2>
-            <p class="text-ink/70 text-center mb-12">Máte dotaz nebo chcete rezervovat termín? Napište nám.</p>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Kontaktní formulář -->
-                <div class="bg-mist/30 rounded-3xl p-8 border border-mist">
-                    <h3 class="font-display text-xl font-bold text-ink mb-6">Kontaktní formulář</h3>
-                    <form id="contact-form" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-ink mb-1">Jméno *</label>
-                            <input type="text" name="name" required class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent focus:border-accent">
+            <div class="contact-grid">
+                <div class="contact-form-wrap fade-in">
+                    <h3 style="font-size: 1.25rem; margin-bottom: 24px;">Kontaktní formulář</h3>
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="c-name">Jméno *</label>
+                            <input type="text" id="c-name" name="name" required placeholder="Vaše jméno">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-ink mb-1">E-mail *</label>
-                            <input type="email" name="email" required class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent focus:border-accent">
+                        <div class="form-group">
+                            <label for="c-email">E-mail *</label>
+                            <input type="email" id="c-email" name="email" required placeholder="vas@email.cz">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-ink mb-1">Zpráva *</label>
-                            <textarea name="message" required rows="4" class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent focus:border-accent"></textarea>
+                        <div class="form-group">
+                            <label for="c-message">Zpráva *</label>
+                            <textarea id="c-message" name="message" required placeholder="Jak vám můžeme pomoci?"></textarea>
                         </div>
-                        <div id="contact-message" class="hidden p-4 rounded-xl text-sm"></div>
-                        <button type="submit" id="contact-submit" class="w-full bg-accent hover:bg-accent/90 text-cream py-3.5 rounded-full font-bold transition-all">
+                        <div id="contact-message" style="display:none; padding: 12px 16px; border-radius: 12px; font-size: 0.875rem; margin-bottom: 16px;"></div>
+                        <button type="submit" class="btn-primary" style="width: 100%;">
                             ODESLAT ZPRÁVU
                         </button>
                     </form>
                 </div>
-                <!-- Rezervace -->
-                <div class="bg-mist/30 rounded-3xl p-8 border border-mist flex flex-col justify-center">
-                    <h3 class="font-display text-xl font-bold text-ink mb-4">Rezervace termínu</h3>
-                    <p class="text-ink/70 mb-6">Vyberte si volný termín v kalendáři. Rezervace je napojena na Google Calendar.</p>
-                    <button type="button" onclick="openBookingModal()" class="w-full bg-ink hover:bg-ink/90 text-cream py-3.5 rounded-full font-bold transition-all flex items-center justify-center gap-2">
-                        <i data-lucide="calendar" class="w-5 h-5"></i>
+
+                <div class="contact-info fade-in">
+                    <div>
+                        <h3>Rezervace termínu</h3>
+                        <p>Vyberte si volný termín v kalendáři. Rezervace je napojena na Google Calendar.</p>
+                    </div>
+                    <button type="button" class="contact-booking-btn" onclick="openBookingModal()">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         OTEVŘÍT KALENDÁŘ
                     </button>
-                    <p class="text-sm text-ink/50 mt-4">Nebo napište na <a href="mailto:info@walance.cz" class="text-accent hover:underline">info@walance.cz</a></p>
+                    <div>
+                        <p>Nebo napište přímo na</p>
+                        <a href="mailto:info@walance.cz" class="contact-email">info@walance.cz</a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="py-24 bg-mist/30">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display text-3xl md:text-4xl font-bold text-ink mb-4 text-center">Časté dotazy</h2>
-            <p class="text-ink/70 text-center mb-16">DOPLNIT: Úvodní věta k FAQ. Lorem ipsum dolor sit amet.</p>
-            <div class="space-y-6">
-                <!-- DOPLNIT: Skutečné FAQ - otázky a odpovědi od klientů -->
-                <details class="group p-6 bg-cream rounded-2xl border border-mist hover:border-accent/30 transition-colors">
-                    <summary class="font-bold text-ink cursor-pointer flex justify-between items-center">Jak dlouho trvá typická spolupráce? <i data-lucide="chevron-down" class="w-5 h-5 text-ink/50 group-open:rotate-180 transition-transform"></i></summary>
-                    <p class="mt-4 text-ink/70">DOPLNIT: Odpověď. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Office Reset™ typicky 4 týdny, Crisis Mentoring dle individuální potřeby.</p>
+    <!-- ============ FAQ ============ -->
+    <section class="section faq-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">FAQ</p>
+                <h2 class="section-title">Časté dotazy</h2>
+            </div>
+
+            <div class="faq-list">
+                <details class="faq-item fade-in">
+                    <summary>
+                        Jak dlouho trvá typická spolupráce?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">Office Reset&trade; je 4týdenní program pro firmy. Crisis Mentoring je individuální a přizpůsobuje se vaší situaci — od jednorázové konzultace po dlouhodobý mentoring.</div>
                 </details>
-                <details class="group p-6 bg-cream rounded-2xl border border-mist hover:border-accent/30 transition-colors">
-                    <summary class="font-bold text-ink cursor-pointer flex justify-between items-center">Potřebuji být fyzicky v Praze? <i data-lucide="chevron-down" class="w-5 h-5 text-ink/50 group-open:rotate-180 transition-transform"></i></summary>
-                    <p class="mt-4 text-ink/70">DOPLNIT: Odpověď o hybridním/online formátu. Lorem ipsum dolor sit amet.</p>
+                <details class="faq-item fade-in">
+                    <summary>
+                        Potřebuji být fyzicky v Praze?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">Ne. Spolupráce probíhá hybridně — online konzultace, video hovory a fyzio cvičení na video. Osobní setkání je možné, ale není nutné.</div>
                 </details>
-                <details class="group p-6 bg-cream rounded-2xl border border-mist hover:border-accent/30 transition-colors">
-                    <summary class="font-bold text-ink cursor-pointer flex justify-between items-center">Jak se liší WALANCE od klasického koučinku? <i data-lucide="chevron-down" class="w-5 h-5 text-ink/50 group-open:rotate-180 transition-transform"></i></summary>
-                    <p class="mt-4 text-ink/70">DOPLNIT: Odpověď - propojení těla a mysli, fyzioterapeutický základ, provozní manuál. Lorem ipsum.</p>
+                <details class="faq-item fade-in">
+                    <summary>
+                        Jak se liší WALANCE od klasického koučingu?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">WALANCE propojuje fyzioterapii s leadershipem. Nepracujeme jen s myšlením, ale i s tělem. Začínáte od hardware (tělo) a postupujete k software (mysl) a operačnímu systému (návyky). Žádný jiný kouč toto nepropojuje.</div>
                 </details>
-                <details class="group p-6 bg-cream rounded-2xl border border-mist hover:border-accent/30 transition-colors">
-                    <summary class="font-bold text-ink cursor-pointer flex justify-between items-center">Je to vhodné i pro prevenci, nebo jen pro krizi? <i data-lucide="chevron-down" class="w-5 h-5 text-ink/50 group-open:rotate-180 transition-transform"></i></summary>
-                    <p class="mt-4 text-ink/70">DOPLNIT: Odpověď. Lorem ipsum dolor sit amet, obě varianty.</p>
-                </details>
-                <details class="group p-6 bg-cream rounded-2xl border border-mist hover:border-accent/30 transition-colors">
-                    <summary class="font-bold text-ink cursor-pointer flex justify-between items-center">Jak začít? <i data-lucide="chevron-down" class="w-5 h-5 text-ink/50 group-open:rotate-180 transition-transform"></i></summary>
-                    <p class="mt-4 text-ink/70">DOPLNIT: Odpověď - Audit zdarma, rezervace termínu, e-mail. CTA.</p>
+                <details class="faq-item fade-in">
+                    <summary>
+                        Jak začít?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">Napište nám přes formulář nebo si rovnou rezervujte termín v kalendáři. Začneme krátkým auditem vaší situace — zdarma a nezávazně.</div>
                 </details>
             </div>
         </div>
     </section>
 
-    <!-- REZERVAČNÍ MODAL - Měsíční kalendář -->
-    <div id="booking-modal" class="fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeBookingModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">
-            <div class="bg-cream rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
-                <div class="sticky top-0 z-20 flex justify-end p-4 bg-cream rounded-t-3xl">
-                    <button type="button" onclick="closeBookingModal()" class="text-ink/60 hover:text-ink p-2 -m-2">
-                        <i data-lucide="x" class="w-6 h-6"></i>
+    <!-- ============ BOOKING MODAL ============ -->
+    <div id="booking-modal" style="display:none; position:fixed; inset:0; z-index:200;">
+        <div onclick="closeBookingModal()" style="position:absolute; inset:0; background:rgba(30,41,59,0.6); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);"></div>
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:calc(100% - 32px); max-width:640px; max-height:90vh; overflow-y:auto; background:var(--cream); border-radius:24px; box-shadow:0 24px 64px rgba(0,0,0,0.2);">
+            <div style="position:sticky; top:0; background:var(--cream); z-index:10; display:flex; justify-content:flex-end; padding:16px 20px 0;">
+                <button onclick="closeBookingModal()" style="background:none; border:none; cursor:pointer; padding:8px; color:var(--ink);" aria-label="Zavřít">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div style="padding:0 32px 32px;">
+                <h2 class="font-display" style="font-size:1.75rem; font-weight:700; margin-bottom:8px;">Rezervace termínu</h2>
+                <p style="color:var(--ink-light); font-size:0.875rem; margin-bottom:24px;">Zelená = volné termíny. Vyberte den, pak čas.</p>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <button id="cal-prev" style="background:none; border:1px solid var(--mist); border-radius:12px; padding:8px 12px; cursor:pointer; color:var(--ink);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <span id="cal-month-title" class="font-display" style="font-weight:700; font-size:1.125rem;"></span>
+                    <button id="cal-next" style="background:none; border:1px solid var(--mist); border-radius:12px; padding:8px 12px; cursor:pointer; color:var(--ink);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
                 </div>
-                <div class="p-8 lg:p-12 pt-2">
-                    <h2 class="font-display text-2xl font-bold text-ink mb-2">Rezervace termínu</h2>
-                    <p class="text-ink/70 mb-6 text-sm">Zelená = volné termíny. Sytější zelená = více volných slotů. Světlejší zelená = den má už nějaké rezervace.</p>
-                    
-                    <!-- Měsíční kalendář -->
-                    <div class="mb-8">
-                        <div class="flex items-center justify-between mb-4">
-                            <button type="button" id="cal-prev" class="p-2 rounded-lg hover:bg-mist/50 text-ink/70">
-                                <i data-lucide="chevron-left" class="w-5 h-5"></i>
-                            </button>
-                            <h3 id="cal-month-title" class="font-display font-bold text-ink">Únor 2026</h3>
-                            <button type="button" id="cal-next" class="p-2 rounded-lg hover:bg-mist/50 text-ink/70">
-                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                            </button>
-                        </div>
-                        <div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-ink/60 mb-2">
-                            <span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span class="text-mist">So</span><span class="text-mist">Ne</span>
-                        </div>
-                        <div id="cal-grid" class="grid grid-cols-7 gap-1 min-h-[280px]">
-                            <!-- Dny se vygenerují v JS -->
-                        </div>
-                        <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-ink/60">
-                            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-emerald-500"></span> Volné termíny</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Výběr času (po kliknutí na den) -->
-                    <div id="cal-time-panel" class="hidden mb-6">
-                        <p class="text-sm font-medium text-ink mb-2">Vyberte čas pro <span id="cal-selected-date"></span>:</p>
-                        <div id="cal-time-slots" class="flex flex-wrap gap-2"></div>
-                    </div>
-                    
-                    <form id="booking-form" class="space-y-6">
-                        <input type="hidden" id="booking-date" name="date" value="">
-                        <input type="hidden" id="booking-time" name="time" value="">
-                        <div id="booking-fields" class="hidden space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-ink mb-1">Jméno *</label>
-                                <input type="text" name="name" required class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-ink mb-1">E-mail *</label>
-                                <input type="email" name="email" required class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-ink mb-1">Telefon</label>
-                                <input type="tel" name="phone" class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-ink mb-1">Poznámka</label>
-                                <textarea name="message" rows="3" class="w-full px-4 py-3 border border-mist rounded-xl focus:ring-2 focus:ring-accent"></textarea>
-                            </div>
-                        </div>
-                        <div id="booking-message" class="hidden p-4 rounded-xl text-sm"></div>
-                        <div id="booking-submit-wrap" class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out overflow-hidden">
-                            <div class="min-h-0 overflow-hidden">
-                                <button type="submit" id="booking-submit" disabled class="w-full bg-accent hover:bg-accent/90 text-cream py-3.5 rounded-full font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4">
-                                    REZERVOVAT
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+
+                <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; margin-bottom:4px;">
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Po</span>
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Út</span>
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">St</span>
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Čt</span>
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Pá</span>
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">So</span>
+                    <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Ne</span>
                 </div>
+
+                <div id="cal-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:24px;"></div>
+
+                <div id="cal-time-panel" style="display:none; margin-bottom:24px;">
+                    <p id="cal-time-label" style="font-weight:600; margin-bottom:12px;"></p>
+                    <div id="cal-time-slots" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+                </div>
+
+                <form id="booking-form">
+                    <input type="hidden" id="booking-date" name="date">
+                    <input type="hidden" id="booking-time" name="time">
+
+                    <div id="booking-fields" style="display:none;">
+                        <div class="form-group">
+                            <label for="b-name">Jméno *</label>
+                            <input type="text" id="b-name" name="name" required placeholder="Vaše jméno">
+                        </div>
+                        <div class="form-group">
+                            <label for="b-email">E-mail *</label>
+                            <input type="email" id="b-email" name="email" required placeholder="vas@email.cz">
+                        </div>
+                        <div class="form-group">
+                            <label for="b-phone">Telefon</label>
+                            <input type="tel" id="b-phone" name="phone" placeholder="+420...">
+                        </div>
+                        <div class="form-group">
+                            <label for="b-message">Poznámka</label>
+                            <textarea id="b-message" name="message" rows="3" placeholder="Stručně popište vaši situaci..."></textarea>
+                        </div>
+                    </div>
+
+                    <div id="booking-message" style="display:none; padding:12px 16px; border-radius:12px; font-size:0.875rem; margin-bottom:16px;"></div>
+
+                    <button type="submit" id="booking-submit" disabled class="btn-primary" style="width:100%; display:none;">
+                        REZERVOVAT
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-ink py-16 border-t border-cream/10 text-cream/70 text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-center md:text-left">
-                <div class="font-display text-2xl font-bold text-cream mb-2">WALANCE.</div>
-                <p class="text-cream/70">Byznys není sprint. Je to maraton v pohybu.</p>
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div>
+                <div class="footer-brand">WALANCE.</div>
+                <p class="footer-tagline">Byznys není sprint. Je to maraton v pohybu.</p>
             </div>
-            <div class="flex space-x-6">
-                <a href="#" class="hover:text-accent transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
-                <a href="mailto:jana@walance.cz" class="hover:text-accent transition-colors"><i data-lucide="mail" class="w-6 h-6"></i></a>
+            <div class="footer-links">
+                <a href="#" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                <a href="mailto:jana@walance.cz" aria-label="E-mail">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
             </div>
-            <div class="text-center md:text-right">
-                <p>© 2026 WALANCE.</p>
-                <p>Všechna práva vyhrazena. <span class="text-cream/50">v<?= htmlspecialchars($v) ?></span></p>
-            </div>
+            <div class="footer-copy">&copy; 2026 WALANCE. Všechna práva vyhrazena. <span style="margin-left: 8px; opacity: 0.5;">v<?= htmlspecialchars($v) ?></span></div>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- ============ JAVASCRIPT ============ -->
     <script>
-        lucide.createIcons();
-
-        // Scroll reveal
-        document.querySelectorAll('section').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transition = 'opacity 0.7s ease-out';
-            new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.style.opacity = '1'; });
-            }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }).observe(el);
-        });
-
-        // 1. Mobile Menu Toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobile-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.getElementById('menu-icon');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
         const closeIcon = document.getElementById('close-icon');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        function toggleMenu() {
-            mobileMenu.classList.toggle('hidden');
-            if (mobileMenu.classList.contains('hidden')) {
-                menuIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-            } else {
-                menuIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
-            }
-        }
-
-        menuBtn.addEventListener('click', toggleMenu);
-        
-        // Close menu when link is clicked
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', toggleMenu);
+        mobileToggle.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            hamburgerIcon.style.display = isOpen ? 'none' : 'block';
+            closeIcon.style.display = isOpen ? 'block' : 'none';
+            document.body.style.overflow = isOpen ? 'hidden' : '';
         });
 
-        // 2. Interactive Pillars
-        const pillarsData = [
-            { letter: 'W', title: 'Walk & Work', subtitle: 'Pohyb jako nástroj myšlení', desc: 'Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Ukončete mozkovou mlhu.' },
-            { letter: 'A', title: 'Awareness', subtitle: 'Diagnostika reality', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat varovné signály těla (mělké dýchání, ztuhlá šíje) dříve, než se zablokujete.' },
-            { letter: 'L', title: 'Longevity', subtitle: 'Udržitelnost funkčnosti', desc: 'Nejde o to dožít se stovky, ale nebýt v 50 letech "na odpis". Cílem je udržet plnou funkční kapacitu těla pro vysoký výkon.' },
-            { letter: 'A', title: 'Alignment', subtitle: 'Zarovnání a optimalizace', desc: 'Odstranění fyzického i mentálního tření. Srovnání páteře a zarovnání pracovní náplně se silnými stránkami (Job Crafting).' },
-            { letter: 'N', title: 'New Habits', subtitle: 'Job Crafting v praxi', desc: 'Velké změny nefungují. Fungují mikronávyky a neuroplasticita. Přepisování starých vzorců bez revolucí.' },
-            { letter: 'C', title: 'Clarity', subtitle: 'Informační hygiena', desc: 'Nevyhoříte z práce, ale z šumu. Techniky pro hlubokou práci (Deep Work) a ochrana proti digitální demenci.' },
-            { letter: 'E', title: 'Energy', subtitle: 'Management zdrojů', desc: 'Time management nestačí. Řídíme biologickou energii. Nejtěžší úkoly plánujeme do biologických špiček.' },
-        ];
-
-        const buttons = document.querySelectorAll('.pillar-btn');
-        const bgLetter = document.getElementById('p-bg-letter');
-        const titleEl = document.getElementById('p-title');
-        const subtitleEl = document.getElementById('p-subtitle');
-        const descEl = document.getElementById('p-desc');
-        const contentBox = document.getElementById('pillar-content');
-
-        const inactiveClasses = 'pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/5 border-cream/20 hover:bg-cream/10';
-        const activeClasses = 'pillar-btn w-full text-left p-5 rounded-2xl border-l-4 transition-all duration-300 flex items-center group bg-cream/10 border-accent';
-
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const index = parseInt(this.getAttribute('data-index'));
-                const data = pillarsData[index];
-
-                buttons.forEach(b => {
-                    b.className = inactiveClasses;
-                    b.querySelector('.btn-letter').className = 'text-2xl font-display font-black mr-6 w-8 text-cream/60 group-hover:text-cream btn-letter';
-                    b.querySelector('.btn-title').className = 'block font-bold text-lg text-cream/70 group-hover:text-cream btn-title';
-                    b.querySelector('.btn-arrow').classList.add('opacity-0');
-                });
-
-                this.className = activeClasses;
-                this.querySelector('.btn-letter').className = 'text-2xl font-display font-black mr-6 w-8 text-accent btn-letter';
-                this.querySelector('.btn-title').className = 'block font-bold text-lg text-cream btn-title';
-                this.querySelector('.btn-arrow').classList.remove('opacity-0');
-
-                contentBox.classList.remove('animate-fade-in');
-                void contentBox.offsetWidth;
-                contentBox.classList.add('animate-fade-in');
-
-                bgLetter.textContent = data.letter;
-                titleEl.textContent = data.title;
-                subtitleEl.textContent = data.subtitle;
-                descEl.textContent = data.desc;
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                hamburgerIcon.style.display = 'block';
+                closeIcon.style.display = 'none';
+                document.body.style.overflow = '';
             });
         });
 
-        // 3. Kontaktní formulář (AJAX, bez přenačtení)
+        // Scroll reveal (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth nav shadow on scroll
+        const nav = document.querySelector('.nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                nav.style.boxShadow = '0 1px 8px rgba(0,0,0,0.06)';
+            } else {
+                nav.style.boxShadow = 'none';
+            }
+        }, { passive: true });
+
+        // Contact form (AJAX)
         const contactForm = document.getElementById('contact-form');
         const contactMsg = document.getElementById('contact-message');
-        const contactSubmit = document.getElementById('contact-submit');
-        const apiBase = 'api';
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            contactSubmit.disabled = true;
-            contactMsg.classList.add('hidden');
+            const btn = contactForm.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            contactMsg.style.display = 'none';
+
             const fd = new FormData(contactForm);
             const data = Object.fromEntries(fd);
+
             try {
-                const r = await fetch(apiBase + '/contact.php', {
+                const r = await fetch('api/contact.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 const res = await r.json();
-                contactMsg.classList.remove('hidden');
+                contactMsg.style.display = 'block';
                 if (res.success) {
-                    contactMsg.className = 'p-4 rounded-xl text-sm bg-green-100 text-green-800';
+                    contactMsg.style.background = '#dcfce7';
+                    contactMsg.style.color = '#166534';
                     contactMsg.textContent = res.message;
                     contactForm.reset();
                 } else {
-                    contactMsg.className = 'p-4 rounded-xl text-sm bg-red-100 text-red-800';
+                    contactMsg.style.background = '#fef2f2';
+                    contactMsg.style.color = '#991b1b';
                     contactMsg.textContent = res.error || 'Chyba při odesílání.';
                 }
             } catch (err) {
-                contactMsg.classList.remove('hidden');
-                contactMsg.className = 'p-4 rounded-xl text-sm bg-red-100 text-red-800';
+                contactMsg.style.display = 'block';
+                contactMsg.style.background = '#fef2f2';
+                contactMsg.style.color = '#991b1b';
                 contactMsg.textContent = 'Chyba připojení. Zkuste to později nebo napište na info@walance.cz';
             }
-            contactSubmit.disabled = false;
+            btn.disabled = false;
         });
 
-        // 4. Rezervační kalendář - měsíční
-        let calCurrentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+        // ---- BOOKING CALENDAR ----
+        const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+        const dayNames = ['neděle','pondělí','úterý','středa','čtvrtek','pátek','sobota'];
+        const dayNamesGen = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
+
+        let calCurrentMonth = '';
         let calData = { slots: {}, availability: {} };
         let calSelectedDate = null;
 
         function openBookingModal() {
-            document.getElementById('booking-modal').classList.remove('hidden');
+            const modal = document.getElementById('booking-modal');
+            modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
-            calCurrentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
             calSelectedDate = null;
+            document.getElementById('cal-time-panel').style.display = 'none';
+            document.getElementById('booking-fields').style.display = 'none';
+            document.getElementById('booking-submit').style.display = 'none';
+            document.getElementById('booking-message').style.display = 'none';
+            const now = new Date();
+            calCurrentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
             loadCalendarMonth();
-            document.getElementById('cal-time-panel').classList.add('hidden');
-            document.getElementById('booking-fields').classList.add('hidden');
-            document.getElementById('booking-date').value = '';
-            document.getElementById('booking-time').value = '';
-            lucide.createIcons();
         }
+
         function closeBookingModal() {
-            document.getElementById('booking-modal').classList.add('hidden');
+            document.getElementById('booking-modal').style.display = 'none';
             document.body.style.overflow = '';
         }
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !document.getElementById('booking-modal').classList.contains('hidden')) {
-                closeBookingModal();
-            }
+            if (e.key === 'Escape') closeBookingModal();
         });
 
         async function loadCalendarMonth() {
             const grid = document.getElementById('cal-grid');
-            grid.innerHTML = '<div class="col-span-7 py-12 text-center text-ink/50">Načítám…</div>';
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--ink-muted);">Načítám…</div>';
             try {
-                const r = await fetch(apiBase + '/slots.php?month=' + calCurrentMonth, { cache: 'no-store' });
-                const data = await r.json();
-                calData = data;
+                const r = await fetch('api/slots.php?month=' + calCurrentMonth, { cache: 'no-store' });
+                calData = await r.json();
                 renderCalendar();
             } catch (err) {
-                grid.innerHTML = '<div class="col-span-7 py-12 text-center text-ink/50">Chyba načtení (spusťte PHP server)</div>';
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:#991b1b;">Chyba načtení kalendáře.</div>';
             }
         }
 
         function renderCalendar() {
-            const [y, m] = calCurrentMonth.split('-').map(Number);
-            const first = new Date(y, m - 1, 1);
-            const last = new Date(y, m - 1 + 1, 0);
-            const daysInMonth = last.getDate();
-            const startOffset = (first.getDay() + 6) % 7; // Po = 0
-
-            const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
-            document.getElementById('cal-month-title').textContent = monthNames[m - 1] + ' ' + y;
-
+            const [year, month] = calCurrentMonth.split('-').map(Number);
+            document.getElementById('cal-month-title').textContent = monthNames[month - 1] + ' ' + year;
             const grid = document.getElementById('cal-grid');
             grid.innerHTML = '';
 
-            for (let i = 0; i < startOffset; i++) {
-                grid.innerHTML += '<div class="aspect-square"></div>';
+            const firstDay = new Date(year, month - 1, 1);
+            const offset = (firstDay.getDay() + 6) % 7;
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let i = 0; i < offset; i++) {
+                const empty = document.createElement('div');
+                grid.appendChild(empty);
             }
-            const today = new Date().toISOString().slice(0, 10);
+
             for (let d = 1; d <= daysInMonth; d++) {
-                const dateStr = y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-                const dayOfWeek = new Date(y, m - 1, d).getDay();
+                const dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                const dateObj = new Date(year, month - 1, d);
+                const dayOfWeek = dateObj.getDay();
+                const isPast = dateObj < today;
                 const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-                const isPast = dateStr < today;
-                const avail = calData.availability[dateStr];
-                const percent = avail ? avail.percent : 0;
-                const hasSlots = avail && avail.free > 0;
-                const hasReservations = avail && ((avail.pending || 0) + (avail.confirmed || 0) > 0);
 
-                let bg = 'bg-mist/30';
-                if (!isWeekend && !isPast) {
-                    if (hasSlots) {
-                        if (hasReservations) {
-                            if (percent >= 75) bg = 'bg-emerald-400 hover:bg-emerald-500';
-                            else if (percent >= 50) bg = 'bg-emerald-300 hover:bg-emerald-400';
-                            else if (percent >= 25) bg = 'bg-emerald-200 hover:bg-emerald-300';
-                            else bg = 'bg-emerald-100 hover:bg-emerald-200';
-                        } else {
-                            if (percent >= 75) bg = 'bg-emerald-600 hover:bg-emerald-700';
-                            else if (percent >= 50) bg = 'bg-emerald-500 hover:bg-emerald-600';
-                            else if (percent >= 25) bg = 'bg-emerald-300 hover:bg-emerald-400';
-                            else bg = 'bg-emerald-100 hover:bg-emerald-200';
-                        }
+                const cell = document.createElement('div');
+                cell.textContent = d;
+
+                const slots = calData.slots?.[dateStr];
+                const avail = calData.availability?.[dateStr];
+
+                if (isPast || isWeekend || !slots || slots.length === 0) {
+                    cell.style.background = 'rgba(226,232,240,0.2)';
+                    cell.style.color = 'var(--ink-muted)';
+                    if (isPast) cell.style.opacity = '0.5';
+                } else {
+                    const pct = avail ? avail.percent : 100;
+                    const hasReservations = avail && (avail.pending > 0 || avail.confirmed > 0);
+
+                    if (!hasReservations) {
+                        if (pct >= 75) { cell.style.background = '#059669'; cell.style.color = '#fff'; }
+                        else if (pct >= 50) { cell.style.background = '#10b981'; cell.style.color = '#fff'; }
+                        else if (pct >= 25) { cell.style.background = '#6ee7b7'; cell.style.color = 'var(--ink)'; }
+                        else { cell.style.background = '#d1fae5'; cell.style.color = 'var(--ink)'; }
                     } else {
-                        bg = 'bg-mist/40';
+                        if (pct >= 75) { cell.style.background = '#34d399'; cell.style.color = '#fff'; }
+                        else if (pct >= 50) { cell.style.background = '#6ee7b7'; cell.style.color = 'var(--ink)'; }
+                        else if (pct >= 25) { cell.style.background = '#a7f3d0'; cell.style.color = 'var(--ink)'; }
+                        else { cell.style.background = '#d1fae5'; cell.style.color = 'var(--ink)'; }
                     }
+
+                    cell.classList.add('cal-day-clickable');
+                    cell.addEventListener('click', () => selectDate(dateStr));
                 }
-                if (isWeekend) bg = 'bg-mist/20';
-                if (isPast) bg = 'bg-mist/20 opacity-60';
 
-                const clickable = !isWeekend && !isPast && hasSlots ? 'cursor-pointer' : 'cursor-default';
-                const textColor = hasSlots && (percent >= 75 || (percent >= 50 && !hasReservations)) ? 'text-white' : 'text-ink';
-                const selected = dateStr === calSelectedDate ? ' ring-2 ring-teal-500 ring-offset-2' : '';
-                grid.innerHTML += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center text-sm font-medium ${bg} ${clickable} ${textColor} min-h-[36px]${selected}" data-date="${dateStr}" data-has-slots="${hasSlots}">${d}</div>`;
+                if (calSelectedDate === dateStr) cell.classList.add('cal-day-selected');
+                grid.appendChild(cell);
             }
-
-            grid.querySelectorAll('[data-has-slots="true"]').forEach(cell => {
-                cell.addEventListener('click', () => selectDate(cell.dataset.date));
-            });
-            lucide.createIcons();
         }
 
         function selectDate(dateStr) {
             calSelectedDate = dateStr;
-            document.querySelectorAll('#cal-grid [data-date]').forEach(cell => {
-                cell.classList.toggle('ring-2', cell.dataset.date === dateStr);
-                cell.classList.toggle('ring-teal-500', cell.dataset.date === dateStr);
-                cell.classList.toggle('ring-offset-2', cell.dataset.date === dateStr);
-            });
-            const freeSlots = calData.slots[dateStr] || [];
-            document.getElementById('booking-date').value = dateStr;
-            document.getElementById('cal-selected-date').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
-            const timePanel = document.getElementById('cal-time-panel');
-            const slotsEl = document.getElementById('cal-time-slots');
-            slotsEl.innerHTML = '';
-            freeSlots.forEach(t => addSlotBtn(slotsEl, t));
-            timePanel.classList.remove('hidden');
-            document.getElementById('booking-fields').classList.add('hidden');
-            document.getElementById('booking-time').value = '';
-            document.getElementById('booking-submit').disabled = true;
-            document.getElementById('booking-submit-wrap').classList.replace('grid-rows-[1fr]', 'grid-rows-[0fr]');
-            requestAnimationFrame(() => {
-                const r = timePanel.getBoundingClientRect();
-                const vh = window.innerHeight;
-                if (r.bottom > vh || r.top < 0) {
-                    timePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            });
-        }
-        function addSlotBtn(container, time) {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.textContent = time;
-            btn.className = 'px-4 py-2 rounded-lg bg-mist/50 hover:bg-accent/80 hover:text-cream text-ink text-sm font-medium transition-colors time-slot-btn cursor-pointer';
-            btn.onclick = () => {
-                document.querySelectorAll('#cal-time-slots .time-slot-btn').forEach(b => {
-                    b.classList.remove('time-slot-selected');
+            renderCalendar();
+
+            const slots = calData.slots[dateStr] || [];
+            const timeSlotsEl = document.getElementById('cal-time-slots');
+            timeSlotsEl.innerHTML = '';
+
+            const dateObj = new Date(dateStr + 'T00:00:00');
+            const dayName = dayNames[dateObj.getDay()];
+            const day = dateObj.getDate();
+            const monthGen = dayNamesGen[dateObj.getMonth()];
+            document.getElementById('cal-time-label').textContent = 'Vyberte čas — ' + dayName + ' ' + day + '. ' + monthGen;
+
+            slots.forEach(time => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'time-slot-btn';
+                btn.textContent = time;
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('time-slot-selected'));
+                    btn.classList.add('time-slot-selected');
+                    document.getElementById('booking-date').value = dateStr;
+                    document.getElementById('booking-time').value = time;
+                    document.getElementById('booking-fields').style.display = 'block';
+                    document.getElementById('booking-submit').style.display = 'block';
+                    document.getElementById('booking-submit').disabled = false;
                 });
-                btn.classList.add('time-slot-selected');
-                document.getElementById('booking-time').value = time;
-                document.getElementById('booking-fields').classList.remove('hidden');
-                document.getElementById('booking-submit').disabled = false;
-                const wrap = document.getElementById('booking-submit-wrap');
-                wrap.classList.replace('grid-rows-[0fr]', 'grid-rows-[1fr]');
-                requestAnimationFrame(() => {
-                    const r = wrap.getBoundingClientRect();
-                    const vh = window.innerHeight;
-                    if (r.bottom > vh || r.top < 0) {
-                        wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }
-                });
-            };
-            container.appendChild(btn);
+                timeSlotsEl.appendChild(btn);
+            });
+
+            document.getElementById('cal-time-panel').style.display = 'block';
+            document.getElementById('booking-fields').style.display = 'none';
+            document.getElementById('booking-submit').style.display = 'none';
         }
 
+        // Calendar navigation
         document.getElementById('cal-prev').addEventListener('click', () => {
             const [y, m] = calCurrentMonth.split('-').map(Number);
             const d = new Date(y, m - 2, 1);
             calCurrentMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
             loadCalendarMonth();
         });
+
         document.getElementById('cal-next').addEventListener('click', () => {
             const [y, m] = calCurrentMonth.split('-').map(Number);
             const d = new Date(y, m, 1);
@@ -999,51 +1858,49 @@
             loadCalendarMonth();
         });
 
+        // Booking form submit
         document.getElementById('booking-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const form = e.target;
-            if (!form.date.value || !form.time.value) return;
-            const submitBtn = document.getElementById('booking-submit');
-            const msgEl = document.getElementById('booking-message');
-            submitBtn.disabled = true;
-            msgEl.classList.add('hidden');
-            const data = {
-                name: form.name.value,
-                email: form.email.value,
-                phone: form.phone.value,
-                date: form.date.value,
-                time: form.time.value,
-                message: form.message.value
-            };
+            const btn = document.getElementById('booking-submit');
+            const msg = document.getElementById('booking-message');
+            btn.disabled = true;
+            msg.style.display = 'none';
+
+            const fd = new FormData(e.target);
+            const data = Object.fromEntries(fd);
+
             try {
-                const r = await fetch(apiBase + '/booking.php', {
+                const r = await fetch('api/booking.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 const res = await r.json();
-                msgEl.classList.remove('hidden');
+                msg.style.display = 'block';
                 if (res.success) {
-                    msgEl.className = 'p-4 rounded-xl text-sm bg-green-100 text-green-800';
-                    msgEl.textContent = res.message;
-                    form.reset();
-                    document.getElementById('booking-date').value = '';
-                    document.getElementById('booking-time').value = '';
-                    document.getElementById('booking-fields').classList.add('hidden');
-                    document.getElementById('cal-time-panel').classList.add('hidden');
-                    document.getElementById('booking-submit-wrap').classList.replace('grid-rows-[1fr]', 'grid-rows-[0fr]');
+                    msg.style.background = '#dcfce7';
+                    msg.style.color = '#166534';
+                    msg.textContent = res.message || 'Rezervace odeslána!';
+                    e.target.reset();
+                    document.getElementById('booking-fields').style.display = 'none';
+                    document.getElementById('booking-submit').style.display = 'none';
+                    document.getElementById('cal-time-panel').style.display = 'none';
+                    calSelectedDate = null;
                     loadCalendarMonth();
                     setTimeout(closeBookingModal, 2000);
                 } else {
-                    msgEl.className = 'p-4 rounded-xl text-sm bg-red-100 text-red-800';
-                    msgEl.textContent = res.error || 'Chyba při rezervaci.';
+                    msg.style.background = '#fef2f2';
+                    msg.style.color = '#991b1b';
+                    msg.textContent = res.error || 'Chyba při odesílání.';
+                    btn.disabled = false;
                 }
             } catch (err) {
-                msgEl.classList.remove('hidden');
-                msgEl.className = 'p-4 rounded-xl text-sm bg-red-100 text-red-800';
-                msgEl.textContent = 'Chyba připojení. Zkuste to později nebo napište na info@walance.cz';
+                msg.style.display = 'block';
+                msg.style.background = '#fef2f2';
+                msg.style.color = '#991b1b';
+                msg.textContent = 'Chyba připojení. Zkuste to později nebo napište na info@walance.cz';
+                btn.disabled = false;
             }
-            submitBtn.disabled = false;
         });
     </script>
 </body>

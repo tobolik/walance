@@ -1,22 +1,23 @@
-# ZADÁNÍ PRO CURSOR: Redesign index.php → homepage-v2.php
+# ZADÁNÍ PRO CURSOR: Redesign index.php (in-place)
 
 ## Shrnutí
 
-Přepiš stávající `index.php` (Tailwind CDN + Lucide CDN, 1050 řádků, 13+ sekcí) na nový `homepage-v2.php` v minimalistickém V2 designu (inline CSS, inline SVG, 8 sekcí).
+Přepiš stávající `index.php` (Tailwind CDN + Lucide CDN, 1050 řádků, 13+ sekcí) na minimalistický V2 design (inline CSS, inline SVG, 8 sekcí) **přímo v souboru `index.php`**.
 
-**Vzorový soubor nového designu: `homepage-v2.html`** — obsahuje kompletní HTML + CSS + JS základ, ale chybí mu:
-1. PHP integrace (config, verze)
-2. Česká diakritika (většina textu je bez háčků/čárek)
-3. Rezervační modál s kalendářem (existuje jen v `index.php`)
-4. Správné napojení CTA tlačítek
+**Vzorový soubor nového designu: `homepage-v2.html`** — použij jako referenci pro:
+- Vizuální design (layout, typografie, barvy)
+- Strukturu sekcí (8 sekcí místo 13)
+- Inline CSS design system (CSS custom properties)
+- Inline SVG ikony (bez Lucide CDN)
 
-**Zdrojový soubor funkční logiky: `index.php`** — obsahuje:
-- Plně funkční rezervační modál s měsíčním kalendářem
-- Kontaktní formulář napojený na API
-- PHP config a verze
-- JavaScript pro booking (slots, calendar, form submit)
+**Co už funguje v `index.php` a musí zůstat zachované:**
+- PHP hlavička (`require_once __DIR__ . '/api/config.php'`)
+- Rezervační modál s měsíčním kalendářem (převést z Tailwind na inline CSS)
+- Kontaktní formulář napojený na API (převést z Tailwind na inline CSS)
+- JavaScript logika pro booking (slots, calendar, form submit)
+- Verze v komentáři a patičce
 
-**Cíl:** Zkombinuj design z `homepage-v2.html` s funkčností z `index.php` do jednoho souboru `homepage-v2.php`.
+**Cíl:** Přepsat `index.php` tak, aby používal V2 design z `homepage-v2.html`, ale zachoval veškerou stávající funkčnost (booking modál, kontaktní formulář, PHP integrace).
 
 ---
 
@@ -27,8 +28,8 @@ Přepiš stávající `index.php` (Tailwind CDN + Lucide CDN, 1050 řádků, 13+
 | `AUDIT-HOMEPAGE.md` | Kompletní technický + UX audit stávajícího webu — proč redesignujeme |
 | `CONTENT-EXTRACTED.md` | Veškerý obsah extrahovaný z index.php — strukturovaně po sekcích |
 | `CONTENT_CHECKLIST.md` | Přehled chybějícího obsahu (Lorem ipsum místa) |
-| `homepage-v2.html` | **Nový design** — inline CSS, bez Tailwind, zjednodušená struktura |
-| `index.php` | **Stávající web** — Tailwind + Lucide, fungující booking modál |
+| `homepage-v2.html` | **Vzor nového designu** — inline CSS, bez Tailwind, zjednodušená struktura |
+| `index.php` | **Soubor k úpravě** — stávající web s fungující logikou |
 
 ---
 
@@ -72,30 +73,44 @@ api/config.local.php    → DB credentials, API klíče (ne v gitu)
 
 ## Přesný postup — krok za krokem
 
-### KROK 1: Zkopíruj homepage-v2.html → homepage-v2.php
+### KROK 1: Nahraď Tailwind CDN + Lucide → inline CSS + inline SVG
 
-Doslova zkopíruj soubor. Pak začni upravovat.
+Odstraň z `<head>`:
+```html
+<!-- SMAZAT: -->
+<script src="https://cdn.tailwindcss.com?v=..."></script>
+<script src="https://unpkg.com/lucide@latest?v=..."></script>
+<script>tailwind.config = { ... }</script>
+```
 
-### KROK 2: Přidej PHP hlavičku
+Místo toho převezmi celý `<style>` blok z `homepage-v2.html` (řádky 21–1105), který obsahuje:
+- CSS reset a custom properties (design system)
+- Layout, typografie, navigace
+- Všechny sekce (hero, trust bar, problém, metoda, story, ROI, produkty, kontakt, FAQ, footer)
+- Responzivní media queries
+- Animace (fade-in, scroll-reveal)
 
-Na úplný začátek souboru (před `<!DOCTYPE html>`):
+Zachovej stávající PHP hlavičku:
 ```php
 <?php require_once __DIR__ . '/api/config.php'; $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0'; ?>
 ```
 
-Za `<head>` tag přidej:
-```html
-<!-- VERSION: <?= htmlspecialchars($v) ?> -->
-```
+Zachovej/aktualizuj meta tagy a Open Graph z homepage-v2.html.
 
-V Google Fonts URL přidej cache-busting:
+Zachovej cache-busting na Google Fonts:
 ```html
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&display=swap&v=<?= htmlspecialchars($v) ?>" rel="stylesheet">
 ```
 
+### KROK 2: Přepiš HTML strukturu sekcí podle V2 designu
+
+Převezmi HTML strukturu z `homepage-v2.html`. Všechny Tailwind třídy (`class="bg-cream text-ink ..."`) nahraď odpovídajícími CSS třídami z V2 stylu.
+
+Lucide ikony (`<i data-lucide="brain">`) nahraď inline SVG z `homepage-v2.html`.
+
 ### KROK 3: Oprav českou diakritiku
 
-Celý soubor `homepage-v2.html` je psaný česky **bez diakritiky**. Existuje jedna výjimka na řádku ~1250 ("Mikrozměny, které běží..."). Vše sjednoť na správnou češtinu.
+Texty převzaté z `homepage-v2.html` jsou psané česky **bez diakritiky**. Při přepisu do `index.php` rovnou použij správnou češtinu.
 
 #### Kompletní seznam oprav:
 
@@ -218,97 +233,11 @@ Celý soubor `homepage-v2.html` je psaný česky **bez diakritiky**. Existuje je
 - `Chyba pri odesilani.` → `Chyba při odesílání.`
 - `Chyba pripojeni. Zkuste to pozdeji nebo napiste na info@walance.cz` → `Chyba připojení. Zkuste to později nebo napište na info@walance.cz`
 
-### KROK 4: Přidej rezervační modál s kalendářem
+### KROK 4: Převeď booking modál z Tailwind na V2 inline CSS
 
-V `homepage-v2.html` chybí rezervační modál úplně. Musíš ho přidat. Zdrojem logiky je `index.php` (řádky 619–693 HTML, 836–1047 JS), ale **CSS musí být V2 styl** (inline CSS, žádný Tailwind).
+Stávající booking modál v `index.php` (řádky 619–693 HTML, 836–1047 JS) **funguje správně**. Převeď jeho HTML z Tailwind tříd na inline CSS / V2 CSS třídy.
 
-#### 4a. HTML modálu — vlož před `</body>`:
-
-```html
-<!-- ============ BOOKING MODAL ============ -->
-<div id="booking-modal" style="display:none; position:fixed; inset:0; z-index:200;">
-    <!-- Backdrop -->
-    <div onclick="closeBookingModal()" style="position:absolute; inset:0; background:rgba(30,41,59,0.6); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);"></div>
-    <!-- Modal box -->
-    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:calc(100% - 32px); max-width:640px; max-height:90vh; overflow-y:auto; background:var(--cream); border-radius:24px; box-shadow:0 24px 64px rgba(0,0,0,0.2);">
-        <!-- Header -->
-        <div style="position:sticky; top:0; background:var(--cream); z-index:10; display:flex; justify-content:flex-end; padding:16px 20px 0;">
-            <button onclick="closeBookingModal()" style="background:none; border:none; cursor:pointer; padding:8px; color:var(--ink);" aria-label="Zavřít">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-        </div>
-        <!-- Content -->
-        <div style="padding:0 32px 32px;">
-            <h2 class="font-display" style="font-size:1.75rem; font-weight:700; margin-bottom:8px;">Rezervace termínu</h2>
-            <p style="color:var(--ink-light); font-size:0.875rem; margin-bottom:24px;">Zelená = volné termíny. Vyberte den, pak čas.</p>
-
-            <!-- Calendar controls -->
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                <button id="cal-prev" style="background:none; border:1px solid var(--mist); border-radius:12px; padding:8px 12px; cursor:pointer; color:var(--ink);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                <span id="cal-month-title" class="font-display" style="font-weight:700; font-size:1.125rem;"></span>
-                <button id="cal-next" style="background:none; border:1px solid var(--mist); border-radius:12px; padding:8px 12px; cursor:pointer; color:var(--ink);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-            </div>
-
-            <!-- Day headers -->
-            <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; margin-bottom:4px;">
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Po</span>
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Út</span>
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">St</span>
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Čt</span>
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Pá</span>
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">So</span>
-                <span style="font-size:0.6875rem; font-weight:700; color:var(--ink-muted); text-transform:uppercase; padding:4px 0;">Ne</span>
-            </div>
-
-            <!-- Calendar grid -->
-            <div id="cal-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:24px;"></div>
-
-            <!-- Time slots -->
-            <div id="cal-time-panel" style="display:none; margin-bottom:24px;">
-                <p id="cal-time-label" style="font-weight:600; margin-bottom:12px;"></p>
-                <div id="cal-time-slots" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
-            </div>
-
-            <!-- Booking form -->
-            <form id="booking-form">
-                <input type="hidden" id="booking-date" name="date">
-                <input type="hidden" id="booking-time" name="time">
-
-                <div id="booking-fields" style="display:none;">
-                    <div class="form-group">
-                        <label for="b-name">Jméno *</label>
-                        <input type="text" id="b-name" name="name" required placeholder="Vaše jméno">
-                    </div>
-                    <div class="form-group">
-                        <label for="b-email">E-mail *</label>
-                        <input type="email" id="b-email" name="email" required placeholder="vas@email.cz">
-                    </div>
-                    <div class="form-group">
-                        <label for="b-phone">Telefon</label>
-                        <input type="tel" id="b-phone" name="phone" placeholder="+420...">
-                    </div>
-                    <div class="form-group">
-                        <label for="b-message">Poznámka</label>
-                        <textarea id="b-message" name="message" rows="3" placeholder="Stručně popište vaši situaci..."></textarea>
-                    </div>
-                </div>
-
-                <div id="booking-message" style="display:none; padding:12px 16px; border-radius:12px; font-size:0.875rem; margin-bottom:16px;"></div>
-
-                <button type="submit" id="booking-submit" disabled class="btn-primary" style="width:100%; display:none;">
-                    REZERVOVAT
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-```
-
-#### 4b. CSS pro modál — přidej do `<style>` bloku:
+Přidej do `<style>` bloku CSS pro modál:
 
 ```css
 /* ---- BOOKING MODAL ---- */
@@ -346,247 +275,31 @@ V `homepage-v2.html` chybí rezervační modál úplně. Musíš ho přidat. Zdr
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 ```
 
-#### 4c. JavaScript pro modál — přidej do `<script>` bloku:
-
-Převezmi logiku z `index.php` (řádky 836–1047), ale adaptuj pro V2:
-
-```javascript
-// ---- BOOKING CALENDAR ----
-const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
-const dayNames = ['neděle','pondělí','úterý','středa','čtvrtek','pátek','sobota'];
-const dayNamesGen = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
-
-let calCurrentMonth = '';
-let calData = { slots: {}, availability: {} };
-let calSelectedDate = null;
-
-function openBookingModal() {
-    const modal = document.getElementById('booking-modal');
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    calSelectedDate = null;
-    document.getElementById('cal-time-panel').style.display = 'none';
-    document.getElementById('booking-fields').style.display = 'none';
-    document.getElementById('booking-submit').style.display = 'none';
-    document.getElementById('booking-message').style.display = 'none';
-    const now = new Date();
-    calCurrentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-    loadCalendarMonth();
-}
-
-function closeBookingModal() {
-    document.getElementById('booking-modal').style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeBookingModal();
-});
-
-async function loadCalendarMonth() {
-    const grid = document.getElementById('cal-grid');
-    grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--ink-muted);">Načítám...</div>';
-    try {
-        const r = await fetch('api/slots.php?month=' + calCurrentMonth, { cache: 'no-store' });
-        calData = await r.json();
-        renderCalendar();
-    } catch (err) {
-        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:#991b1b;">Chyba načtení kalendáře.</div>';
-    }
-}
-
-function renderCalendar() {
-    const [year, month] = calCurrentMonth.split('-').map(Number);
-    document.getElementById('cal-month-title').textContent = monthNames[month - 1] + ' ' + year;
-    const grid = document.getElementById('cal-grid');
-    grid.innerHTML = '';
-
-    const firstDay = new Date(year, month - 1, 1);
-    const offset = (firstDay.getDay() + 6) % 7; // Monday = 0
-    const daysInMonth = new Date(year, month, 0).getDate();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Empty cells for offset
-    for (let i = 0; i < offset; i++) {
-        const empty = document.createElement('div');
-        grid.appendChild(empty);
-    }
-
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-        const dateObj = new Date(year, month - 1, d);
-        const dayOfWeek = dateObj.getDay();
-        const isPast = dateObj < today;
-        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
-        const cell = document.createElement('div');
-        cell.textContent = d;
-
-        const slots = calData.slots?.[dateStr];
-        const avail = calData.availability?.[dateStr];
-
-        if (isPast || isWeekend || !slots || slots.length === 0) {
-            cell.style.background = 'rgba(226,232,240,0.2)';
-            cell.style.color = 'var(--ink-muted)';
-            if (isPast) cell.style.opacity = '0.5';
-        } else {
-            const pct = avail ? avail.percent : 100;
-            const hasReservations = avail && (avail.pending > 0 || avail.confirmed > 0);
-
-            if (!hasReservations) {
-                if (pct >= 75) { cell.style.background = '#059669'; cell.style.color = '#fff'; }
-                else if (pct >= 50) { cell.style.background = '#10b981'; cell.style.color = '#fff'; }
-                else if (pct >= 25) { cell.style.background = '#6ee7b7'; cell.style.color = 'var(--ink)'; }
-                else { cell.style.background = '#d1fae5'; cell.style.color = 'var(--ink)'; }
-            } else {
-                if (pct >= 75) { cell.style.background = '#34d399'; cell.style.color = '#fff'; }
-                else if (pct >= 50) { cell.style.background = '#6ee7b7'; cell.style.color = 'var(--ink)'; }
-                else if (pct >= 25) { cell.style.background = '#a7f3d0'; cell.style.color = 'var(--ink)'; }
-                else { cell.style.background = '#d1fae5'; cell.style.color = 'var(--ink)'; }
-            }
-
-            cell.classList.add('cal-day-clickable');
-            cell.addEventListener('click', () => selectDate(dateStr));
-        }
-
-        if (calSelectedDate === dateStr) cell.classList.add('cal-day-selected');
-        grid.appendChild(cell);
-    }
-}
-
-function selectDate(dateStr) {
-    calSelectedDate = dateStr;
-    renderCalendar(); // Re-render to update selection
-
-    const slots = calData.slots[dateStr] || [];
-    const timeSlotsEl = document.getElementById('cal-time-slots');
-    timeSlotsEl.innerHTML = '';
-
-    const dateObj = new Date(dateStr + 'T00:00:00');
-    const dayName = dayNames[dateObj.getDay()];
-    const day = dateObj.getDate();
-    const monthGen = dayNamesGen[dateObj.getMonth()];
-    document.getElementById('cal-time-label').textContent = 'Vyberte čas — ' + dayName + ' ' + day + '. ' + monthGen;
-
-    slots.forEach(time => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'time-slot-btn';
-        btn.textContent = time;
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('time-slot-selected'));
-            btn.classList.add('time-slot-selected');
-            document.getElementById('booking-date').value = dateStr;
-            document.getElementById('booking-time').value = time;
-            document.getElementById('booking-fields').style.display = 'block';
-            document.getElementById('booking-submit').style.display = 'block';
-            document.getElementById('booking-submit').disabled = false;
-        });
-        timeSlotsEl.appendChild(btn);
-    });
-
-    document.getElementById('cal-time-panel').style.display = 'block';
-    document.getElementById('booking-fields').style.display = 'none';
-    document.getElementById('booking-submit').style.display = 'none';
-}
-
-// Calendar navigation
-document.getElementById('cal-prev').addEventListener('click', () => {
-    const [y, m] = calCurrentMonth.split('-').map(Number);
-    const d = new Date(y, m - 2, 1);
-    calCurrentMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-    loadCalendarMonth();
-});
-
-document.getElementById('cal-next').addEventListener('click', () => {
-    const [y, m] = calCurrentMonth.split('-').map(Number);
-    const d = new Date(y, m, 1);
-    calCurrentMonth = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-    loadCalendarMonth();
-});
-
-// Booking form submit
-document.getElementById('booking-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('booking-submit');
-    const msg = document.getElementById('booking-message');
-    btn.disabled = true;
-    msg.style.display = 'none';
-
-    const fd = new FormData(e.target);
-    const data = Object.fromEntries(fd);
-
-    try {
-        const r = await fetch('api/booking.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        const res = await r.json();
-        msg.style.display = 'block';
-        if (res.success) {
-            msg.style.background = '#dcfce7';
-            msg.style.color = '#166534';
-            msg.textContent = res.message || 'Rezervace odeslána!';
-            e.target.reset();
-            document.getElementById('booking-fields').style.display = 'none';
-            document.getElementById('booking-submit').style.display = 'none';
-            document.getElementById('cal-time-panel').style.display = 'none';
-            calSelectedDate = null;
-            loadCalendarMonth();
-            setTimeout(closeBookingModal, 2000);
-        } else {
-            msg.style.background = '#fef2f2';
-            msg.style.color = '#991b1b';
-            msg.textContent = res.error || 'Chyba při odesílání.';
-            btn.disabled = false;
-        }
-    } catch (err) {
-        msg.style.display = 'block';
-        msg.style.background = '#fef2f2';
-        msg.style.color = '#991b1b';
-        msg.textContent = 'Chyba připojení. Zkuste to později nebo napište na info@walance.cz';
-        btn.disabled = false;
-    }
-});
-```
+JavaScript logiku bookingu zachovej ze stávajícího `index.php` — jen uprav CSS třídy na V2 (inline styly místo Tailwind).
 
 ### KROK 5: Napoj CTA tlačítka na modál
 
-1. **"REZERVOVAT TERMÍN"** v produktu Crisis Mentoring — změň:
+1. **"REZERVOVAT TERMÍN"** v produktu Crisis Mentoring:
 ```html
-<!-- Z: -->
-<a href="#contact" class="product-cta product-cta--primary">REZERVOVAT TERMÍN</a>
-<!-- Na: -->
 <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">REZERVOVAT TERMÍN</button>
 ```
 
-2. **"OTEVŘÍT KALENDÁŘ"** v kontaktní sekci — změň:
+2. **"OTEVŘÍT KALENDÁŘ"** v kontaktní sekci:
 ```html
-<!-- Z: -->
-<button type="button" class="contact-booking-btn" onclick="if(typeof openBookingModal==='function')openBookingModal();else alert('...');">
-<!-- Na: -->
-<button type="button" class="contact-booking-btn" onclick="openBookingModal()">
+<button type="button" class="contact-booking-btn" onclick="openBookingModal()">OTEVŘÍT KALENDÁŘ</button>
 ```
 
-3. **Odstraň alert() fallback** — s modálem v souboru je `openBookingModal` vždy definována.
+### KROK 6: Zachovej verzi v patičce
 
-### KROK 6: Přidej verzi do patičky
-
-V `<footer>` přidej za copyright:
 ```html
-<div class="footer-copy">
-    &copy; 2026 WALANCE. Všechna práva vyhrazena.
-    <span style="margin-left: 8px; opacity: 0.5;">v<?= htmlspecialchars($v) ?></span>
-</div>
+<span style="margin-left: 8px; opacity: 0.5;">v<?= htmlspecialchars($v) ?></span>
 ```
 
 ---
 
-## Struktura sekcí — V1 (index.php) vs V2 (homepage-v2.php)
+## Struktura sekcí — co odebrat, co zachovat
 
-### Co se ODSTRAŇUJE z V1 (nepoužívej):
+### Co se ODSTRAŇUJE z index.php:
 | Sekce | Důvod odstranění |
 |---|---|
 | O metodě (id="about") | Duplicitní s Metoda WALANCE, texty = Lorem ipsum |
@@ -597,17 +310,17 @@ V `<footer>` přidej za copyright:
 ### Co ZŮSTÁVÁ (8 sekcí V2):
 | # | Sekce | Zdroj designu | Zdroj funkčnosti |
 |---|---|---|---|
-| 1 | Navigace | `homepage-v2.html` řádky 1107–1138 | Mobile menu toggle JS |
-| 2 | Hero | `homepage-v2.html` řádky 1141–1157 | — |
-| 3 | Trust bar | `homepage-v2.html` řádky 1159–1181 | — |
-| 4 | Problém | `homepage-v2.html` řádky 1183–1223 | — |
-| 5 | Metoda WALANCE | `homepage-v2.html` řádky 1225–1254 | — |
-| 6 | Příběh | `homepage-v2.html` řádky 1256–1279 | — |
-| 7 | ROI | `homepage-v2.html` řádky 1281–1293 | — |
-| 8 | Produkty | `homepage-v2.html` řádky 1295–1398 | Booking modál onclick |
-| 9 | Kontakt + FAQ | `homepage-v2.html` řádky 1400–1489 | Contact form + booking btn |
-| 10 | Footer | `homepage-v2.html` řádky 1491–1508 | — |
-| 11 | Booking modál | **NOVÝ** (viz Krok 4) | `index.php` řádky 619–693 + 836–1047 |
+| 1 | Navigace | `homepage-v2.html` | Mobile menu toggle JS |
+| 2 | Hero | `homepage-v2.html` | — |
+| 3 | Trust bar | `homepage-v2.html` | — |
+| 4 | Problém | `homepage-v2.html` | — |
+| 5 | Metoda WALANCE | `homepage-v2.html` | — |
+| 6 | Příběh | `homepage-v2.html` | — |
+| 7 | ROI | `homepage-v2.html` | — |
+| 8 | Produkty | `homepage-v2.html` | Booking modál onclick |
+| 9 | Kontakt + FAQ | `homepage-v2.html` | Contact form JS + booking btn |
+| 10 | Footer | `homepage-v2.html` | — |
+| 11 | Booking modál | Stávající `index.php` (převést CSS) | Stávající `index.php` JS |
 
 ---
 
@@ -621,9 +334,9 @@ V `<footer>` přidej za copyright:
 - Jakékoliv `<script src="...cdn...">` tagy
 
 ### POUŽÍVEJ:
-- Inline `<style>` blok v `<head>` (rozšiř stávající)
+- Inline `<style>` blok v `<head>` (převzít z `homepage-v2.html`)
 - CSS custom properties (`var(--accent)`, `var(--cream)`, ...)
-- Inline SVG ikony (už jsou v `homepage-v2.html` — brain, activity, users, check, chevron, calendar, linkedin, mail, arrow-right, hamburger, close)
+- Inline SVG ikony (převzít z `homepage-v2.html`)
 - Nativní HTML elementy (`<details>` pro FAQ, `<form>`, ...)
 - `font-family: var(--font-body)` a `font-family: var(--font-display)`
 
@@ -648,18 +361,20 @@ V `<footer>` přidej za copyright:
 
 ## Výstup
 
-Jeden soubor: **`homepage-v2.php`** v root adresáři projektu.
+Upravený soubor: **`index.php`** v root adresáři projektu.
 
-Soubor `homepage-v2.html` zachovej beze změny (jako referenci).
+Soubor `homepage-v2.html` zachovej beze změny (jako referenci designu).
 
 ### Checklist před dokončením:
-- [ ] Soubor je `homepage-v2.php` (ne .html)
-- [ ] PHP hlavička s `require_once __DIR__ . '/api/config.php'`
+- [ ] Úprava proběhla přímo v `index.php` (ne nový soubor)
+- [ ] PHP hlavička zachována: `require_once __DIR__ . '/api/config.php'`
 - [ ] Verze v HTML komentáři a v patičce
 - [ ] Cache-busting `?v=` na Google Fonts URL
 - [ ] **Kompletní česká diakritika** — žádný text bez háčků/čárek (projdi celý soubor!)
-- [ ] Rezervační modál s měsíčním kalendářem (inline CSS, ne Tailwind)
-- [ ] Modál: navigace měsíců, výběr dne, výběr času, formulář, submit
+- [ ] Tailwind CDN odstraněn, Lucide CDN odstraněn
+- [ ] Inline CSS z homepage-v2.html + booking modál CSS
+- [ ] Inline SVG místo Lucide ikon
+- [ ] Rezervační modál s měsíčním kalendářem (fungující, převedený na V2 CSS)
 - [ ] Kontaktní formulář → `api/contact.php` (POST JSON)
 - [ ] Rezervační formulář → `api/booking.php` (POST JSON)
 - [ ] Kalendářní data → `api/slots.php?month=YYYY-MM` (GET)
@@ -667,16 +382,16 @@ Soubor `homepage-v2.html` zachovej beze změny (jako referenci).
 - [ ] "OTEVŘÍT KALENDÁŘ" → `openBookingModal()`
 - [ ] Escape klávesa zavře modál
 - [ ] Mobile responsive (modál, kalendář, formuláře)
-- [ ] Žádný Tailwind, žádný Lucide CDN, žádný `<script src="...cdn...">`
-- [ ] Všechny SVG ikony inline
+- [ ] Žádný `<script src="...cdn...">` tag
 - [ ] Fade-in animace (Intersection Observer) zachovány
 - [ ] Nav shadow on scroll zachován
 - [ ] Open Graph meta tagy přítomny
+- [ ] Odstraněné sekce: O metodě, Pro koho, 7 pilířů, Reference
 
 ### Testování:
 ```bash
 php -S localhost:8000
-# Otevři http://localhost:8000/homepage-v2.php
+# Otevři http://localhost:8000/index.php
 ```
 
 API vyžaduje MySQL databázi a `api/config.local.php`. Pokud chybí, modál zobrazí "Chyba načtení kalendáře." — to je OK.
