@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [1.4.0] – 16.02.2026 14:15
-> Nepushnuto
+> Pushed: 16.02.2026 14:23
 
 ### Změněno
 - **Personalizace (ich-forma):** celý web přepsán z „my-formy" do první osoby (Jana Štěpaníková) — „Napište mi", „Ozvěte se mi", „Cílím na", „Pracuji s myšlením i s tělem"
