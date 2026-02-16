@@ -1403,7 +1403,7 @@
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 3.9 2.5 7.1 6 8.4V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.6c3.5-1.3 6-4.5 6-8.4a9 9 0 0 0-9-9z"/><path d="M10 17h4"/></svg>
                     </div>
                     <h3>Hlava (Software)</h3>
-                    <p>Mozková mlha po obědě. Rozhodovací paralýza. Neschopnost „vypnout" práci doma. Jedete na autopilot.</p>
+                    <p>Mozková mlha po obědě. Rozhodovací paralýza. Neschopnost „vypnout" práci doma. Jedete na autopilota.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon" style="background: rgba(90, 125, 90, 0.1);">
@@ -1546,8 +1546,8 @@
                     </div>
                 </div>
                 <div class="story-image-wrap fade-in">
-                    <img src="assets/images/hero-story-origin.jpg"
-                         alt="Jana na lůžku s ortézou a laptopem — autentický záběr zakladatelky WALANCE"
+                    <img src="assets/images/hero-story-jana.jpg"
+                         alt="Jana Štěpaníková — zakladatelka WALANCE"
                          class="story-image"
                          width="1800" height="1200"
                          loading="lazy"
