@@ -5,6 +5,25 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.3.0] – 15.02.2026 01:30
+
+### Změněno
+- **Homepage redesign V2:** kompletní přepis `index.php` — inline CSS + inline SVG místo Tailwind CDN + Lucide CDN
+- **Sekce:** zredukováno z 13 na 8 (odstraněny: O metodě, Pro koho, 7 pilířů, Reference)
+- **Booking modál:** převeden z Tailwind tříd na V2 inline CSS, zachována plná funkčnost
+- **Kontaktní formulář:** převeden z Tailwind tříd na V2 inline CSS
+- **Česká diakritika:** opraveny všechny texty převzaté z homepage-v2.html
+- **Open Graph meta tagy:** přidány/aktualizovány
+- **Story obrázek:** vyměněn za `hero-story-origin.jpg` + optimalizace načítání (`decoding="async"`, `fetchpriority="low"`)
+
+### Opraveno
+- **Booking modál:** reset stavu při znovuotevření — vyčištění stale date/time hodnot z předchozí interakce
+
+### Odstraněno
+- Tailwind CSS CDN (`cdn.tailwindcss.com`)
+- Lucide Icons CDN (`unpkg.com/lucide`)
+- Tailwind config script
+
 ## [1.2.5] – 15.02.2026 00:25
 
 ### Opraveno

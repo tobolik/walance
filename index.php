@@ -1307,11 +1307,13 @@
                     </div>
                 </div>
                 <div class="story-image-wrap fade-in">
-                    <img src="assets/images/hero-story.jpg"
+                    <img src="assets/images/hero-story-origin.jpg"
                          alt="Jana na lůžku s ortézou a laptopem — autentický záběr zakladatelky WALANCE"
                          class="story-image"
                          width="1800" height="1200"
-                         loading="lazy">
+                         loading="lazy"
+                         decoding="async"
+                         fetchpriority="low">
                 </div>
             </div>
         </div>
