@@ -5,6 +5,15 @@ Všechny významné změny v projektu WALANCE jsou dokumentovány v tomto soubor
 Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 
+## [1.3.2] – 16.02.2026 12:15
+
+### Přidáno
+- **Sekce 7 pilířů WALANCE:** interaktivní akronym W-A-L-A-N-C-E s detail panelem (inline CSS, bez Tailwind)
+- **Navigace:** logo WALANCE. odkazuje na sekci pilířů (`#pillars`)
+
+### Opraveno
+- **Hero CTA:** tlačítko „Zastavit vyhoření" směřuje na `#products` (bylo `#contact`)
+
 ## [1.3.1] – 16.02.2026 11:46
 
 ### Změněno
