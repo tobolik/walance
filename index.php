@@ -133,7 +133,7 @@
             margin-left: 1px;
         }
 
-        .nav-cta::after { color: var(--cream); }
+        .nav-links a.nav-cta::after { color: var(--cream); }
 
         .nav-cta {
             background: var(--accent);
@@ -1639,7 +1639,6 @@
                         <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">
                             REZERVOVAT TERMÍN
                         </button>
-                        <p class="product-note">Kapacita omezena (Úraz)</p>
                     </div>
                 </div>
 

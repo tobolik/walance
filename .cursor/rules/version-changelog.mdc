@@ -12,20 +12,25 @@ alwaysApply: true
 1. Zvyš verzi v `api/version.php` (např. 1.0.24 → 1.0.25)
 2. Přidej novou sekci na začátek CHANGELOG (hned za úvodní text, před předchozí verzi)
 3. **Povinně uveď datum A ČAS** ve formátu `DD.MM.YYYY HH:MM` (např. `15.02.2026 22:30`)
-4. Sekce `Změněno`, `Přidáno`, `Opraveno` – použij jen ty, které jsou relevantní
+4. **Po pushnutí** přidej řádek `> Pushed: DD.MM.YYYY HH:MM` pod záhlaví verze
+5. Sekce `Změněno`, `Přidáno`, `Opraveno` – použij jen ty, které jsou relevantní
 
 ## Formát záhlaví verze
 
 ```markdown
 ## [1.0.25] – 15.02.2026 22:30
+> Pushed: 15.02.2026 22:31
 ```
 
 **Důležité:** Nikdy nepoužívej jen datum (`15.02.2026`). Vždy přidej i čas (`15.02.2026 22:30`). Čas získáš z `git log` nebo aktuálního času.
+
+Řádek `> Pushed:` přidej **po úspěšném `git push`**. Pokud verze ještě nebyla pushnuta, řádek vynech nebo uveď `> Nepushnuto`.
 
 ## Příklad záznamu
 
 ```markdown
 ## [1.0.25] – 15.02.2026 22:30
+> Pushed: 15.02.2026 22:31
 
 ### Změněno
 - **Soubor:** popis změny
