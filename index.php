@@ -1762,7 +1762,7 @@
                         Jak začít?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Napište mi přes formulář nebo si rovnou rezervujte termín v kalendáři. Začneme krátkým auditem vaší situace — zdarma a nezávazně.</div>
+                    <div class="faq-answer"><a href="#contact" style="color: var(--accent); text-decoration: underline;">Napište mi přes formulář</a> nebo si rovnou <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">rezervujte termín v kalendáři</a>. Začneme krátkým auditem vaší situace — zdarma a nezávazně.</div>
                 </details>
             </div>
         </div>

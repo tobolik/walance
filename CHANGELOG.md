@@ -6,6 +6,13 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [1.4.1] – 16.02.2026 14:35
+> Nepushnuto
+
+### Změněno
+- **FAQ „Jak začít?":** text „Napište mi přes formulář" a „rezervujte termín v kalendáři" jsou klikací odkazy (kontakt / booking modal)
+- **FAQ „Potřebuji být fyzicky v Praze?":** nahrazeno za „Přijedete k nám do firmy?" + pozitivní odpověď
+
 ## [1.4.0] – 16.02.2026 14:15
 > Pushed: 16.02.2026 14:23
 
