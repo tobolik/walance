@@ -1694,13 +1694,13 @@
     <!-- ============ ROI ============ -->
     <section class="section roi-section fade-in">
         <div class="container">
-            <p class="section-label" style="color: rgba(250,249,247,0.5);">Matematika výkonu je neúprosná</p>
-            <div class="roi-number">8</div>
-            <p class="roi-unit">MINUT</p>
-            <p class="roi-text">Tolik času denně stačí ušetřit (eliminací mikrostresů a fyzického nepohodlí), aby se vám investice do WALANCE vrátila.</p>
+            <p class="section-label" style="color: rgba(250,249,247,0.5);">Proč se to vyplatí</p>
+            <div class="roi-number">3 v 1</div>
+            <p class="roi-unit">METODA</p>
+            <p class="roi-text">Fyzioterapie, koučink a Job Crafting v jednom systému. Místo tří specialistů pracujete s jedním člověkem, který vidí celý obraz.</p>
             <div class="roi-highlight">
-                <p><strong>60 MINUT</strong> — to je náš reálný cíl. Hodina čisté mentální kapacity denně navíc pro každého klíčového člověka.</p>
-                <small>Vynásobte si to hodinovou sazbou vašich lídrů. WALANCE není benefit. Je to prevence systémových výpadků a optimalizace vašeho nejdražšího aktiva — kapacity vašich lidí.</small>
+                <p><strong>Méně mikrostresů, víc čisté kapacity.</strong> Když přestanete bojovat s bolestí zad, únavou a rozhodovací paralýzou, uvolníte energii pro to, co opravdu potřebujete řešit.</p>
+                <small>WALANCE není wellness benefit. Je to investice do kapacity vašich lidí — vašeho nejdražšího aktiva.</small>
             </div>
         </div>
     </section>
@@ -1948,7 +1948,7 @@
                     </summary>
                     <div class="faq-answer">
                         <strong>CRISIS MENTORING (1:1):</strong> Od 3 500 Kč za 90minutovou session. Balíčky (3 session) od 9 000 Kč. Tříměsíční mentoring na míru — cena dle rozsahu.<br><br>
-                        <strong>OFFICE RESET&trade; (firmy):</strong> Od 45 000 Kč za tým. Závisí na velikosti týmu a rozsahu auditu. Posíláme detailní nabídku do 48 hodin od prvního hovoru.<br><br>
+                        <strong>OFFICE RESET&trade; (firmy):</strong> Od 45 000 Kč za tým. Závisí na velikosti týmu a rozsahu auditu. Pošlu vám detailní nabídku do 48 hodin od prvního hovoru.<br><br>
                         <strong>BYZNYS Z POSTELE:</strong> Zcela zdarma — masterclass, e-book i komunita.<br><br>
                         Úvodní konzultace (30 min) je vždy zdarma a nezávazná.
                     </div>
