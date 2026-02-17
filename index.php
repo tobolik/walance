@@ -2185,7 +2185,8 @@
                     document.getElementById('booking-fields').style.display = 'block';
                     document.getElementById('booking-submit').style.display = 'block';
                     document.getElementById('booking-submit').disabled = false;
-                    document.getElementById('b-name').focus();
+                    document.getElementById('booking-submit').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    setTimeout(() => document.getElementById('b-name').focus(), 400);
                 });
                 timeSlotsEl.appendChild(btn);
             });
