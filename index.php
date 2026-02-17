@@ -1006,24 +1006,24 @@
 
         .story-author-img {
             flex-shrink: 0;
-            width: 100%;
-            max-width: 200px;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 20px;
         }
 
         @media (min-width: 768px) {
             .story-author-img {
-                width: 180px;
-                margin: 0;
+                margin: 4px 0 0 0;
             }
         }
 
         .story-author-img img {
             width: 100%;
-            aspect-ratio: 1/1;
+            height: 100%;
             object-fit: cover;
-            border-radius: 16px;
+            border-radius: 50%;
             display: block;
+            border: 3px solid rgba(74, 124, 89, 0.5);
         }
 
         .story-author-text p {
