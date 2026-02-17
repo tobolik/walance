@@ -1605,10 +1605,10 @@
     <header class="hero">
         <div class="hero-deco">W</div>
         <div class="container">
-            <span class="hero-accent-line">Pro lídry a týmy, které odmítají vyhořet</span>
+            <span class="hero-accent-line">Anatomie udržitelného výkonu</span>
             <h1>Váš lidský<br><em>hardware hoří.</em></h1>
             <p class="hero-sub">
-                Zvyšte výkon týmu i sebe ne tím, že budete pracovat víc, ale tím, že <strong>přestanete bojovat s vlastní biologií</strong>. Fyzioterapie + koučink + Job Crafting v jednom systému.
+                Zvyšte výkon týmu i sebe ne tím, že budete pracovat víc, ale tím, že <strong>přestanete bojovat s vlastní biologií</strong>.
             </p>
             <div class="hero-cta-row">
                 <a href="#products" class="btn-primary">
@@ -1625,16 +1625,16 @@
         <div class="container">
             <div class="trust-bar-inner">
                 <div class="trust-item">
-                    <span class="trust-number">3 v 1</span>
-                    <span class="trust-label">Fyzio + koučink + Job Crafting</span>
-                </div>
-                <div class="trust-item">
                     <span class="trust-number">7</span>
                     <span class="trust-label">Pilířů metody</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">4</span>
-                    <span class="trust-label">Ověřené případové studie</span>
+                    <span class="trust-number">60 min</span>
+                    <span class="trust-label">Ušetřený čas denně</span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-number">5</span>
+                    <span class="trust-label">Ověřených případových studií</span>
                 </div>
                 <div class="trust-item">
                     <span class="trust-number">4 týdny</span>
@@ -1841,12 +1841,12 @@
             </div>
             <div class="casestudy-list">
 
-                <!-- PŘÍBĚH 1 — Vlaďka -->
+                <!-- PŘÍBĚH 1 — Markéta -->
                 <details class="casestudy-item fade-in">
                     <summary>
                         <div class="casestudy-summary">
                             <p class="casestudy-tag">Deprese &amp; dechové bloky</p>
-                            <h3>Vlaďka — Konečně se nadechnout</h3>
+                            <h3>Markéta — Konečně se nadechnout</h3>
                             <p class="casestudy-subtitle">Jak dech a pohyb rozpustily letité úzkosti</p>
                         </div>
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
