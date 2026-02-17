@@ -6,6 +6,13 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.1.0] – 15.02.2026 00:15
+> Nepushnuto
+
+### Přidáno
+- **Slovníček reality:** nová sekce mezi Kontaktem a FAQ — 3 viditelné pojmy (Prezentismus, Brain fog, Deep work) + 5 dalších na rozklik (Job crafting, Tech neck, Chronický stres, Mikropřestávka, Ergonomie)
+- **O autorce metody:** rozbalovací blok pod příběhem Klienta 0 v Story sekci — krátký profil Jany Štěpaníkové
+
 ## [2.0.0] – 14.02.2026 23:45
 
 ### Přidáno

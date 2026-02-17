@@ -936,6 +936,61 @@
             color: var(--cream) !important;
         }
 
+        /* ---- STORY AUTHOR DETAILS ---- */
+        .story-author-details {
+            margin-top: 40px;
+            border: 1px solid rgba(250, 249, 247, 0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .story-author-details:hover {
+            border-color: rgba(74, 124, 89, 0.4);
+        }
+
+        .story-author-details summary {
+            padding: 20px 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--cream);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            user-select: none;
+        }
+
+        .story-author-details summary::-webkit-details-marker { display: none; }
+
+        .story-author-details summary svg {
+            width: 20px;
+            height: 20px;
+            stroke: rgba(250, 249, 247, 0.5);
+            stroke-width: 2;
+            fill: none;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .story-author-details[open] summary svg { transform: rotate(180deg); }
+
+        .story-author-body {
+            padding: 0 24px 24px;
+            color: rgba(250, 249, 247, 0.8);
+            line-height: 1.7;
+        }
+
+        .story-author-body p {
+            margin-bottom: 12px;
+        }
+
+        .story-author-body p:last-child {
+            margin-bottom: 0;
+        }
+
         /* ---- ROI HIGHLIGHT ---- */
         .roi-section {
             background: linear-gradient(135deg, var(--ink) 0%, #0f172a 100%);
@@ -1400,6 +1455,96 @@
 
         .contact-email:hover { text-decoration: underline; }
 
+        /* ---- GLOSSARY ---- */
+        .glossary-section {
+            background: var(--white);
+        }
+
+        .glossary-list {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .glossary-item {
+            background: var(--mist-light);
+            border-radius: 16px;
+            border: 1px solid var(--mist);
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .glossary-item:hover { border-color: rgba(13, 148, 136, 0.3); }
+
+        .glossary-item summary {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            user-select: none;
+        }
+
+        .glossary-item summary::-webkit-details-marker { display: none; }
+
+        .glossary-item summary h3 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .glossary-item summary svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--ink-muted);
+            stroke-width: 2;
+            fill: none;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .glossary-item[open] summary svg { transform: rotate(180deg); }
+
+        .glossary-body {
+            padding: 0 24px 20px;
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+
+        .glossary-body p {
+            margin-bottom: 8px;
+        }
+
+        .glossary-cta {
+            color: var(--accent);
+            font-size: 0.9375rem;
+        }
+
+        .glossary-toggle {
+            display: block;
+            margin: 24px auto 0;
+            background: none;
+            border: 1px solid var(--mist);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .glossary-toggle:hover {
+            border-color: var(--accent);
+            background: rgba(74, 124, 89, 0.05);
+        }
+
         /* ---- FAQ ---- */
         .faq-section {
             background: var(--mist-light);
@@ -1814,6 +1959,17 @@
                          fetchpriority="low">
                 </div>
             </div>
+
+            <details class="story-author-details fade-in">
+                <summary>
+                    O autorce metody
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="story-author-body">
+                    <p>Jana je autorkou metody WALANCE a „Klientem 0" (celý systém nejprve vyzkoušela na sobě). Po letech v korporátním světě, kde zažila vyhoření, chronické bolesti a ztrátu smyslu, vytvořila metodu, která jí vrátila zdraví, čas a radost z práce.</p>
+                    <p>Dnes pracuje s firmami i jednotlivci. Její přístup kombinuje poznatky z neurovědy, ergonomie, time managementu a koučinku do jednoho praktického systému.</p>
+                </div>
+            </details>
         </div>
     </section>
 
@@ -2174,6 +2330,112 @@
         </div>
     </section>
 
+    <!-- ============ SLOVNÍČEK ============ -->
+    <section class="section glossary-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Slovníček reality</p>
+                <h2 class="section-title">Pojmy, které řešíte — a co s nimi</h2>
+            </div>
+
+            <div class="glossary-list">
+                <details class="glossary-item fade-in">
+                    <summary>
+                        <h3>Prezentismus</h3>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="glossary-body">
+                        <p>Stav, kdy je člověk fyzicky přítomen v práci, ale mentálně nepracuje. Produktivita klesá o 30–40 %.</p>
+                        <p class="glossary-cta"><strong>Co s tím:</strong> WALANCE audit odhalí míru prezentismu ve vaší firmě a navrhne konkrétní intervence.</p>
+                    </div>
+                </details>
+
+                <details class="glossary-item fade-in">
+                    <summary>
+                        <h3>Brain fog</h3>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="glossary-body">
+                        <p>Mentální mlha — zpomalené myšlení, potíže s koncentrací a rozhodováním. Častý důsledek chronického stresu, nedostatku spánku nebo dehydratace.</p>
+                        <p class="glossary-cta"><strong>Co s tím:</strong> Pracuji na spánkové hygieně, hydrataci a mikropřestávkách, které brain fog snižují.</p>
+                    </div>
+                </details>
+
+                <details class="glossary-item fade-in">
+                    <summary>
+                        <h3>Deep work</h3>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="glossary-body">
+                        <p>Stav plného soustředění na kognitivně náročný úkol bez rušení. Cal Newport ukázal, že je klíčem k hodnotnému výkonu.</p>
+                        <p class="glossary-cta"><strong>Co s tím:</strong> Pomáhám vytvořit podmínky pro deep work: time blocking, digitální hygiena, fyzické prostředí.</p>
+                    </div>
+                </details>
+
+                <div id="glossary-more" style="display: none;">
+                    <details class="glossary-item fade-in">
+                        <summary>
+                            <h3>Job crafting</h3>
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        <div class="glossary-body">
+                            <p>Aktivní přeměna vlastní pracovní role — úkolů, vztahů nebo vnímání práce — tak, aby lépe odpovídala vašim silným stránkám a hodnotám.</p>
+                            <p class="glossary-cta"><strong>Co s tím:</strong> V rámci WALANCE pracuji na alignmentu mezi vašimi hodnotami a tím, jak reálně pracujete.</p>
+                        </div>
+                    </details>
+
+                    <details class="glossary-item fade-in">
+                        <summary>
+                            <h3>Tech neck</h3>
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        <div class="glossary-body">
+                            <p>Chronická bolest krční páteře a ramen způsobená předkloněnou hlavou u obrazovky. Postihuje až 80 % kancelářských pracovníků.</p>
+                            <p class="glossary-cta"><strong>Co s tím:</strong> Ergonomický audit pracoviště + korekční cvičení integrovaná do pracovního dne.</p>
+                        </div>
+                    </details>
+
+                    <details class="glossary-item fade-in">
+                        <summary>
+                            <h3>Chronický stres</h3>
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        <div class="glossary-body">
+                            <p>Dlouhodobá aktivace stresové odpovědi, která poškozuje imunitní systém, kognitivní funkce i emoční regulaci.</p>
+                            <p class="glossary-cta"><strong>Co s tím:</strong> Mapuji spouštěče stresu a implementuji techniky regulace nervového systému.</p>
+                        </div>
+                    </details>
+
+                    <details class="glossary-item fade-in">
+                        <summary>
+                            <h3>Mikropřestávka</h3>
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        <div class="glossary-body">
+                            <p>Krátká (1–5 min) přestávka v práci zaměřená na regeneraci — pohyb, dýchání, odpojení od obrazovky.</p>
+                            <p class="glossary-cta"><strong>Co s tím:</strong> Integruji mikropřestávky do pracovního dne jako systémový návyk, ne nárazovou aktivitu.</p>
+                        </div>
+                    </details>
+
+                    <details class="glossary-item fade-in">
+                        <summary>
+                            <h3>Ergonomie</h3>
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        <div class="glossary-body">
+                            <p>Věda o přizpůsobení pracovního prostředí lidskému tělu. Správná ergonomie snižuje bolest a zvyšuje výkon.</p>
+                            <p class="glossary-cta"><strong>Co s tím:</strong> Audit pracoviště + konkrétní doporučení pro nastavení stolu, monitoru, židle a návyků.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <button type="button" class="glossary-toggle" id="glossary-toggle-btn">
+                    Zobrazit celý slovníček →
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- ============ FAQ ============ -->
     <section class="section faq-section">
         <div class="container">
@@ -2393,6 +2655,19 @@
         }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Glossary toggle
+        document.getElementById('glossary-toggle-btn').addEventListener('click', function() {
+            const more = document.getElementById('glossary-more');
+            const isHidden = more.style.display === 'none';
+            more.style.display = isHidden ? 'flex' : 'none';
+            more.style.flexDirection = 'column';
+            more.style.gap = '12px';
+            this.textContent = isHidden ? '← Skrýt slovníček' : 'Zobrazit celý slovníček →';
+            if (isHidden) {
+                more.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            }
+        });
 
         // Smooth nav shadow on scroll
         const nav = document.querySelector('.nav');
