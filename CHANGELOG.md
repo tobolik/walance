@@ -6,6 +6,14 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.2.0] – 17.02.2026 18:50
+
+### Změněno
+- **Slovníček reality:** kompletní redesign z akordeonového seznamu na kartičkový grid layout (3 sloupce desktop, 2 tablet, 1 mobil)
+- Každá kartička má ikonu (SVG), název, krátký popis a po kliknutí rozbalovací detail „Co s tím"
+- Tlačítko „Celý slovníček" zobrazí zbývajících 5 pojmů ve stejném grid layoutu
+- Vizuálně čistější a moderní prezentace slovníčku
+
 ## [2.1.1] – 17.02.2026 18:25
 > Pushed: 17.02.2026 18:25
 
