@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [1.5.1] – 17.02.2026 03:51
-> Nepushnuto
+> Pushed: 17.02.2026 03:51
 
 ### Změněno
 - **Booking modal:** po výběru času se automaticky nastaví focus na pole „Jméno a příjmení"
