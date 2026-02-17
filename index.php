@@ -1500,20 +1500,20 @@
         <div class="container">
             <div class="trust-bar-inner">
                 <div class="trust-item">
-                    <span class="trust-number">50+</span>
-                    <span class="trust-label">Lídrů prošlo metodou</span>
+                    <span class="trust-number">3 v 1</span>
+                    <span class="trust-label">Fyzio + koučink + Job Crafting</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">12</span>
-                    <span class="trust-label">Firem dokončilo Reset</span>
+                    <span class="trust-number">7</span>
+                    <span class="trust-label">Pilířů metody</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">94 %</span>
-                    <span class="trust-label">Klientů pokračuje</span>
+                    <span class="trust-number">4</span>
+                    <span class="trust-label">Ověřené případové studie</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">10+ let</span>
-                    <span class="trust-label">Praxe v oboru</span>
+                    <span class="trust-number">4 týdny</span>
+                    <span class="trust-label">Program Office Reset</span>
                 </div>
             </div>
         </div>
@@ -1732,29 +1732,56 @@
         </div>
     </section>
 
-    <!-- ============ TESTIMONIALS ============ -->
-    <section class="section" style="background: var(--white);">
+    <!-- ============ PŘÍBĚHY KLIENTŮ ============ -->
+    <section id="results" class="section" style="background: var(--white);">
         <div class="container">
             <div class="section-header fade-in">
-                <p class="section-label">Reference</p>
-                <h2 class="section-title">Co říkají klienti</h2>
+                <p class="section-label">Reálné výsledky</p>
+                <h2 class="section-title">4 lidé, 4 příběhy, 1 metoda</h2>
+                <p class="section-subtitle">Každý přišel s jiným problémem. Všichni odcházeli s funkčním systémem.</p>
             </div>
-            <div class="cards-grid">
-                <div class="card fade-in" style="border-left: 3px solid var(--accent);">
-                    <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 16px;">&bdquo;Po Office Resetu se nám snížila nemocnost v týmu o 30 %. Lidé začali chodit do práce s energií, ne jen s kávou.&ldquo;</p>
-                    <p style="font-weight: 700; font-size: 0.875rem;">Martin K.</p>
-                    <p style="font-size: 0.8125rem; color: var(--ink-muted);">CEO, technologická firma (35 zaměstnanců)</p>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+
+                <!-- PŘÍBĚH 1 — Jana nahradí reálným příběhem -->
+                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
+                    <div>
+                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 1 <!-- např. "Chronická bolest zad" --></p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                    </div>
                 </div>
-                <div class="card fade-in" style="border-left: 3px solid var(--accent);">
-                    <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 16px;">&bdquo;Jana mi za jednu session pomohla víc než rok koučinku. Konečně chápu, proč mě po obědě nefunguje hlava a co s tím dělat.&ldquo;</p>
-                    <p style="font-weight: 700; font-size: 0.875rem;">Petra S.</p>
-                    <p style="font-size: 0.8125rem; color: var(--ink-muted);">COO, e-commerce</p>
+
+                <!-- PŘÍBĚH 2 -->
+                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
+                    <div>
+                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 2</p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                    </div>
                 </div>
-                <div class="card fade-in" style="border-left: 3px solid var(--accent);">
-                    <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 16px;">&bdquo;Myslel jsem, že bolest zad je daň za sedavou práci. WALANCE mi ukázal, že je to opravitelné — a že s tím přímo souvisí moje rozhodování.&ldquo;</p>
-                    <p style="font-weight: 700; font-size: 0.875rem;">Tomáš R.</p>
-                    <p style="font-size: 0.8125rem; color: var(--ink-muted);">CTO, SaaS startup</p>
+
+                <!-- PŘÍBĚH 3 -->
+                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
+                    <div>
+                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 3</p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                    </div>
                 </div>
+
+                <!-- PŘÍBĚH 4 -->
+                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
+                    <div>
+                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 4</p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
