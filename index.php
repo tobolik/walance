@@ -1555,7 +1555,7 @@
             </div>
 
             <div class="verdict-box fade-in">
-                <h3>Tohle se dá změnit. Celé. Najednou.</h3>
+                <h3>Tohle se dá změnit. Celé. Systematicky.</h3>
                 <p>Metoda WALANCE pracuje se všemi třemi vrstvami současně — s tělem, myslí i nastavením práce. Protože když opravíte jen jednu, ty další vás stáhnou zpět.</p>
             </div>
         </div>
@@ -1581,12 +1581,12 @@
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 2</p>
                     <h3>Software (Hlava &amp; Koučink)</h3>
-                    <p>Odvirujeme procesor. Rozhodovací paralýza a neschopnost vypnout jsou jako zasekané aplikace na pozadí. Pomocí koučinku uvolníme vaši mentální kapacitu. Získáte čistou hlavu pro strategická rozhodnutí, ne pro stres.</p>
+                    <p>Odviruji procesor. Rozhodovací paralýza a neschopnost vypnout jsou jako zasekané aplikace na pozadí. Pomocí koučinku uvolním vaši mentální kapacitu. Získáte čistou hlavu pro strategická rozhodnutí, ne pro stres.</p>
                 </div>
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 3</p>
                     <h3>Operační systém (Návyky &amp; Job Crafting)</h3>
-                    <p>Automatizace zdraví a práce. Mikrozměny a rituály nastavíme tak, aby běžely na pozadí a šetřily energii. Pomocí Job Craftingu designujeme práci tak, aby vás nabíjela. Sladíme vaše silné stránky s náplní role.</p>
+                    <p>Automatizace zdraví a práce. Mikrozměny a rituály nastavím tak, aby běžely na pozadí a šetřily energii. Pomocí Job Craftingu designuji práci tak, aby vás nabíjela. Sladím vaše silné stránky s náplní role.</p>
                 </div>
             </div>
         </div>
@@ -1799,7 +1799,7 @@
 
                 <!-- Product 2: Crisis Mentoring (Featured) -->
                 <div class="product-card product-card--featured fade-in">
-                    <span class="product-badge">Bestseller</span>
+                    <span class="product-badge">Doporučuji</span>
                     <div class="product-header">Pro lídry (1-on-1)</div>
                     <div class="product-body">
                         <h3>CRISIS MENTORING</h3>
@@ -1925,21 +1925,21 @@
                         Jak dlouho trvá spolupráce?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Zaměřujeme se na skutečnou implementaci, ne na jednorázové teorie. Respektujeme čas potřebný pro změnu návyků.<br><br><strong>OFFICE RESET&trade; (firemní týmy):</strong> 4týdenní cyklus. První týden nastavíme systém a provedeme audit (LIVE), další tři týdny slouží k fixaci nových návyků do praxe (hybridní formou).<br><br><strong>CRISIS MENTORING (lídři 1:1):</strong> Přizpůsobujeme se stavu vašeho systému. Nabízíme buď jednorázovou strategickou intervenci (90 min) pro okamžitou úlevu, nebo 3měsíční mentoring pro kompletní přestavbu pracovních návyků.</div>
+                    <div class="faq-answer">Zaměřuji se na skutečnou implementaci, ne na jednorázové teorie. Respektuji čas potřebný pro změnu návyků.<br><br><strong>OFFICE RESET&trade; (firemní týmy):</strong> 4týdenní cyklus. První týden nastavím systém a provedu audit (LIVE), další tři týdny slouží k fixaci nových návyků do praxe (hybridní formou).<br><br><strong>CRISIS MENTORING (lídři 1:1):</strong> Přizpůsobuji se stavu vašeho systému. Nabízím buď jednorázovou strategickou intervenci (90 min) pro okamžitou úlevu, nebo 3měsíční mentoring pro kompletní přestavbu pracovních návyků.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Kde probíhá spolupráce?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Působíme po celé ČR. Za klienty jezdím tam, kde je jejich byznys.<br><br><strong>Pro firmy (OFFICE RESET&trade;):</strong> Úvodní audit a nastavení pracoviště probíhá vždy fyzicky u vás ve firmě. Následný mentoring pro fixaci návyků řídíme hybridně/online.<br><br><strong>Pro lídry (CRISIS MENTORING):</strong> Tělo nelze plně nastavit přes webkameru. Proto kombinujeme osobní setkání (pro hloubkovou diagnostiku a manuální techniky) s efektivními online konzultacemi (pro řízení kalendáře a strategie).</div>
+                    <div class="faq-answer">Působím po celé ČR. Za klienty jezdím tam, kde je jejich byznys.<br><br><strong>Pro firmy (OFFICE RESET&trade;):</strong> Úvodní audit a nastavení pracoviště probíhá vždy fyzicky u vás ve firmě. Následný mentoring pro fixaci návyků řídím hybridně/online.<br><br><strong>Pro lídry (CRISIS MENTORING):</strong> Tělo nelze plně nastavit přes webkameru. Proto kombinuji osobní setkání (pro hloubkovou diagnostiku a manuální techniky) s efektivními online konzultacemi (pro řízení kalendáře a strategie).</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Jak se liší WALANCE od klasického koučingu?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Většina koučů pracuje „shora dolů" (od hlavy k tělu). My jdeme opačně. Klasický koučink ladí váš software (mindset). My ale začínáme opravou hardwaru (těla).<br><br>WALANCE respektuje biologii výkonu:<br><strong>Hardware (Tělo):</strong> Nejdřív odstraníme fyzické bloky, bolest a chronickou únavu.<br><strong>Software (Hlava):</strong> Teprve když systém nebolí, nastavujeme strategie a myšlení.<br><strong>Operační systém (Návyky):</strong> Vše ukotvíme do kalendáře, aby změna vydržela.</div>
+                    <div class="faq-answer">Většina koučů pracuje „shora dolů" (od hlavy k tělu). Já jdu opačně. Klasický koučink ladí váš software (mindset). Já ale začínám opravou hardwaru (těla).<br><br>WALANCE respektuje biologii výkonu:<br><strong>Hardware (Tělo):</strong> Nejdřív odstraním fyzické bloky, bolest a chronickou únavu.<br><strong>Software (Hlava):</strong> Teprve když systém nebolí, nastavuji strategie a myšlení.<br><strong>Operační systém (Návyky):</strong> Vše ukotvím do kalendáře, aby změna vydržela.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
