@@ -16,6 +16,86 @@
     <meta property="og:url" content="https://walance.cz">
     <meta property="og:locale" content="cs_CZ">
 
+    <!-- Google Analytics 4 — nahraďte G-XXXXXXXXXX svým Measurement ID -->
+    <?php if (defined('GA_MEASUREMENT_ID') && GA_MEASUREMENT_ID): ?>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars(GA_MEASUREMENT_ID) ?>"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<?= htmlspecialchars(GA_MEASUREMENT_ID) ?>');
+    </script>
+    <?php endif; ?>
+
+    <link rel="canonical" href="https://walance.cz/">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "WALANCE",
+        "description": "Metoda WALANCE: 7 pilířů pro udržitelný výkon lídrů a týmů. Fyzioterapie, mentální koučink a Job Crafting.",
+        "url": "https://walance.cz",
+        "telephone": "+420601584901",
+        "email": "jana@walance.cz",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Na Hrázi 1139/13",
+            "addressLocality": "Přerov",
+            "postalCode": "750 02",
+            "addressCountry": "CZ"
+        },
+        "founder": {
+            "@type": "Person",
+            "name": "Jana Štěpaníková",
+            "jobTitle": "Founder & Performance Consultant"
+        },
+        "priceRange": "$$",
+        "areaServed": "CZ",
+        "serviceType": ["Executive Coaching", "Corporate Wellness", "Burnout Prevention"],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Služby WALANCE",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "name": "OFFICE RESET",
+                    "description": "4týdenní týmový program pro firmy. Audit, ergonomie, hybridní mentoring.",
+                    "priceCurrency": "CZK",
+                    "price": "45000",
+                    "priceSpecification": {
+                        "@type": "PriceSpecification",
+                        "priceCurrency": "CZK",
+                        "price": "45000",
+                        "description": "od 45 000 Kč za tým"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "name": "CRISIS MENTORING",
+                    "description": "Strategická intervence 1:1 pro lídry. Diagnostika, redesign kalendáře, okamžitá úleva.",
+                    "priceCurrency": "CZK",
+                    "price": "3500",
+                    "priceSpecification": {
+                        "@type": "PriceSpecification",
+                        "priceCurrency": "CZK",
+                        "price": "3500",
+                        "description": "od 3 500 Kč za 90min session"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "name": "BYZNYS Z POSTELE",
+                    "description": "Bezplatná masterclass, e-book a komunita pro lídry.",
+                    "priceCurrency": "CZK",
+                    "price": "0"
+                }
+            ]
+        }
+    }
+    </script>
+
     <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -919,6 +999,131 @@
             margin-top: 4px;
         }
 
+        /* ---- CASE STUDIES (příběhy klientů) ---- */
+        .casestudy-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .casestudy-item {
+            background: var(--white);
+            border: 1px solid var(--mist);
+            border-left: 3px solid var(--accent);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .casestudy-item[open] {
+            box-shadow: 0 8px 32px rgba(30, 41, 59, 0.08);
+        }
+
+        .casestudy-item summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .casestudy-item summary::-webkit-details-marker { display: none; }
+
+        .casestudy-item summary svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--ink-muted);
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .casestudy-item[open] summary svg {
+            transform: rotate(180deg);
+        }
+
+        .casestudy-summary { flex: 1; }
+
+        .casestudy-tag {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .casestudy-summary h3 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .casestudy-subtitle {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+        }
+
+        .casestudy-body {
+            padding: 0 24px 24px;
+        }
+
+        .casestudy-phase {
+            margin-bottom: 20px;
+        }
+
+        .casestudy-phase:last-child { margin-bottom: 0; }
+
+        .casestudy-phase h4 {
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .casestudy-phase p {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--ink-light);
+        }
+
+        .casestudy-phase ul {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0;
+        }
+
+        .casestudy-phase li {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--ink-light);
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .casestudy-phase li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .casestudy-phase li strong {
+            color: var(--ink);
+        }
+
         /* ---- PRODUCTS ---- */
         .products-grid {
             display: grid;
@@ -1428,39 +1633,12 @@
                     <span class="trust-label">Ušetřený čas denně</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">3</span>
-                    <span class="trust-label">Vrstvy přístupu</span>
+                    <span class="trust-number">5</span>
+                    <span class="trust-label">Ověřených případových studií</span>
                 </div>
                 <div class="trust-item">
                     <span class="trust-number">4 týdny</span>
                     <span class="trust-label">Program Office Reset</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ BENEFITS ============ -->
-    <section class="section benefits-section">
-        <div class="container">
-            <div class="section-header fade-in" style="text-align: center;">
-                <p class="section-label" style="color: var(--accent);">3 klíčové benefity WALANCE</p>
-            </div>
-
-            <div class="benefits-grid">
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Tělo / Fyzio</p>
-                    <h3>Udržitelný výkon</h3>
-                    <p>Tělo nesmí být limitujícím faktorem vašeho úspěchu. Nastavíme vaši biologii (spánek, dech, ergonomii) tak, aby zvládla vysokou zátěž bez výkyvů. Místo abyste energii museli „dobíjet" kofeinem, vytvoříme systém, který ji generuje přirozeně. Získáte stabilní drive od rána do večera.</p>
-                </div>
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Práce / Job Crafting</p>
-                    <h3>Práce ve flow</h3>
-                    <p>Dřina není ctnost, je to chyba v designu práce. Pomocí metodiky Job Craftingu odstraníme „tření" ve vašich úkolech. Přenastavíme vaši roli tak, abyste dělali to, pro co máte talent. Výsledek? Maximální efektivita s minimálním úsilím. Práce vás přestane vysávat a začne vás nabíjet.</p>
-                </div>
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Hlava / Koučink</p>
-                    <h3>Mentální odolnost</h3>
-                    <p>V krizi vyhrává ten, kdo zachová chladnou hlavu. Získáte nástroje pro okamžitou regulaci stresu a emocí. Vaše rozhodování bude strategické a přesné i pod extrémním tlakem. Naučíte se vypnout hlavu na povel, abyste si práci a stres nebrali domů.</p>
                 </div>
             </div>
         </div>
@@ -1471,9 +1649,9 @@
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">Poznáváte se?</p>
-                <h2 class="section-title">Váš byznys software je geniální.<br>Ale co hardware?</h2>
+                <h2 class="section-title">Výkon neklesá kvůli neschopnosti.<br>Klesá kvůli přetížení.</h2>
                 <p class="section-subtitle">
-                    Snažíte se řídit formuli 1 se zataženou ruční brzdou. To není stáří. To je systémová chyba.
+                    Jste schopní lidé v náročných rolích. Problém není v tom, co děláte — ale v tom, že váš systém běží bez údržby.
                 </p>
             </div>
 
@@ -1482,28 +1660,28 @@
                     <div class="card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 3.9 2.5 7.1 6 8.4V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.6c3.5-1.3 6-4.5 6-8.4a9 9 0 0 0-9-9z"/><path d="M10 17h4"/></svg>
                     </div>
-                    <h3>Hlava (Software)</h3>
-                    <p>Optimalizujeme váš procesor. Když jede hlava na 100 %, systém začne sekat chyby. Odstraníme „mentální viry" — rozhodovací paralýzu a neschopnost vypnout práci doma. Získáte čistou hlavu pro strategii, ne jen pro hašení požárů.</p>
+                    <h3>Rozhodujete pod mlhou</h3>
+                    <p>Neustálý stres a neschopnost „vypnout" po práci. Hlava jede nonstop, ale místo jasných rozhodnutí generuje zmatky. Strategické myšlení ustupuje hašení požárů.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon" style="background: rgba(90, 125, 90, 0.1);">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--sage);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     </div>
-                    <h3>Tělo (Hardware)</h3>
-                    <p>Tělo jako opora, ne brzda. Bolest a únava jsou „chybová hlášení", že jedete na dluh. Budujeme fyzickou odolnost (resilienci), která podrží vaši hlavu v krizích. Ať už řešíte záda, poúrazový stav nebo vyčerpání — vytvoříme hardware, o který se můžete kdykoliv opřít.</p>
+                    <h3>Tělo táhne za ruční brzdu</h3>
+                    <p>Bolest zad, chronická únava, spadlá energie po obědě. Kompenzujete to kávou a vůlí, ale to není řešení — to je odklad.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <h3>Tým &amp; Výkon (Operační systém)</h3>
-                    <p>Konec drahého „nicnedělání". Prezentismus je tichý zabiják firmy. Lidé jsou fyzicky přítomni, ale mentálně jedou na 40 %. Platíte plnou mzdu za poloviční výkon. Odstraníme tento „zombie mód". Nastavíme týmovou kulturu tak, aby lidé nechodili do práce jen přežít, ale aby měli kapacitu tvořit skutečnou hodnotu.</p>
+                    <h3>Práce vysává místo nabíjí</h3>
+                    <p>Děláte hodně, ale málo z toho odpovídá tomu, v čem jste opravdu dobří. Role není nastavená na vaše silné stránky. Výsledek? Dřete víc, ale výsledky neodpovídají úsilí.</p>
                 </div>
             </div>
 
             <div class="verdict-box fade-in">
-                <h3>To není stáří. To je systémová chyba.</h3>
-                <p>Metoda WALANCE nelepí symptomy. Opravuje všechny tři vrstvy najednou — hardware (tělo), software (mysl) a operační systém (návyky/práci).</p>
+                <h3>Tohle se dá změnit. Celé. Systematicky.</h3>
+                <p>Metoda WALANCE pracuje se všemi třemi vrstvami současně — s tělem, myslí i nastavením práce. Protože když opravíte jen jednu, ty další vás stáhnou zpět.</p>
             </div>
         </div>
     </section>
@@ -1528,12 +1706,12 @@
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 2</p>
                     <h3>Software (Hlava &amp; Koučink)</h3>
-                    <p>Odvirujeme procesor. Rozhodovací paralýza a neschopnost vypnout jsou jako zasekané aplikace na pozadí. Pomocí koučinku uvolníme vaši mentální kapacitu. Získáte čistou hlavu pro strategická rozhodnutí, ne pro stres.</p>
+                    <p>Odviruji procesor. Rozhodovací paralýza a neschopnost vypnout jsou jako zasekané aplikace na pozadí. Pomocí koučinku uvolním vaši mentální kapacitu. Získáte čistou hlavu pro strategická rozhodnutí, ne pro stres.</p>
                 </div>
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 3</p>
                     <h3>Operační systém (Návyky &amp; Job Crafting)</h3>
-                    <p>Automatizace zdraví a práce. Mikrozměny a rituály nastavíme tak, aby běžely na pozadí a šetřily energii. Pomocí Job Craftingu designujeme práci tak, aby vás nabíjela. Sladíme vaše silné stránky s náplní role.</p>
+                    <p>Automatizace zdraví a práce. Mikrozměny a rituály nastavím tak, aby běžely na pozadí a šetřily energii. Pomocí Job Craftingu designuji práci tak, aby vás nabíjela. Sladím vaše silné stránky s náplní role.</p>
                 </div>
             </div>
         </div>
@@ -1544,6 +1722,7 @@
         <div class="container">
             <div class="section-header fade-in" style="text-align:center; margin-bottom:56px;">
                 <h2 class="section-title"><span>WALANCE</span> — Anatomie udržitelného lídra</h2>
+                <p class="section-subtitle">7 pilířů, 7 písmen. Každé stojí za jedním principem.</p>
             </div>
 
             <div class="pillars-grid">
@@ -1641,13 +1820,204 @@
     <!-- ============ ROI ============ -->
     <section class="section roi-section fade-in">
         <div class="container">
-            <p class="section-label" style="color: rgba(250,249,247,0.5);">Matematika výkonu je neúprosná</p>
-            <div class="roi-number">8</div>
-            <p class="roi-unit">MINUT</p>
-            <p class="roi-text">Tolik času denně stačí ušetřit (eliminací mikrostresů a fyzického nepohodlí), aby se vám investice do WALANCE vrátila.</p>
+            <p class="section-label" style="color: rgba(250,249,247,0.5);">Proč se to vyplatí</p>
+            <div class="roi-number">3 v 1</div>
+            <p class="roi-unit">METODA</p>
+            <p class="roi-text">Fyzioterapie, koučink a Job Crafting v jednom systému. Místo tří specialistů pracujete s jedním člověkem, který vidí celý obraz.</p>
             <div class="roi-highlight">
-                <p><strong>60 MINUT</strong> — to je náš reálný cíl. Hodina čisté mentální kapacity denně navíc pro každého klíčového člověka.</p>
-                <small>Vynásobte si to hodinovou sazbou vašich lídrů. WALANCE není benefit. Je to prevence systémových výpadků a optimalizace vašeho nejdražšího aktiva — kapacity vašich lidí.</small>
+                <p><strong>Méně mikrostresů, víc čisté kapacity.</strong> Když přestanete bojovat s bolestí zad, únavou a rozhodovací paralýzou, uvolníte energii pro to, co opravdu potřebujete řešit.</p>
+                <small>WALANCE není wellness benefit. Je to investice do kapacity vašich lidí — vašeho nejdražšího aktiva.</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PŘÍBĚHY KLIENTŮ ============ -->
+    <section id="results" class="section" style="background: var(--white);">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Reálné výsledky</p>
+                <h2 class="section-title">5 lidí, 5 příběhů, 1 metoda</h2>
+                <p class="section-subtitle">Každý přišel s jiným problémem. Všichni odcházeli s funkčním systémem.</p>
+            </div>
+            <div class="casestudy-list">
+
+                <!-- PŘÍBĚH 1 — Markéta -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Deprese &amp; dechové bloky</p>
+                            <h3>Markéta — Konečně se nadechnout</h3>
+                            <p class="casestudy-subtitle">Jak dech a pohyb rozpustily letité úzkosti</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Život v „uzlíčku"</h4>
+                            <p>Když ke mně tato klientka (shodou okolností skvělá učitelka) přišla poprvé, byla zosobněním vnitřního stažení. Trpěla těžkými depresemi, brala silná antidepresiva a každé jaro pro ni bylo kritické — cítila fyzickou nemožnost se nadechnout. Přestože svou práci s dětmi milovala, její tělo i mysl byly v totální křeči. Byla na nemocenské, vyčerpaná a odpojená od sebe sama.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Nešli jsme na to jen přes „povídání", ale vzali jsme to skutečně holisticky. Propojili jsme fyzioterapii s mentálním nastavením:</p>
+                            <ul>
+                                <li><strong>Uvolnění těla:</strong> Začali jsme tejpováním, cvičením s overbally a expandéry, abychom fyzicky otevřeli hrudník.</li>
+                                <li><strong>Pohyb jako lék:</strong> Nordic Walking, kde se pohyb v přírodě stal prostorem pro mentoring.</li>
+                                <li><strong>Strategie v práci:</strong> Upravili jsme její přístup k výuce. Naučila se nastavit hodiny tak, aby ji nevyčerpávaly, ale dobíjely.</li>
+                                <li><strong>Dech jako kotva:</strong> Intenzivně jsme trénovali dechové techniky, které jí umožnily „roztáhnout ruce" a nebát se nadechnout světa.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu</h4>
+                            <p>Nejsilnější moment přišel, když si uvědomila, že svůj stav může ovlivnit sama. Že to sevření není její osud, ale vzorec, který se dá změnit. Zjistila, že když se dokáže fyzicky narovnat a nadechnout, její sebevědomí i psychická odolnost vystřelí nahoru.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Dnes je z ní jiná žena. Depresivní stavy ustoupily, antidepresiva už nejsou hlavním tématem a ona se vrátila ke své vášni — k dětem — s úplně novou energií. I když už spolu dnes pracujeme převážně online, dokáže své tělo vnímat natolik citlivě, že případné přicházející napětí pozná včas a sama ho pomocí naučených technik „rozpustí". Už neuhýbá, už se neschovává. Žije v rovnováze.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- PŘÍBĚH 2 — Renata -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Ztráta sebevědomí &amp; toxické prostředí</p>
+                            <h3>Renata — Vlastní síla nad systémem</h3>
+                            <p class="casestudy-subtitle">Cesta od role oběti k pevným hranicím a sebeúctě</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Neviditelná bolest</h4>
+                            <p>Přišla ve chvíli, kdy ji „systém" zlomil. Trpěla bolestmi, které lékaři ignorovali a označovali ji za simulanta. K tomu se přidal rozpad toxického vztahu a pocit, že její tělo je nepřítel. Navenek působila sebevědomě, ale její tělo vyprávělo příběh o naprostém stažení a rezignaci. Pracovala jako jeřábnice, vystavena chladu i drsnému kolektivu.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Klíčové bylo pochopit, že žádný „zázračný proutek" zvenčí neexistuje:</p>
+                            <ul>
+                                <li><strong>Fyzické nastavení v extrému:</strong> Řešili jsme ergonomii a nastavení těla přímo v kabině jeřábu, aby ji práce v zimě a nepohodlí neničila.</li>
+                                <li><strong>Mentální štít:</strong> Pracovali jsme na tom, jak se ráno naladit, aby ji toxický kolektiv nevyčerpával. Naučila se rozlišovat mezi svými pocity a problémy druhých.</li>
+                                <li><strong>Seznámení se s vlastním tělem:</strong> Přes cvičení a úpravu stravy začala poprvé v životě své tělo skutečně vnímat, ne ho jen „používat".</li>
+                                <li><strong>Online podpora:</strong> Kdykoliv se objevila krize, využili jsme online konzultace pro okamžité srovnání směru.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: „Mám se ráda"</h4>
+                            <p>Zlom nenastal, když zmizela veškerá bolest, ale v momentě, kdy prohlásila: „Začínám mít ráda sama sebe a cítím ke svému tělu úctu." Přestala čekat, až ji zachrání lékaři nebo okolí, a začala se zachraňovat sama.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Dnes je to žena, která stojí pevně na nohou. V práci už nenechá útoky ostatních proniknout pod kůži — chápe, že je to jejich boj, ne její. I když tělo občas po starých traumatech zastávkuje, ona už ví, co s tím. Už není obětí okolností, ale tvůrkyní své vlastní rovnováhy.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- PŘÍBĚH 3 — David -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Stres &amp; kariérní nesoulad</p>
+                            <h3>David — Když tělo křičí „STOP"</h3>
+                            <p class="casestudy-subtitle">Proč bolest ramene vyřešila až změna kariéry</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Úspěch vykoupený křečí</h4>
+                            <p>Do ordinace mi vstoupil prototyp úspěchu: mladý, charismatický manažer, sportovec, vedoucí týmu. Přišel s „prostou" bolestí ramene. Ale viděla jsem víc než jen zánět šlach. Viděla jsem muže v permanentním stresu, sešněrovaného v roli, která mu neseděla. I přes naučené úsměvy jeho tělo vysílalo jasný signál: „Takhle už to dál nejde."</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Šli jsme do hloubky:</p>
+                            <ul>
+                                <li><strong>Diagnostika těla i role:</strong> Zatímco jsme tejpovali a stabilizovali rameno, rozebírali jsme jeho pracovní dny. Jako pozorovatelka na jeho poradě jsem viděla ten rozpor — byl skvělý odborník, ale v roli šéfa byl v křeči. Rozený sólista nucený hrát týmovou hru.</li>
+                                <li><strong>Analýza komfortní zóny:</strong> „Proč děláš něco, co tě vnitřně láme?" Zjistili jsme, že jeho ambice ho dohnaly do pozice, která nebyla v souladu s jeho přirozeností.</li>
+                                <li><strong>Fyzické uvolnění:</strong> Propojili jsme dechové techniky s posturálním nastavením. Jakmile začal chápat příčinu svého stresu, i jeho rameno začalo „povolovat".</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: Odvaha k autenticitě</h4>
+                            <p>Zásadní moment nastal, když si přiznal, že nepotřebuje vést lidi, aby byl úspěšný. Pochopil, že jeho síla je v individualitě, ne v managementu. Toto uvědomění doslova „shodilo balvan" z jeho ramen.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Dnes je z něj úspěšný podnikatel na volné noze. Už to není ten vystresovaný kluk. Je to chlap, ze kterého sálá opravdové, vnitřní sebevědomí. Bolest ramene zmizela — ne proto, že by bral prášky, ale proto, že přestal bojovat sám se sebou. Našel svou WALANCE.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- PŘÍBĚH 4 — Vašek -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Úraz mozku &amp; hledání identity</p>
+                            <h3>Vašek — Odvaha k pravdě</h3>
+                            <p class="casestudy-subtitle">Jak po těžkém úrazu mozku najít sebe sama a vnitřní klid</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Život v mlze a bolesti</h4>
+                            <p>Vašek ke mně přišel ve svých 20 letech se zavazadlem, které by bylo těžké i pro padesátníka. Po tragickém úrazu hlavy a náročné operaci mozku trpěl chronickými bolestmi, hučením v uších a neustálou únavou. Jako vedlejší (téměř zázračný) efekt úrazu se u něj projevila schopnost hrát na klavír, na který dříve nikdy nehrál. Přesto byl ztracený — fyzicky i duševně. Nevěděl, kým je, kam patří, a schovával se v životě, který nebyl jeho.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Metodu jsme aplikovali v několika rovinách, které se postupně propojily:</p>
+                            <ul>
+                                <li><strong>Fyzické uvolnění a režim:</strong> Práce s jizvou po operaci, srovnání postavení hlavy a řešení „banalit" jako pitný režim. Chronické bolesti hlavy živil i extrémní nedostatek vody a nadmíra kofeinu.</li>
+                                <li><strong>Job Crafting:</strong> Vašek hledal své místo v pracovním světě. Pomocí mentoringu jsme hledali roli, která nebude dráždit jeho citlivý nervový systém.</li>
+                                <li><strong>Odvaha k pravdě:</strong> Nejtěžší téma — jeho identita. Vašek žil v partnerství se ženou, ale uvnitř věděl, že je gay. Strach z odmítnutí a pocit viny mu způsobovaly obrovské úzkosti, které se projevovaly i fyzickou bolestí.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: Rozhovor, který osvobozuje</h4>
+                            <p>Společně jsme se připravili na klíčový životní krok. Pomohla jsem mu nastavit vnitřní klid a připravit se na upřímný rozhovor s přítelkyní. Nakonec jsme celou situaci rozebírali i společně v bezpečné atmosféře mé poradny. Ten moment, kdy pravda vyšla ven a byla přijata, byl pro něj skutečným uzdravením.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Vašek nakonec našel odvahu žít autenticky. S bývalou partnerkou zůstali blízkými přáteli, našel si práci, která ho naplňuje, a hlavně — přestal se bát sám sebe. Bolesti hlavy ustoupily do pozadí, protože zmizelo to největší vnitřní pnutí. Ukázalo se, že „rozvázat" uzel v životě je stejně důležité jako uvolnit stažený sval.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- PŘÍBĚH 5 — Zdeňka -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Mrtvice &amp; ztráta sebeúcty</p>
+                            <h3>Zdeňka — Hranice jsou jen v naší hlavě</h3>
+                            <p class="casestudy-subtitle">Jak jedno setkání v nemocnici vrátilo chuť do života a sebeúctu</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: „Já jsem blbá…"</h4>
+                            <p>Tento příběh se neodehrál v mé poradně, ale v nemocničním pokoji. Ležela jsem tam po operaci kolene, sama v bolestech, a vedle mě ležela paní Zdenička. Byla po mrtvici a čekala na operaci krčku. Neustále o sobě opakovala: „Já jsem blbá, já nic nezvládnu." Byla to uťápnutá žena bez kouska sebevědomí, kterou systém a její vlastní stav přesvědčily o tom, že už za nic nestojí.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Moment WALANCE: Síla slova a motivace</h4>
+                            <p>I když mi nebylo dobře, nemohla jsem to nechat jen tak:</p>
+                            <ul>
+                                <li><strong>Změna paradigmatu:</strong> Vysvětlila jsem jí, že její mozek jen teď pracuje jiným tempem. Že pomalost není hloupost.</li>
+                                <li><strong>Malá vítězství:</strong> Motivovala jsem ji, aby si sama podala sklenici vody, na kterou dříve jen odevzdaně koukala. Ten záblesk v jejích očích, když zjistila, že to dokáže, byl silnější než jakékoliv léky.</li>
+                                <li><strong>Lidskost jako metoda:</strong> Smály jsme se, plakaly a já jsem ji z postele mentorovala, jak se k sobě chovat s laskavostí, i když tělo zrovna neposlouchá.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: Nová identita</h4>
+                            <p>Zdeňka pochopila, že její hodnota nezmizela s nemocí. Slíbila mi, že už o sobě nikdy neřekne, že je blbá. Našla v sobě sílu se personálu i světu postavit s větou: „Jsem jen pomalejší, dejte mi čas."</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Proč to dělám</h4>
+                            <p>Tento zážitek mi potvrdil, že metoda WALANCE není jen práce. Je to dar vidět v lidech to dobré, i když oni sami to už nevidí. Pomáhám lidem najít jejich sebehodnotu a sílu, ať už jsou v manažerském křesle, nebo na nemocničním lůžku. Protože rovnováha začíná v hlavě — v tom, co si o sobě říkáme.</p>
+                        </div>
+                    </div>
+                </details>
+
             </div>
         </div>
     </section>
@@ -1662,65 +2032,13 @@
             </div>
 
             <div class="products-grid">
-                <!-- Product 1: Office Reset -->
-                <div class="product-card product-card--default fade-in">
-                    <div class="product-header">Pro firmy</div>
-                    <div class="product-body">
-                        <h3>OFFICE RESET&trade;</h3>
-                        <p class="desc">Systematické řešení výkonu a zdraví. Zastavíme úniky energie a zvýšíme kapacitu vašich lidí. Fyziologie, ergonomie a výsledky podložené auditem.</p>
-                        <ul class="product-features">
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Audit „energetických děr" (měření kondice týmu)</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Fyzio-ergonomie: nastavení těl a židlí pro výkon</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>4 týdny hybridního mentoringu pro fixaci návyků</span>
-                            </li>
-                        </ul>
-                        <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
-                            POPTAT AUDIT
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Product 2: Crisis Mentoring (Featured) -->
-                <div class="product-card product-card--featured fade-in">
-                    <span class="product-badge">Bestseller</span>
-                    <div class="product-header">Pro lídry (1-on-1)</div>
-                    <div class="product-body">
-                        <h3>CRISIS MENTORING</h3>
-                        <p class="desc">Strategická intervence 1:1. Krizové řízení vás samotných pod vedením Klienta 0. Hloubková diagnostika vašeho systému a okamžité nastavení podmínek pro udržitelné vládnutí.</p>
-                        <ul class="product-features">
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Hloubková diagnostika: Tělo, Hlava, Práce</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Redesign kalendáře: plánování podle energie, ne času</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Okamžitá úleva od tlaku a fyzické bolesti</span>
-                            </li>
-                        </ul>
-                        <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">
-                            REZERVOVAT TERMÍN
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product 3: Byznys z postele -->
+                <!-- Product 1: Byznys z postele (zdarma) -->
                 <div class="product-card product-card--default fade-in">
                     <div class="product-header" style="color: var(--sage);">Start (zdarma)</div>
                     <div class="product-body">
                         <h3>BYZNYS Z POSTELE</h3>
                         <p class="desc">Manuál přežití pro lídry. Nečekejte, až vás systém vypne natvrdo. Připojte se k živému vysílání a získejte návod, jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--accent);">0 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">e-book + masterclass + komunita zdarma</span></p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1742,6 +2060,63 @@
                         <a href="#contact" class="product-cta product-cta--outline">
                             VSTOUPIT DO PROGRAMU ZDARMA
                         </a>
+                    </div>
+                </div>
+
+                <!-- Product 2: Crisis Mentoring (Featured) -->
+                <div class="product-card product-card--featured fade-in">
+                    <span class="product-badge">Doporučuji</span>
+                    <div class="product-header">Pro lídry (1-on-1)</div>
+                    <div class="product-body">
+                        <h3>CRISIS MENTORING</h3>
+                        <p class="desc">Strategická intervence 1:1. Krizové řízení vás samotných pod vedením Klienta 0. Hloubková diagnostika vašeho systému a okamžité nastavení podmínek pro udržitelné vládnutí.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--cream);">od 3 500 Kč</span><br><span style="font-size: 0.8125rem; color: rgba(250,249,247,0.5);">za 90min session / balíčky od 9 000 Kč</span></p>
+                        <ul class="product-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Hloubková diagnostika: Tělo, Hlava, Práce</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Redesign kalendáře: plánování podle energie, ne času</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Okamžitá úleva od tlaku a fyzické bolesti</span>
+                            </li>
+                        </ul>
+                        <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">
+                            REZERVOVAT TERMÍN
+                        </button>
+                        <p class="product-note">Úvodní konzultace (30 min) zdarma.</p>
+                    </div>
+                </div>
+
+                <!-- Product 3: Office Reset (pro firmy) -->
+                <div class="product-card product-card--default fade-in">
+                    <div class="product-header">Pro firmy</div>
+                    <div class="product-body">
+                        <h3>OFFICE RESET&trade;</h3>
+                        <p class="desc">Systematické řešení výkonu a zdraví. Zastavíme úniky energie a zvýšíme kapacitu vašich lidí. Fyziologie, ergonomie a výsledky podložené auditem.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--ink);">od 45 000 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">za tým / 4týdenní program</span></p>
+                        <ul class="product-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Audit „energetických děr" (měření kondice týmu)</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Fyzio-ergonomie: nastavení těl a židlí pro výkon</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>4 týdny hybridního mentoringu pro fixaci návyků</span>
+                            </li>
+                        </ul>
+                        <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
+                            POPTAT AUDIT
+                        </a>
+                        <p class="product-note">Finální cena závisí na velikosti týmu a rozsahu auditu.</p>
                     </div>
                 </div>
             </div>
@@ -1782,7 +2157,7 @@
 
                 <div class="contact-info fade-in">
                     <div>
-                        <h3>Rezervace termínu</h3>
+                        <h3>Rezervace konzultace zdarma</h3>
                         <p>Vyberte si volný termín v kalendáři. Rezervace je napojena na Google Calendar.</p>
                     </div>
                     <button type="button" class="contact-booking-btn" onclick="openBookingModal()">
@@ -1813,28 +2188,45 @@
                         Jak dlouho trvá spolupráce?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Zaměřujeme se na skutečnou implementaci, ne na jednorázové teorie. Respektujeme čas potřebný pro změnu návyků.<br><br><strong>OFFICE RESET&trade; (firemní týmy):</strong> 4týdenní cyklus. První týden nastavíme systém a provedeme audit (LIVE), další tři týdny slouží k fixaci nových návyků do praxe (hybridní formou).<br><br><strong>CRISIS MENTORING (lídři 1:1):</strong> Přizpůsobujeme se stavu vašeho systému. Nabízíme buď jednorázovou strategickou intervenci (90 min) pro okamžitou úlevu, nebo 3měsíční mentoring pro kompletní přestavbu pracovních návyků.</div>
+                    <div class="faq-answer">Zaměřuji se na skutečnou implementaci, ne na jednorázové teorie. Respektuji čas potřebný pro změnu návyků.<br><br><strong>OFFICE RESET&trade; (firemní týmy):</strong> 4týdenní cyklus. První týden nastavím systém a provedu audit (LIVE), další tři týdny slouží k fixaci nových návyků do praxe (hybridní formou).<br><br><strong>CRISIS MENTORING (lídři 1:1):</strong> Přizpůsobuji se stavu vašeho systému. Nabízím buď jednorázovou strategickou intervenci (90 min) pro okamžitou úlevu, nebo 3měsíční mentoring pro kompletní přestavbu pracovních návyků.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Kde probíhá spolupráce?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Působíme po celé ČR. Za klienty jezdím tam, kde je jejich byznys.<br><br><strong>Pro firmy (OFFICE RESET&trade;):</strong> Úvodní audit a nastavení pracoviště probíhá vždy fyzicky u vás ve firmě. Následný mentoring pro fixaci návyků řídíme hybridně/online.<br><br><strong>Pro lídry (CRISIS MENTORING):</strong> Tělo nelze plně nastavit přes webkameru. Proto kombinujeme osobní setkání (pro hloubkovou diagnostiku a manuální techniky) s efektivními online konzultacemi (pro řízení kalendáře a strategie).</div>
+                    <div class="faq-answer">Působím po celé ČR. Za klienty jezdím tam, kde je jejich byznys.<br><br><strong>Pro firmy (OFFICE RESET&trade;):</strong> Úvodní audit a nastavení pracoviště probíhá vždy fyzicky u vás ve firmě. Následný mentoring pro fixaci návyků řídím hybridně/online.<br><br><strong>Pro lídry (CRISIS MENTORING):</strong> Tělo nelze plně nastavit přes webkameru. Proto kombinuji osobní setkání (pro hloubkovou diagnostiku a manuální techniky) s efektivními online konzultacemi (pro řízení kalendáře a strategie).</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Jak se liší WALANCE od klasického koučingu?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Většina koučů pracuje „shora dolů" (od hlavy k tělu). My jdeme opačně. Klasický koučink ladí váš software (mindset). My ale začínáme opravou hardwaru (těla).<br><br>WALANCE respektuje biologii výkonu:<br><strong>Hardware (Tělo):</strong> Nejdřív odstraníme fyzické bloky, bolest a chronickou únavu.<br><strong>Software (Hlava):</strong> Teprve když systém nebolí, nastavujeme strategie a myšlení.<br><strong>Operační systém (Návyky):</strong> Vše ukotvíme do kalendáře, aby změna vydržela.</div>
+                    <div class="faq-answer">Většina koučů pracuje „shora dolů" (od hlavy k tělu). Já jdu opačně. Klasický koučink ladí váš software (mindset). Já ale začínám opravou hardwaru (těla).<br><br>WALANCE respektuje biologii výkonu:<br><strong>Hardware (Tělo):</strong> Nejdřív odstraním fyzické bloky, bolest a chronickou únavu.<br><strong>Software (Hlava):</strong> Teprve když systém nebolí, nastavuji strategie a myšlení.<br><strong>Operační systém (Návyky):</strong> Vše ukotvím do kalendáře, aby změna vydržela.</div>
+                </details>
+                <details class="faq-item fade-in">
+                    <summary>
+                        Kolik to stojí?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <strong>CRISIS MENTORING (1:1):</strong> Od 3 500 Kč za 90minutovou session. Balíčky (3 session) od 9 000 Kč. Tříměsíční mentoring na míru — cena dle rozsahu.<br><br>
+                        <strong>OFFICE RESET&trade; (firmy):</strong> Od 45 000 Kč za tým. Závisí na velikosti týmu a rozsahu auditu. Pošlu vám detailní nabídku do 48 hodin od prvního hovoru.<br><br>
+                        <strong>BYZNYS Z POSTELE:</strong> Zcela zdarma — masterclass, e-book i komunita.<br><br>
+                        Úvodní konzultace (30 min) je vždy zdarma a nezávazná.
+                    </div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Jak začít?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer"><a href="#contact" style="color: var(--accent); text-decoration: underline;">Vyplňte formulář</a> nebo si rovnou <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">rezervujte termín v kalendáři</a>. Nabízíme úvodní strategickou konzultaci (30 min). Cílem je ověření kompatibility. Společně zhodnotíme stav vašeho systému a určíme, zda je pro vás efektivnějším řešením firemní reset, nebo osobní mentoring.</div>
+                    <div class="faq-answer">
+                        <strong>Krok 1:</strong> <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">Rezervujte si bezplatnou konzultaci</a> (30 min) v kalendáři — nebo <a href="#contact" style="color: var(--accent); text-decoration: underline;">vyplňte formulář</a>.<br><br>
+                        <strong>Krok 2:</strong> Společně zhodnotíme stav vašeho systému (tělo, hlava, práce) a určíme, zda je pro vás vhodnější osobní mentoring nebo firemní Office Reset.<br><br>
+                        <strong>Krok 3:</strong> Dostanete konkrétní nabídku s cenou, rozsahem a časovým plánem. Žádné překvapení.<br><br>
+                        Chcete začít hned? Stáhněte si zdarma <strong>Byznys z postele</strong> — e-book + masterclass bez závazků.
+                    </div>
                 </details>
             </div>
         </div>
@@ -1850,7 +2242,7 @@
                 </button>
             </div>
             <div style="padding:0 32px 32px;">
-                <h2 class="font-display" style="font-size:1.75rem; font-weight:700; margin-bottom:8px;">Rezervace termínu</h2>
+                <h2 class="font-display" style="font-size:1.75rem; font-weight:700; margin-bottom:8px;">Rezervace konzultace zdarma</h2>
                 <p style="color:var(--ink-light); font-size:0.875rem; margin-bottom:24px;">Zelená = volné termíny. Vyberte den, pak čas.</p>
 
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -1970,12 +2362,12 @@
         // Pillars interactive (WALANCE acronym)
         const pillarsData = [
             { letter: 'W', title: 'Walk & Work', subtitle: 'Pohyb jako nástroj myšlení', desc: 'Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Aktivujte svůj procesor v pohybu a nechte nápady volně proudit.' },
-            { letter: 'A', title: 'Awareness', subtitle: 'Senzory pro včasné varování', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat signály těla — mělké dýchání nebo tuhnoucí šíji — dříve, než systém nahlásí kritickou chybu a zablokuje vás.' },
+            { letter: 'A', title: 'Awareness', subtitle: 'Senzory pro včasné varování', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat signály těla — mělké dýchání nebo tuhnoucí šíji — dříve, než se z drobného napětí stane problém, který vás zastaví.' },
             { letter: 'L', title: 'Longevity', subtitle: 'Maximální životnost systému', desc: 'Nejde o to dožít se stovky, ale nebýt v padesáti „na odpis". Budujeme tělo, které udrží plnou kapacitu pro vysoký výkon tak dlouho, dokud se sami rozhodnete zůstat ve hře.' },
             { letter: 'A', title: 'Alignment', subtitle: 'Geometrie těla i role', desc: 'Odstraňujeme tření v systému. Srovnáme vaši páteř (fyzický postoj) a pomocí Job Craftingu zarovnáme pracovní náplň s vašimi silnými stránkami. Když vše lícuje, výkon roste bez odporu.' },
             { letter: 'N', title: 'New Habits', subtitle: 'Systémový upgrade návyků', desc: 'Velké revoluce nefungují. Fungují mikrozměny, které využívají neuroplasticitu mozku. Nastavíme nové rutiny tak, aby se staly přirozenou součástí vašeho dne — bez stresu a bez nutnosti železné vůle.' },
             { letter: 'C', title: 'Clarity', subtitle: 'Ochrana procesoru před šumem', desc: 'Nevyhoříte z práce, ale z chaosu. Nastavíme principy informační hygieny a hluboké práce (Deep Work). Odstraníme digitální smog, aby vaše mysl zůstala ostrá a schopná soustředění i pod tlakem.' },
-            { letter: 'E', title: 'Energy', subtitle: 'Optimalizace biologického paliva', desc: 'Time management sám o sobě nestačí, pokud chybí energie. Zaměříme se na její řízení. Naučíte se pracovat se svými biorytmy a nejtěžší úkoly plánovat do výkonnostních špiček. Výsledkem je stabilní přísun sil po celý den, ne jen do oběda.' },
+            { letter: 'E', title: 'Energy', subtitle: 'Optimalizace biologického paliva', desc: 'Time management sám o sobě nestačí, pokud nemáte energii. Zaměříme se na její řízení. Naučíte se pracovat se svými biorytmy a nejtěžší úkoly plánovat do výkonnostních špiček. Výsledkem je stabilní přísun sil po celý den, ne jen do oběda.' },
         ];
 
         document.querySelectorAll('#pillar-buttons .pillar-btn').forEach(btn => {
