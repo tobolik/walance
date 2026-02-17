@@ -1958,16 +1958,6 @@
                         <p class="story-quote">„Řídím byznys horizontálně. A funguje to. Moje hlava je díky systému ostřejší než kdy dřív, přestože tělo je v opravě. Moje omezení se stalo laboratoří pro vaši efektivitu."</p>
                         <p>Pokud dokážu udržet vysoké pracovní tempo, jasnou mysl a strategický nadhled já z postele, garantuji vám, že váš systém vyladím kdekoli — v kanceláři i pod největším tlakem.</p>
                     </div>
-                    <details class="story-author-details fade-in">
-                        <summary>
-                            O autorce metody
-                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                        </summary>
-                        <div class="story-author-body">
-                            <p>Jana je autorkou metody WALANCE a „Klientem 0" (celý systém nejprve vyzkoušela na sobě). Po letech v korporátním světě, kde zažila vyhoření, chronické bolesti a ztrátu smyslu, vytvořila metodu, která jí vrátila zdraví, čas a radost z práce.</p>
-                            <p>Dnes pracuje s firmami i jednotlivci. Její přístup kombinuje poznatky z neurovědy, ergonomie, time managementu a koučinku do jednoho praktického systému.</p>
-                        </div>
-                    </details>
                 </div>
                 <div class="story-image-wrap fade-in">
                     <img src="assets/images/hero-story-jana.jpg"
@@ -1979,6 +1969,21 @@
                          fetchpriority="low">
                 </div>
             </div>
+
+            <details class="story-author-details fade-in">
+                <summary>
+                    O autorce metody
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="story-author-body">
+                    <p>Jana je „Klientem 0" svého vlastního systému. Po 12 letech intenzivní praxe fyzioterapeutky v nemocničním prostředí, kde denně řešila akutní i chronické stavy pacientů, sama okusila odvrácenou stranu vysokého pracovního nasazení v korporátním světě. Prošla si vyhořením a ztrátou zdraví, což ji motivovalo k vytvoření metodiky, která propojuje medicínské znalosti s nároky moderní doby.</p>
+                    <p>Dnes ve své práci kombinuje unikátní expertní trojúhelník:</p>
+                    <p><strong>Zkušená fyzioterapeutka:</strong> Dokonale rozumí mechanice těla a biomechanice pohybu. Ví, jak efektivně odstranit bolesti zad, krční páteře a hlavy, které jsou daní za hodiny strávené u počítače.</p>
+                    <p><strong>Certifikovaná koučka:</strong> Pomáhá lidem zvládnout mentální nápor, nastavit si udržitelné hranice a pracovat s motivací tak, aby předešli vyhoření.</p>
+                    <p><strong>Event manažerka:</strong> Díky zkušenostem z organizace velkých projektů mluví jazykem byznysu. Rozumí tlaku na výkon, deadlinům i stresu, který manažerské pozice přinášejí.</p>
+                    <p>Její systém WALANCE není jen o cvičení, ale o komplexním přístupu zahrnujícím neurovědu, aplikovanou ergonomii a moderní time management. Jana učí firmy i jednotlivce, jak si udržet špičkovou výkonnost a radost z práce, aniž by u toho museli obětovat své vlastní zdraví.</p>
+                </div>
+            </details>
         </div>
     </section>
 

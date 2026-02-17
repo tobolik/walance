@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.3] – 17.02.2026 19:53
+> Pushed: 17.02.2026 19:53
+
+### Změněno
+- **Story – „O autorce metody":** přesunut zpět na plnou šířku pod celý grid (text + obrázek), kompletně přepsaný text — detailní profil Jany (12 let fyzioterapie, expertní trojúhelník: fyzioterapeutka, koučka, event manažerka)
+
 ## [2.4.2] – 17.02.2026 19:49
 > Pushed: 17.02.2026 19:49
 
