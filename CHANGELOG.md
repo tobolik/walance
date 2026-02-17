@@ -7,6 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [2.1.1] – 17.02.2026 18:25
+> Pushed: 17.02.2026 18:25
 
 ### Změněno
 - **Story sekce – „O autorce metody":** přesunuto z pod celého gridu dovnitř textového sloupce (přímo pod text), eliminace zbytečného prázdného místa
