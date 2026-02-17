@@ -162,6 +162,50 @@ try {
             $messages[] = "Odstraněn redundantní sloupec bookings.contact_id.";
         }
 
+        // blog_posts – blogové články (soft-update schema)
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS blog_posts (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                blog_posts_id INT UNSIGNED NULL,
+                title VARCHAR(255) NOT NULL,
+                slug VARCHAR(255) NOT NULL,
+                excerpt TEXT,
+                body LONGTEXT,
+                author_id INT UNSIGNED NULL,
+                status VARCHAR(20) DEFAULT 'draft',
+                published_at DATETIME NULL,
+                featured_image VARCHAR(255),
+                meta_description VARCHAR(255),
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME NULL DEFAULT NULL,
+                valid_user_from INT UNSIGNED NULL,
+                valid_user_to INT UNSIGNED NULL,
+                INDEX idx_blog_posts_id (blog_posts_id, valid_to),
+                INDEX idx_v (valid_to),
+                INDEX idx_slug (slug, valid_to),
+                INDEX idx_status (status, valid_to),
+                INDEX idx_published (published_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ");
+        $messages[] = "Tabulka blog_posts OK.";
+
+        // blog_categories – kategorie článků (soft-update schema)
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS blog_categories (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                blog_categories_id INT UNSIGNED NULL,
+                name VARCHAR(255) NOT NULL,
+                slug VARCHAR(255) NOT NULL,
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME NULL DEFAULT NULL,
+                valid_user_from INT UNSIGNED NULL,
+                valid_user_to INT UNSIGNED NULL,
+                INDEX idx_blog_categories_id (blog_categories_id, valid_to),
+                INDEX idx_v (valid_to)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ");
+        $messages[] = "Tabulka blog_categories OK.";
+
     } else {
         $dir = dirname(DB_PATH);
         if (!is_dir($dir)) mkdir($dir, 0755, true);
@@ -258,6 +302,48 @@ try {
             $pdo->exec("CREATE INDEX IF NOT EXISTS idx_activities_bookings ON activities(bookings_id)");
             $messages[] = "Migrace activities: přidán sloupec bookings_id.";
         }
+
+        // SQLite: blog_posts
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS blog_posts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                blog_posts_id INTEGER,
+                title TEXT NOT NULL,
+                slug TEXT NOT NULL,
+                excerpt TEXT,
+                body TEXT,
+                author_id INTEGER,
+                status TEXT DEFAULT 'draft',
+                published_at DATETIME,
+                featured_image TEXT,
+                meta_description TEXT,
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME,
+                valid_user_from INTEGER,
+                valid_user_to INTEGER
+            )
+        ");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_blog_posts_id ON blog_posts(blog_posts_id, valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_blog_posts_v ON blog_posts(valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug, valid_to)");
+        $messages[] = "SQLite tabulka blog_posts OK.";
+
+        // SQLite: blog_categories
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS blog_categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                blog_categories_id INTEGER,
+                name TEXT NOT NULL,
+                slug TEXT NOT NULL,
+                valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                valid_to DATETIME,
+                valid_user_from INTEGER,
+                valid_user_to INTEGER
+            )
+        ");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_blog_categories_id ON blog_categories(blog_categories_id, valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_blog_categories_v ON blog_categories(valid_to)");
+        $messages[] = "SQLite tabulka blog_categories OK.";
 
         $messages[] = "SQLite tabulky OK.";
     }
