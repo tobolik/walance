@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [1.4.2] – 16.02.2026 20:25
-> Nepushnuto
+> Pushed: 16.02.2026 20:32
 
 ### Změněno
 - **Hero obrázek:** nový story obrázek (`hero-story-jana.jpg`) + CSS úprava pro portrait formát (`aspect-ratio: 4/3`, `max-height: 520px`, `object-position: center top`)
