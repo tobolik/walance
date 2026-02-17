@@ -1,0 +1,54 @@
+---
+description: Standard logic for new DB tables – soft-update, valid_*, entity_id
+globs: migrations/*.sql, schema*.sql, api/crud.php
+alwaysApply: false
+---
+
+# New Tables – Soft-update Logic
+
+When creating new tables in this project **always** use the standard soft-update logic.
+
+## REQUIRED: soft* methods in crud.php
+
+**Never use direct INSERT/UPDATE/DELETE** for tables with soft-update logic. Always:
+- **Insert:** `softInsert($table, $data)` – auto-fills valid_from, valid_to, valid_user_from, valid_user_to, {table}_id
+- **Update:** `softUpdate($table, $id, $data)` – invalidates old row, creates new one
+- **Delete:** `softDelete($table, $id)` – sets valid_to
+- **Read:** `findActive()`, `findAllActive()` – filters WHERE valid_to IS NULL
+
+Direct INSERT without softInsert = missing bank_accounts_id, valid_user_from, valid_from etc.
+
+## Columns in every new table
+
+1. **`{table}_id`** (e.g. `bank_accounts_id`) – entity_id for linking versions, INT UNSIGNED NULL, right after `id`
+2. **`valid_from`** – DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+3. **`valid_to`** – DATETIME NULL DEFAULT NULL
+4. **`valid_user_from`** – INT UNSIGNED NULL
+5. **`valid_user_to`** – INT UNSIGNED NULL
+
+## Indexes
+
+- `INDEX idx_{table}_id ({table}_id, valid_to)`
+- `INDEX idx_v (valid_to)`
+
+## API (crud.php)
+
+- **Always** use `softInsert`, `softUpdate`, `softDelete` – never direct INSERT/UPDATE/DELETE
+- Use `findActive`, `findAllActive` for reads (WHERE valid_to IS NULL)
+- Add table to `$FIELDS`, `$REQUIRED`, `$FIELD_LABELS`
+
+## Example migration
+
+```sql
+CREATE TABLE IF NOT EXISTS nova_tabulka (
+    id               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nova_tabulka_id  INT UNSIGNED NULL,
+    -- business columns --
+    valid_from       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    valid_to         DATETIME NULL DEFAULT NULL,
+    valid_user_from  INT UNSIGNED NULL,
+    valid_user_to    INT UNSIGNED NULL,
+    INDEX idx_nova_tabulka_id (nova_tabulka_id, valid_to),
+    INDEX idx_v (valid_to)
+) ENGINE=InnoDB;
+```

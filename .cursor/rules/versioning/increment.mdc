@@ -1,0 +1,41 @@
+---
+description: Version bump and cache busting – NEVER SKIP
+alwaysApply: true
+---
+
+# Version Bump – AGENT MUST RUN SCRIPT
+
+**You (the AI agent) must run the bump script** – never edit `api/version.php` or `CHANGELOG.md` manually.
+
+**When:** Before every `git push` that includes code changes. If you made changes (features, fixes, UI), run the script first.
+
+**Command:**
+```bash
+php script/bump-version.php patch [--added "item"] [--changed "item"] [--fixed "item"]
+```
+
+- **patch|minor|major** – bump type (patch for most changes)
+- **--added, --changed, --fixed** – changelog items describing what changed (can repeat)
+- Date/time is taken from system at execution – 100% correct (Europe/Prague)
+
+**After push:** Run `php script/bump-version.php mark-pushed` and commit the CHANGELOG update.
+
+# App Version – NEVER FORGET
+
+On every code change (features, bugfixes, UI updates) **always** bump the version via the script.
+
+- Version format: `MAJOR.MINOR.PATCH` – for regular changes use `patch`
+- **Cache busting:** All PHP files use `$v` from config (APP_VERSION) – no manual update needed
+- **Note:** On feature branches the version may be higher than on main. That is intentional.
+- This is a critical instruction – never skip it.
+
+# Closing Summary – EVERY TIME
+
+At the end of work (after completing tasks, before ending the response) **always** state:
+
+1. **Current version:** e.g. "Version: v2.2.1"
+2. **Push:** "Project was pushed" or "Project was not pushed – run `git add -A && git commit -m \"...\" && git push`"
+
+**Before push:** If you made code changes, you must have run `php script/bump-version.php` first. Never push without bumping version when code changed.
+
+**After push:** Run `php script/bump-version.php mark-pushed` and push the CHANGELOG update. Announce the current app version.

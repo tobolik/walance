@@ -1,0 +1,45 @@
+---
+description: When bumping version always update CHANGELOG
+alwaysApply: true
+---
+
+# Version and Changelog – AGENT MUST RUN SCRIPT
+
+**You (the AI agent) must run the script** – never edit manually. Run `php script/bump-version.php` before push when you made code changes.
+
+## Procedure (agent responsibility)
+
+1. After making code changes, **before push**: run `php script/bump-version.php patch --added "..." --changed "..." --fixed "..."`
+2. Script updates `api/version.php` and prepends CHANGELOG entry with **correct date+time**
+3. Include `script/bump-version.php` output in `git add` before commit
+4. After `git push`: run `php script/bump-version.php mark-pushed`, then `git add CHANGELOG.md && git commit -m "chore: mark vX.Y.Z pushed" && git push`
+5. Sections `Přidáno`, `Změněno`, `Opraveno` – pass via `--added`, `--changed`, `--fixed`
+
+## Version header format
+
+```markdown
+## [2.2.2] – 17.02.2026 18:30
+> Pushed: 17.02.2026 18:31
+```
+
+**Important:** Never use date only (`17.02.2026`). Always add time (`17.02.2026 18:30`). Get time from `git log` or current time.
+
+Add `> Pushed:` line **after successful `git push`**. If version was not pushed yet, omit the line or use `> Not pushed`.
+
+## Example entry
+
+```markdown
+## [2.2.2] – 17.02.2026 18:30
+> Pushed: 17.02.2026 18:31
+
+### Změněno
+- **File:** description of change
+
+### Přidáno
+- **File:** description of new feature
+
+### Opraveno
+- **File:** description of fix
+```
+
+CHANGELOG version must match the value in `api/version.php`.

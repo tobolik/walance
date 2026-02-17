@@ -1,0 +1,40 @@
+---
+description: Soft-update, entity_id, valid_*, app versioning
+globs: api/**/*.php, migrations/*.sql, docs/SOFT-UPDATE-AND-VERSIONING.md
+alwaysApply: false
+---
+
+# Soft-update and Versioning – CRITICAL RULES
+
+When editing API, migrations or new tables **always** follow these rules.
+
+## 1. Methods in crud.php and _bootstrap.php
+
+- **Insert:** only `softInsert($table, $data)` – never direct INSERT (missing valid_from, valid_to, valid_user_*, entity_id).
+- **Update:** only `softUpdate($table, $id, $data)` – $id = physical row `id`; closes old version, inserts new one with same entity_id.
+- **Delete:** only `softDelete($table, $id)` – $id = physical `id`; sets valid_to, valid_user_to.
+- **Read:** `findActive($table, $id)`, `findActiveByEntityId($table, $entityId)`, `findAllActive($table, $order)`; in SQL always `WHERE valid_to IS NULL`.
+
+## 2. Entity_id
+
+- `properties_id`, `tenants_id`, `contracts_id` (and similar in other tables) = **always entity_id** (logical identifier), not physical `id`.
+- Column name: `{table}_id` (e.g. `contracts_id`). Usage: linking versions of same entity; in API and JOINs work with entity_id.
+
+## 3. Valid_* and user
+
+- `valid_from` = when version started; `valid_to` = NULL = active.
+- `valid_user_from` / `valid_user_to` = who created / closed version (filled by softInsert/softUpdate/softDelete from SESSION).
+
+## 4. New tables (migrations)
+
+- Columns: `id`, `{table}_id`, business fields, `valid_from`, `valid_to`, `valid_user_from`, `valid_user_to`.
+- Indexes: `idx_{table}_id ({table}_id, valid_to)`, `idx_v (valid_to)`.
+- In crud.php add to $FIELDS, $REQUIRED, $FIELD_LABELS and use only soft* methods.
+
+## 5. App versioning (api/version.php)
+
+- On every code change bump version (PATCH): `MAJOR.MINOR.PATCH`.
+- Use same value (without "v") for all `?v=...` on CSS and JS (cache busting).
+- See also `.cursor/rules/versioning/increment.mdc`.
+
+Full docs: `docs/SOFT-UPDATE-AND-VERSIONING.md`.

@@ -1,28 +1,33 @@
-# Verzování (cursor-rules: version-increment.mdc)
+# Verzování
 
-Při každé úpravě kódu **vždy** zvýš verzi (PATCH: 1.0.0 → 1.0.1).
+Při každé úpravě kódu **vždy** povýš verzi. **Používej výhradně skript** – nikdy neupravuj `api/version.php` ani `CHANGELOG.md` ručně.
 
-## Kde aktualizovat
+**Cursor AI agent:** Pravidla v `.cursor/rules/versioning/` vyžadují, aby agent skript spouštěl sám před push a po push.
 
-**Pouze api/version.php** – `define('APP_VERSION', '1.0.2');`
+## Skript (jediný správný způsob)
 
-Web (index.php) i admin stránky čtou verzi z version.php automaticky.
-
-## Formát
-
-`vMAJOR.MINOR.PATCH` – při běžné změně zvyš PATCH.
-
-## CHANGELOG – datum a čas
-
-Při každém povýšení verze přidej záznam do `CHANGELOG.md`:
-
-```markdown
-## [1.0.25] – 15.02.2026 22:30
+```bash
+php script/bump-version.php patch [--added "popis"] [--changed "popis"] [--fixed "popis"]
 ```
 
-**Povinně:** datum **a** čas ve formátu `DD.MM.YYYY HH:MM`. Nikdy jen datum.
+- **patch** – běžná změna (1.0.0 → 1.0.1)
+- **minor** – nová funkce (1.0.1 → 1.1.0)
+- **major** – zlomová změna (1.1.0 → 2.0.0)
+- **--added, --changed, --fixed** – položky do CHANGELOG (lze opakovat)
 
-Čas získáš např. z `git log --format="%ad" --date=format:"%d.%m.%Y %H:%M" -1`.
+Datum a čas se berou ze systému v okamžiku spuštění – stoprocentní správnost (Europe/Prague).
+
+Po `git push` spusť:
+
+```bash
+php script/bump-version.php mark-pushed
+```
+
+## Kde je verze
+
+**api/version.php** – `define('APP_VERSION', '1.0.2');`
+
+Web (index.php) i admin stránky čtou verzi z version.php automaticky. Cache busting (`?v=`) je dynamický.
 
 ## Závěrečná hláška
 

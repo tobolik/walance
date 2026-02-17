@@ -1,0 +1,85 @@
+---
+description: Checklist for introducing new rental contract with tenant, property, payments
+globs: migrations/*.sql
+alwaysApply: false
+---
+
+# Rental Contract Including Payments
+
+When creating a migration that **introduces a new rental contract** (tenant + property + contract + payments), always follow this checklist. Template: `migrations/058_kinclova_dominika_interbrigadistu.sql`.
+
+## Rules before writing SQL
+
+- **Contract dates:** Always verify `contract_start`, `contract_end`, `deposit_paid_date`, `deposit_return_date` and payment dates – they must match the contract and statements. On conflict or ambiguity inform the user, do not guess.
+- **Summary before insert:** Before writing to .sql always present a summary of detected values (tenant, property, contract from–to, rent, deposit, payments by month, payment requests). Only after **explicit user approval** write the migration.
+- **When unsure:** Whenever unsure (unclear data, missing data, conflict), inform the user and do not assume values without confirmation.
+
+## 1. Tenant (tenants)
+
+- INSERT only if not exists (NOT EXISTS by name, e.g. LIKE '%Surname%' AND LIKE '%Firstname%').
+- Columns: `tenants_id`, `name`, `type`, `birth_date`, `email`, `phone`, `address`, `valid_from`, `valid_to`, `valid_user_from`, `valid_user_to`.
+- After INSERT: `UPDATE tenants SET tenants_id = id WHERE ... AND tenants_id IS NULL`.
+- `SET @tenants_id := (SELECT COALESCE(tenants_id, id) FROM tenants WHERE valid_to IS NULL AND ... LIMIT 1)`.
+
+## 2. Property (properties)
+
+- INSERT only if not exists (NOT EXISTS by name or address).
+- Columns: `properties_id`, `name`, `address`, `type` (apartment, garage, …), `valid_*`.
+- After INSERT: `UPDATE properties SET properties_id = id WHERE ...`.
+- `SET @properties_id := ...`.
+
+## 3. Landlord bank account
+
+- `SET @ba_id := (SELECT COALESCE(bank_accounts_id, id) FROM bank_accounts WHERE valid_to IS NULL AND (account_number LIKE '...' OR is_primary = 1) ORDER BY ... LIMIT 1)`.
+
+## 4. Contract (contracts)
+
+- Columns: `contracts_id`, `properties_id`, `tenants_id`, `contract_start`, `contract_end`, `monthly_rent`, `first_month_rent`, `deposit_amount`, `deposit_paid_date`, `deposit_return_date`, `default_payment_method`, `default_bank_accounts_id`, `valid_*`.
+- **Rent:** if rent + advances (e.g. 7 500 + 1 400), store **sum** in `monthly_rent` (8 900). `first_month_rent` = prorated first month (rent + advances).
+- INSERT only if no contract exists for that tenant+property and contract_start.
+- After INSERT: `UPDATE contracts SET contracts_id = id WHERE ...`.
+- `SET @contracts_id := ...`.
+
+## 5. Rent changes (contract_rent_changes)
+
+- If rent increases during contract: INSERT rows with `contract_rent_changes_id`, `contracts_id`, `amount` (total rent in CZK), `effective_from` (first day of month), `valid_*`.
+- NOT EXISTS by `contracts_id` and `effective_from`.
+- Template from 058: one row from 4/2022 with amount 9 400.
+
+## 6. Tenant bank account (tenant_bank_accounts)
+
+- For FIO matching: INSERT counterpart account number (e.g. `2799423133/0800`) for `@tenants_id`.
+- NOT EXISTS by `tenants_id` and `account_number`.
+- After INSERT: `UPDATE tenant_bank_accounts SET tenant_bank_accounts_id = id WHERE ...`.
+
+## 7. Payments (payments)
+
+- Columns: `payments_id`, `contracts_id`, `period_year`, `period_month`, `amount`, `currency`, `payment_date`, `note`, `payment_method`, `bank_accounts_id`, `payment_type`, `approved_at`.
+- **Payment types:** `rent` (rent), `deposit` (deposit), `deposit_return` (deposit return – negative amount), `energy`, `other` (settlement, overpayment etc.).
+- **First month:** one payment with `payment_type = 'rent'` and actual amount (prorated).
+- **Deposit:** one payment `payment_type = 'deposit'`, positive amount.
+- **Monthly rent:** rows by month, `payment_type = 'rent'`, matching `amount` after rent change (contract_rent_changes).
+- **Deposit return:** one payment `payment_type = 'deposit_return'`, **negative** amount.
+- **Settlement / overpayment:** `payment_type = 'other'` (or `settlement` per convention), negative amount, note.
+- All payments have `approved_at = payment_date` (or CONCAT(payment_date, ' 12:00:00')) so they count as paid in calendar.
+- Idempotence: NOT EXISTS by contracts_id, period_year, period_month, payment_date, amount.
+- After INSERT: `UPDATE payments SET payments_id = id WHERE payments_id IS NULL AND contracts_id = @contracts_id AND payment_date BETWEEN ...`.
+
+## 8. Payment requests (payment_requests) – NEVER SKIP
+
+- For every payment of type deposit / deposit return / settlement create a record in `payment_requests` and **link it to the payment** (`payments_id`, `paid_at`).
+- After inserting payments load `payments_id` (entity_id) of relevant payments:
+  - `@pay_deposit_id` – payment with `payment_type = 'deposit'` and matching amount,
+  - `@pay_deposit_return_id` – payment with `payment_type = 'deposit_return'` and negative amount,
+  - `@pay_settlement_id` – settlement payment (e.g. `payment_type = 'other'`, amount e.g. -1657).
+- INSERT into `payment_requests`: `payment_requests_id`, `contracts_id`, `amount`, `type` (deposit / deposit_return / settlement / energy / other), `note`, `due_date`, `paid_at`, `payments_id`, `valid_*`.
+- Types: `deposit` (deposit), `deposit_return` (deposit return), `settlement` (settlement), `energy`, `other`.
+- NOT EXISTS by contracts_id and type (and optionally amount) to avoid duplicates.
+- After each INSERT: `UPDATE payment_requests SET payment_requests_id = id WHERE valid_to IS NULL AND payment_requests_id IS NULL AND ...`.
+
+## General
+
+- Migrations must be **idempotent**: use NOT EXISTS and conditions so repeated runs do not create duplicates.
+- All tables use soft-update: after INSERT set `{table}_id = id` where NULL.
+- Migration numbering: next free number in `migrations/` (e.g. 059_...).
+- In SQL header state brief description (tenant, property, specifics: rent+advances, prorated first month, deposit, settlement).

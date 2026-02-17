@@ -1,0 +1,16 @@
+---
+description: After bug fix (fixbot / user) always commit changes
+globs: api/**/*.php, js/**/*.js, *.html, *.php, .cursor/rules/**/*.mdc
+alwaysApply: false
+---
+
+# Commit After Bug Fix
+
+When you fix a bug (from fixbot report or user):
+
+1. **After the fix** always:
+   - `git add` for changed files (not submodule e.g. `docs/cursor-rules-firemni` unless part of the fix)
+   - `git commit -m "fix: brief description"` (e.g. `fix: restore session SameSite=Strict`, `fix(settlement): use prepared statements`)
+2. In closing summary state: **Commit:** hash and message, **Current version**, **Push:** whether pushed, or offer `git push`.
+
+This ensures fixbot fixes are not lost and are clearly recorded in history.

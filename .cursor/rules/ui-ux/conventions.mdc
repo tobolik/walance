@@ -1,0 +1,49 @@
+---
+description: General UX/UI conventions – note column, scrollbars, forms
+globs: css/style.css, js/**/*.js, index.php, admin/**/*.php
+alwaysApply: true
+---
+
+# General UX/UI Conventions – FOLLOW
+
+When editing UI (tables, forms, styles) always follow these rules.
+
+## 1. Note column / field
+
+- **In tables:** Note is always **max one line**, then truncate with `text-overflow: ellipsis` (class `.cell-note-truncate`).
+- **On hover:** Full text shows in native tooltip – use `title` attribute with full content. **Do not expand** text on hover (no `white-space: normal` / `overflow: visible` on hover), that causes horizontal scroll.
+- **Where:** Tenants, Properties, Contracts, Payments – "Note" column; in modals for payment requests etc. All places showing note in a table must use `<span class="cell-note-truncate" title="…">…</span>` inside `<td class="col-note cell-note-wrap">`.
+
+## 2. Horizontal scrollbars
+
+- **Never** want bottom (horizontal) scrollbar.
+- **Ensure:** `overflow-x: hidden` on containers that might overflow (`.heatmap-wrap`, `.tbl-wrap`; `body` already has `overflow-x: hidden`).
+- **Do not add** `overflow-x: auto` for tables – rather shrink content (note truncation etc.) so everything stays within width.
+
+## 3. Versioning and cache busting
+
+- On every code change bump version in `api/version.php`: format `MAJOR.MINOR.PATCH`, same value (without "v") for all `?v=...` on CSS and JS.
+- See `.cursor/rules/versioning/increment.mdc`.
+
+## 4. Tag colors
+
+- **Green and red** are reserved for **status** (success / problem). For informational tags (payment type, request settlement, deposit etc.) use other colors (blue, teal, gray) to avoid collision with system states.
+
+## 5. Searchable select
+
+- Native `<select>` inside the component has `tabindex="-1"` so it is not in tab order (tab goes straight to the visible input).
+- On input focus: if the field has a value, select all text (`input.select()`) so it can be easily overwritten.
+
+## 6. Tables – sorting and striping
+
+- **Sorting:** Tables with sorting must clearly show which column and direction is sorted. On load there is always one column in sort state (implicit state) so the icon matches actual order.
+  - **Sorted column:** in header always **filled** triangle (▲ ascending, ▼ descending). For multi-level sort show priority number (1, 2, 3…) next to icon.
+  - **Sortable, unsorted column:** in header **outline** triangle (up arrow) – indicates column can be sorted (default direction = ascending). On click it becomes filled.
+  - Click on header: sort by that column; first click = ascending, second = descending. Click on another column switches sort to that column.
+  - **Ctrl+Click:** keep current columns and add this as another level; for already sorted column toggles direction.
+  - Implementation: `UI.renderTable(…, { sortable: { order: [ { key, dir }, … ] }, striped: true })`. Backward compatible: `sortable: { currentKey, currentDir }` converts to single level.
+- **Row striping:** Tables with sorting or long lists should have `striped: true` (class `tbl-striped`) so rows alternate visually (e.g. every even row slightly different background) for better readability.
+
+---
+
+Full docs: `docs/UX-UI-CONVENTIONS.md`.

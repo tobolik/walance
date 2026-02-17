@@ -1,0 +1,66 @@
+---
+description: Expected/Paid calculation invariants in heatmap and overviews
+globs: api/dashboard.php, js/views/dashboard.js, api/settlement.php
+alwaysApply: false
+---
+
+# Heatmap and Overviews – Expected / Paid
+
+When editing heatmap, contract overview or settlement calculations **always** follow these rules. Full algorithm docs: `docs/heatmap-predpis-platby-logika.md` – **read it before any non-trivial change**.
+
+## Invariants – NEVER VIOLATE
+
+### 1. deposit and deposit_return NEVER in Expected
+
+Requests of type `deposit` and `deposit_return` are ALWAYS excluded from:
+- `paymentRequestsSumByContract` (total Expected)
+- `paymentRequestsByContractMonth` (monthly Expected)
+
+**But:** Unpaid `deposit` and `deposit_return` (paid_at IS NULL) ARE SHOWN in unpaid requests (orange badge). After payment/settlement they disappear.
+
+Deposit is not a tenant obligation for Expected. Including it in Expected would skew the balance.
+
+### 2. settled_by_request_id NEVER in Expected
+
+Requests with non-empty `settled_by_request_id` are excluded from the same places as deposit. Settled advances were replaced by settlement request – counting both would double Expected.
+
+### 3. Settled advances STAY in display list
+
+`paymentRequestsListByContractMonth` contains ALL requests (including settled and deposit) – modal shows them as info items. **Do not filter** them when filling the display list.
+
+### 4. Remainder deposit payments = DISCARD
+
+In PHP and JS: remainder (leftover after allocating linked requests) for deposit/deposit_return payments is DISCARDED. Unused deposit = will be returned via deposit_return.
+
+### 5. No capping for deposit payments
+
+`$shouldCap = !$isDepositPayment` – deposit payment covers requests with sum lower than deposit; capping would cut allocation.
+
+### 6. Frontend MIRRORS backend
+
+`amountContributingToMonth()` and `renderExisting()` in `dashboard.js` MUST have identical skip/cap/remainder logic as PHP allocation loop in `dashboard.php`. On any change in PHP update JS (and vice versa).
+
+### 7. energy_settlement and settled_by_request_id
+
+Action `energy_settlement` in `settlement.php` sets `settled_by_request_id` **only** for unpaid and unlinked energy advances (`paid_at IS NULL AND payments_id IS NULL`). Paid advances stay in Expected normally.
+
+### 8. Month assignment
+
+- **Expected:** month = `date('Y-m', due_date)` from `payment_requests`.
+- **Paid (heatmap):** month = `due_date` of linked request; fallback = `period_year-period_month` or `payment_date`.
+- **Deposit/deposit_return (JS effectiveMonthKey):** month = `payment_date`.
+
+### 9. Deposit indicator in heatmap
+
+Deposit events (deposit received/returned) are collected from heatmapByPayment by `payment_date` and shown as "K" icon in heatmap cell. **These events MUST NOT affect Expected/Paid numbers** – they are informational only. Backend field: `deposit_events` in JSON cell. Frontend: `cell.deposit_events`.
+
+### 10. Deposit account
+
+Extended stats include `deposit_account` object with per-contract breakdown. Status is computed from `contracts.deposit_amount`, `deposit_return_date` and `contract_end`. **Do not change status logic** without updating frontend rendering code.
+
+## When editing
+
+1. Read `docs/heatmap-predpis-platby-logika.md` (full algorithm description).
+2. Verify none of the invariants above is violated.
+3. If changing PHP logic, update corresponding JS logic (and vice versa).
+4. After change update docs in `docs/heatmap-predpis-platby-logika.md`.
