@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.5] – 17.02.2026 20:02
+> Pushed: 17.02.2026 20:02
+
+### Přidáno
+- **Story – „O autorce metody":** přidán obrázek jana-linkedin.jpg (800×800) vlevo vedle textu, responsivní layout (sloupce na desktopu, pod sebou na mobilu)
+
 ## [2.4.4] – 17.02.2026 19:55
 > Pushed: 17.02.2026 19:55
 

@@ -992,13 +992,45 @@
             padding: 0 24px 24px;
             color: rgba(250, 249, 247, 0.8);
             line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
 
-        .story-author-body p {
+        @media (min-width: 768px) {
+            .story-author-body {
+                flex-direction: row;
+                gap: 32px;
+            }
+        }
+
+        .story-author-img {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto 20px;
+        }
+
+        @media (min-width: 768px) {
+            .story-author-img {
+                width: 180px;
+                margin: 0;
+            }
+        }
+
+        .story-author-img img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+        }
+
+        .story-author-text p {
             margin-bottom: 12px;
         }
 
-        .story-author-body p:last-child {
+        .story-author-text p:last-child {
             margin-bottom: 0;
         }
 
@@ -1976,12 +2008,21 @@
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </summary>
                 <div class="story-author-body">
-                    <p>Jana je „Klientem 0" svého vlastního systému. Po 12 letech intenzivní praxe fyzioterapeutky v nemocničním prostředí, kde denně řešila akutní i chronické stavy pacientů, sama okusila odvrácenou stranu vysokého pracovního nasazení v korporátním světě. Prošla si vyhořením a ztrátou zdraví, což ji motivovalo k vytvoření metodiky, která propojuje medicínské znalosti s nároky moderní doby.</p>
-                    <p>Dnes ve své práci kombinuje unikátní expertní trojúhelník:</p>
-                    <p><strong>Zkušená fyzioterapeutka:</strong> Dokonale rozumí mechanice těla a biomechanice pohybu. Ví, jak efektivně odstranit bolesti zad, krční páteře a hlavy, které jsou daní za hodiny strávené u počítače.</p>
-                    <p><strong>Certifikovaná koučka:</strong> Pomáhá lidem zvládnout mentální nápor, nastavit si udržitelné hranice a pracovat s motivací tak, aby předešli vyhoření.</p>
-                    <p><strong>Event manažerka:</strong> Díky zkušenostem z organizace velkých projektů mluví jazykem byznysu. Rozumí tlaku na výkon, deadlinům i stresu, který manažerské pozice přinášejí.</p>
-                    <p>Její systém WALANCE není jen o cvičení, ale o komplexním přístupu zahrnujícím neurovědu, aplikovanou ergonomii a moderní time management. Jana učí firmy i jednotlivce, jak si udržet špičkovou výkonnost a radost z práce, aniž by u toho museli obětovat své vlastní zdraví.</p>
+                    <div class="story-author-img">
+                        <img src="assets/images/jana-linkedin.jpg"
+                             alt="Jana Štěpaníková"
+                             width="800" height="800"
+                             loading="lazy"
+                             decoding="async">
+                    </div>
+                    <div class="story-author-text">
+                        <p>Jana je „Klientem 0" svého vlastního systému. Po 12 letech intenzivní praxe fyzioterapeutky v nemocničním prostředí, kde denně řešila akutní i chronické stavy pacientů, sama okusila odvrácenou stranu vysokého pracovního nasazení v korporátním světě. Prošla si vyhořením a ztrátou zdraví, což ji motivovalo k vytvoření metodiky, která propojuje medicínské znalosti s nároky moderní doby.</p>
+                        <p>Dnes ve své práci kombinuje unikátní expertní trojúhelník:</p>
+                        <p><strong>Zkušená fyzioterapeutka:</strong> Dokonale rozumí mechanice těla a biomechanice pohybu. Ví, jak efektivně odstranit bolesti zad, krční páteře a hlavy, které jsou daní za hodiny strávené u počítače.</p>
+                        <p><strong>Certifikovaná koučka:</strong> Pomáhá lidem zvládnout mentální nápor, nastavit si udržitelné hranice a pracovat s motivací tak, aby předešli vyhoření.</p>
+                        <p><strong>Event manažerka:</strong> Díky zkušenostem z organizace velkých projektů mluví jazykem byznysu. Rozumí tlaku na výkon, deadlinům i stresu, který manažerské pozice přinášejí.</p>
+                        <p>Její systém WALANCE není jen o cvičení, ale o komplexním přístupu zahrnujícím neurovědu, aplikovanou ergonomii a moderní time management. Jana učí firmy i jednotlivce, jak si udržet špičkovou výkonnost a radost z práce, aniž by u toho museli obětovat své vlastní zdraví.</p>
+                    </div>
                 </div>
             </details>
         </div>
