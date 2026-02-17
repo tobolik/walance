@@ -999,6 +999,131 @@
             margin-top: 4px;
         }
 
+        /* ---- CASE STUDIES (příběhy klientů) ---- */
+        .casestudy-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .casestudy-item {
+            background: var(--white);
+            border: 1px solid var(--mist);
+            border-left: 3px solid var(--accent);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .casestudy-item[open] {
+            box-shadow: 0 8px 32px rgba(30, 41, 59, 0.08);
+        }
+
+        .casestudy-item summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .casestudy-item summary::-webkit-details-marker { display: none; }
+
+        .casestudy-item summary svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--ink-muted);
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .casestudy-item[open] summary svg {
+            transform: rotate(180deg);
+        }
+
+        .casestudy-summary { flex: 1; }
+
+        .casestudy-tag {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .casestudy-summary h3 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .casestudy-subtitle {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+        }
+
+        .casestudy-body {
+            padding: 0 24px 24px;
+        }
+
+        .casestudy-phase {
+            margin-bottom: 20px;
+        }
+
+        .casestudy-phase:last-child { margin-bottom: 0; }
+
+        .casestudy-phase h4 {
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .casestudy-phase p {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--ink-light);
+        }
+
+        .casestudy-phase ul {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0;
+        }
+
+        .casestudy-phase li {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--ink-light);
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .casestudy-phase li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .casestudy-phase li strong {
+            color: var(--ink);
+        }
+
         /* ---- PRODUCTS ---- */
         .products-grid {
             display: grid;
@@ -1006,8 +1131,17 @@
             gap: 24px;
         }
 
+        /* Mobile: free first, expensive last (reverse HTML order) */
+        .products-grid .product-card:nth-child(1) { order: 3; } /* Office Reset 45k → last */
+        .products-grid .product-card:nth-child(2) { order: 2; } /* Crisis Mentoring → middle */
+        .products-grid .product-card:nth-child(3) { order: 1; } /* Byznys z postele free → first */
+
         @media (min-width: 768px) {
             .products-grid { grid-template-columns: repeat(3, 1fr); }
+            /* Desktop: restore original order */
+            .products-grid .product-card:nth-child(1) { order: 1; }
+            .products-grid .product-card:nth-child(2) { order: 2; }
+            .products-grid .product-card:nth-child(3) { order: 3; }
         }
 
         .product-card {
@@ -1597,6 +1731,7 @@
         <div class="container">
             <div class="section-header fade-in" style="text-align:center; margin-bottom:56px;">
                 <h2 class="section-title"><span>WALANCE</span> — Anatomie udržitelného lídra</h2>
+                <p class="section-subtitle">7 pilířů, 7 písmen. Každé stojí za jedním principem.</p>
             </div>
 
             <div class="pillars-grid">
@@ -1710,50 +1845,187 @@
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">Reálné výsledky</p>
-                <h2 class="section-title">4 lidé, 4 příběhy, 1 metoda</h2>
+                <h2 class="section-title">5 lidí, 5 příběhů, 1 metoda</h2>
                 <p class="section-subtitle">Každý přišel s jiným problémem. Všichni odcházeli s funkčním systémem.</p>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+            <div class="casestudy-list">
 
-                <!-- PŘÍBĚH 1 — Jana nahradí reálným příběhem -->
-                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
-                    <div>
-                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 1 <!-- např. "Chronická bolest zad" --></p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                <!-- PŘÍBĚH 1 — Vlaďka -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Deprese &amp; dechové bloky</p>
+                            <h3>Vlaďka — Konečně se nadechnout</h3>
+                            <p class="casestudy-subtitle">Jak dech a pohyb rozpustily letité úzkosti</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Život v „uzlíčku"</h4>
+                            <p>Když ke mně tato klientka (shodou okolností skvělá učitelka) přišla poprvé, byla zosobněním vnitřního stažení. Trpěla těžkými depresemi, brala silná antidepresiva a každé jaro pro ni bylo kritické — cítila fyzickou nemožnost se nadechnout. Přestože svou práci s dětmi milovala, její tělo i mysl byly v totální křeči. Byla na nemocenské, vyčerpaná a odpojená od sebe sama.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Nešli jsme na to jen přes „povídání", ale vzali jsme to skutečně holisticky. Propojili jsme fyzioterapii s mentálním nastavením:</p>
+                            <ul>
+                                <li><strong>Uvolnění těla:</strong> Začali jsme tejpováním, cvičením s overbally a expandéry, abychom fyzicky otevřeli hrudník.</li>
+                                <li><strong>Pohyb jako lék:</strong> Nordic Walking, kde se pohyb v přírodě stal prostorem pro mentoring.</li>
+                                <li><strong>Strategie v práci:</strong> Upravili jsme její přístup k výuce. Naučila se nastavit hodiny tak, aby ji nevyčerpávaly, ale dobíjely.</li>
+                                <li><strong>Dech jako kotva:</strong> Intenzivně jsme trénovali dechové techniky, které jí umožnily „roztáhnout ruce" a nebát se nadechnout světa.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu</h4>
+                            <p>Nejsilnější moment přišel, když si uvědomila, že svůj stav může ovlivnit sama. Že to sevření není její osud, ale vzorec, který se dá změnit. Zjistila, že když se dokáže fyzicky narovnat a nadechnout, její sebevědomí i psychická odolnost vystřelí nahoru.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Dnes je z ní jiná žena. Depresivní stavy ustoupily, antidepresiva už nejsou hlavním tématem a ona se vrátila ke své vášni — k dětem — s úplně novou energií. I když už spolu dnes pracujeme převážně online, dokáže své tělo vnímat natolik citlivě, že případné přicházející napětí pozná včas a sama ho pomocí naučených technik „rozpustí". Už neuhýbá, už se neschovává. Žije v rovnováze.</p>
+                        </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- PŘÍBĚH 2 -->
-                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
-                    <div>
-                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 2</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                <!-- PŘÍBĚH 2 — Renata -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Ztráta sebevědomí &amp; toxické prostředí</p>
+                            <h3>Renata — Vlastní síla nad systémem</h3>
+                            <p class="casestudy-subtitle">Cesta od role oběti k pevným hranicím a sebeúctě</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Neviditelná bolest</h4>
+                            <p>Přišla ve chvíli, kdy ji „systém" zlomil. Trpěla bolestmi, které lékaři ignorovali a označovali ji za simulanta. K tomu se přidal rozpad toxického vztahu a pocit, že její tělo je nepřítel. Navenek působila sebevědomě, ale její tělo vyprávělo příběh o naprostém stažení a rezignaci. Pracovala jako jeřábnice, vystavena chladu i drsnému kolektivu.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Klíčové bylo pochopit, že žádný „zázračný proutek" zvenčí neexistuje:</p>
+                            <ul>
+                                <li><strong>Fyzické nastavení v extrému:</strong> Řešili jsme ergonomii a nastavení těla přímo v kabině jeřábu, aby ji práce v zimě a nepohodlí neničila.</li>
+                                <li><strong>Mentální štít:</strong> Pracovali jsme na tom, jak se ráno naladit, aby ji toxický kolektiv nevyčerpával. Naučila se rozlišovat mezi svými pocity a problémy druhých.</li>
+                                <li><strong>Seznámení se s vlastním tělem:</strong> Přes cvičení a úpravu stravy začala poprvé v životě své tělo skutečně vnímat, ne ho jen „používat".</li>
+                                <li><strong>Online podpora:</strong> Kdykoliv se objevila krize, využili jsme online konzultace pro okamžité srovnání směru.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: „Mám se ráda"</h4>
+                            <p>Zlom nenastal, když zmizela veškerá bolest, ale v momentě, kdy prohlásila: „Začínám mít ráda sama sebe a cítím ke svému tělu úctu." Přestala čekat, až ji zachrání lékaři nebo okolí, a začala se zachraňovat sama.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Dnes je to žena, která stojí pevně na nohou. V práci už nenechá útoky ostatních proniknout pod kůži — chápe, že je to jejich boj, ne její. I když tělo občas po starých traumatech zastávkuje, ona už ví, co s tím. Už není obětí okolností, ale tvůrkyní své vlastní rovnováhy.</p>
+                        </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- PŘÍBĚH 3 -->
-                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
-                    <div>
-                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 3</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                <!-- PŘÍBĚH 3 — David -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Stres &amp; kariérní nesoulad</p>
+                            <h3>David — Když tělo křičí „STOP"</h3>
+                            <p class="casestudy-subtitle">Proč bolest ramene vyřešila až změna kariéry</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Úspěch vykoupený křečí</h4>
+                            <p>Do ordinace mi vstoupil prototyp úspěchu: mladý, charismatický manažer, sportovec, vedoucí týmu. Přišel s „prostou" bolestí ramene. Ale viděla jsem víc než jen zánět šlach. Viděla jsem muže v permanentním stresu, sešněrovaného v roli, která mu neseděla. I přes naučené úsměvy jeho tělo vysílalo jasný signál: „Takhle už to dál nejde."</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Šli jsme do hloubky:</p>
+                            <ul>
+                                <li><strong>Diagnostika těla i role:</strong> Zatímco jsme tejpovali a stabilizovali rameno, rozebírali jsme jeho pracovní dny. Jako pozorovatelka na jeho poradě jsem viděla ten rozpor — byl skvělý odborník, ale v roli šéfa byl v křeči. Rozený sólista nucený hrát týmovou hru.</li>
+                                <li><strong>Analýza komfortní zóny:</strong> „Proč děláš něco, co tě vnitřně láme?" Zjistili jsme, že jeho ambice ho dohnaly do pozice, která nebyla v souladu s jeho přirozeností.</li>
+                                <li><strong>Fyzické uvolnění:</strong> Propojili jsme dechové techniky s posturálním nastavením. Jakmile začal chápat příčinu svého stresu, i jeho rameno začalo „povolovat".</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: Odvaha k autenticitě</h4>
+                            <p>Zásadní moment nastal, když si přiznal, že nepotřebuje vést lidi, aby byl úspěšný. Pochopil, že jeho síla je v individualitě, ne v managementu. Toto uvědomění doslova „shodilo balvan" z jeho ramen.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Dnes je z něj úspěšný podnikatel na volné noze. Už to není ten vystresovaný kluk. Je to chlap, ze kterého sálá opravdové, vnitřní sebevědomí. Bolest ramene zmizela — ne proto, že by bral prášky, ale proto, že přestal bojovat sám se sebou. Našel svou WALANCE.</p>
+                        </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- PŘÍBĚH 4 -->
-                <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
-                    <div>
-                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 4</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
+                <!-- PŘÍBĚH 4 — Vašek -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Úraz mozku &amp; hledání identity</p>
+                            <h3>Vašek — Odvaha k pravdě</h3>
+                            <p class="casestudy-subtitle">Jak po těžkém úrazu mozku najít sebe sama a vnitřní klid</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: Život v mlze a bolesti</h4>
+                            <p>Vašek ke mně přišel ve svých 20 letech se zavazadlem, které by bylo těžké i pro padesátníka. Po tragickém úrazu hlavy a náročné operaci mozku trpěl chronickými bolestmi, hučením v uších a neustálou únavou. Jako vedlejší (téměř zázračný) efekt úrazu se u něj projevila schopnost hrát na klavír, na který dříve nikdy nehrál. Přesto byl ztracený — fyzicky i duševně. Nevěděl, kým je, kam patří, a schovával se v životě, který nebyl jeho.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Cesta WALANCE</h4>
+                            <p>Metodu jsme aplikovali v několika rovinách, které se postupně propojily:</p>
+                            <ul>
+                                <li><strong>Fyzické uvolnění a režim:</strong> Práce s jizvou po operaci, srovnání postavení hlavy a řešení „banalit" jako pitný režim. Chronické bolesti hlavy živil i extrémní nedostatek vody a nadmíra kofeinu.</li>
+                                <li><strong>Job Crafting:</strong> Vašek hledal své místo v pracovním světě. Pomocí mentoringu jsme hledali roli, která nebude dráždit jeho citlivý nervový systém.</li>
+                                <li><strong>Odvaha k pravdě:</strong> Nejtěžší téma — jeho identita. Vašek žil v partnerství se ženou, ale uvnitř věděl, že je gay. Strach z odmítnutí a pocit viny mu způsobovaly obrovské úzkosti, které se projevovaly i fyzickou bolestí.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: Rozhovor, který osvobozuje</h4>
+                            <p>Společně jsme se připravili na klíčový životní krok. Pomohla jsem mu nastavit vnitřní klid a připravit se na upřímný rozhovor s přítelkyní. Nakonec jsme celou situaci rozebírali i společně v bezpečné atmosféře mé poradny. Ten moment, kdy pravda vyšla ven a byla přijata, byl pro něj skutečným uzdravením.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Nová realita</h4>
+                            <p>Vašek nakonec našel odvahu žít autenticky. S bývalou partnerkou zůstali blízkými přáteli, našel si práci, která ho naplňuje, a hlavně — přestal se bát sám sebe. Bolesti hlavy ustoupily do pozadí, protože zmizelo to největší vnitřní pnutí. Ukázalo se, že „rozvázat" uzel v životě je stejně důležité jako uvolnit stažený sval.</p>
+                        </div>
                     </div>
-                </div>
+                </details>
+
+                <!-- PŘÍBĚH 5 — Zdeňka -->
+                <details class="casestudy-item fade-in">
+                    <summary>
+                        <div class="casestudy-summary">
+                            <p class="casestudy-tag">Mrtvice &amp; ztráta sebeúcty</p>
+                            <h3>Zdeňka — Hranice jsou jen v naší hlavě</h3>
+                            <p class="casestudy-subtitle">Jak jedno setkání v nemocnici vrátilo chuť do života a sebeúctu</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="casestudy-body">
+                        <div class="casestudy-phase">
+                            <h4>Výchozí stav: „Já jsem blbá…"</h4>
+                            <p>Tento příběh se neodehrál v mé poradně, ale v nemocničním pokoji. Ležela jsem tam po operaci kolene, sama v bolestech, a vedle mě ležela paní Zdenička. Byla po mrtvici a čekala na operaci krčku. Neustále o sobě opakovala: „Já jsem blbá, já nic nezvládnu." Byla to uťápnutá žena bez kouska sebevědomí, kterou systém a její vlastní stav přesvědčily o tom, že už za nic nestojí.</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Moment WALANCE: Síla slova a motivace</h4>
+                            <p>I když mi nebylo dobře, nemohla jsem to nechat jen tak:</p>
+                            <ul>
+                                <li><strong>Změna paradigmatu:</strong> Vysvětlila jsem jí, že její mozek jen teď pracuje jiným tempem. Že pomalost není hloupost.</li>
+                                <li><strong>Malá vítězství:</strong> Motivovala jsem ji, aby si sama podala sklenici vody, na kterou dříve jen odevzdaně koukala. Ten záblesk v jejích očích, když zjistila, že to dokáže, byl silnější než jakékoliv léky.</li>
+                                <li><strong>Lidskost jako metoda:</strong> Smály jsme se, plakaly a já jsem ji z postele mentorovala, jak se k sobě chovat s laskavostí, i když tělo zrovna neposlouchá.</li>
+                            </ul>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Bod zlomu: Nová identita</h4>
+                            <p>Zdeňka pochopila, že její hodnota nezmizela s nemocí. Slíbila mi, že už o sobě nikdy neřekne, že je blbá. Našla v sobě sílu se personálu i světu postavit s větou: „Jsem jen pomalejší, dejte mi čas."</p>
+                        </div>
+                        <div class="casestudy-phase">
+                            <h4>Proč to dělám</h4>
+                            <p>Tento zážitek mi potvrdil, že metoda WALANCE není jen práce. Je to dar vidět v lidech to dobré, i když oni sami to už nevidí. Pomáhám lidem najít jejich sebehodnotu a sílu, ať už jsou v manažerském křesle, nebo na nemocničním lůžku. Protože rovnováha začíná v hlavě — v tom, co si o sobě říkáme.</p>
+                        </div>
+                    </div>
+                </details>
 
             </div>
         </div>
