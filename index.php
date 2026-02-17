@@ -1886,8 +1886,8 @@
 
                     <div id="booking-fields" style="display:none;">
                         <div class="form-group">
-                            <label for="b-name">Jméno *</label>
-                            <input type="text" id="b-name" name="name" required placeholder="Vaše jméno">
+                            <label for="b-name">Jméno a příjmení *</label>
+                            <input type="text" id="b-name" name="name" required placeholder="Vaše jméno a příjmení">
                         </div>
                         <div class="form-group">
                             <label for="b-email">E-mail *</label>
@@ -2185,6 +2185,7 @@
                     document.getElementById('booking-fields').style.display = 'block';
                     document.getElementById('booking-submit').style.display = 'block';
                     document.getElementById('booking-submit').disabled = false;
+                    document.getElementById('b-name').focus();
                 });
                 timeSlotsEl.appendChild(btn);
             });
