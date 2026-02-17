@@ -21,6 +21,10 @@ define('DB_PASS', 'vaše-heslo');
 // Nastavte stejnou hodnotu v GitHub Secrets jako MIGRATE_TOKEN
 define('MIGRATE_TOKEN', 'váš-náhodný-token');
 
+// Google Analytics 4 – Measurement ID (formát: G-XXXXXXXXXX)
+// Získáte v Google Analytics → Admin → Data Streams → Measurement ID
+// define('GA_MEASUREMENT_ID', 'G-XXXXXXXXXX');
+
 // Google Calendar – zapis do kalendáře jiného uživatele (Domain-Wide Delegation)
 // Povolte, pokud chcete zapisovat události do kalendáře kolegy (např. jana@firma.cz)
 // Vyžaduje nastavení Domain-Wide Delegation v Google Workspace Admin – viz docs/GOOGLE-CALENDAR-DELEGATION.md

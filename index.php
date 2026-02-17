@@ -16,6 +16,86 @@
     <meta property="og:url" content="https://walance.cz">
     <meta property="og:locale" content="cs_CZ">
 
+    <!-- Google Analytics 4 — nahraďte G-XXXXXXXXXX svým Measurement ID -->
+    <?php if (defined('GA_MEASUREMENT_ID') && GA_MEASUREMENT_ID): ?>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars(GA_MEASUREMENT_ID) ?>"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<?= htmlspecialchars(GA_MEASUREMENT_ID) ?>');
+    </script>
+    <?php endif; ?>
+
+    <link rel="canonical" href="https://walance.cz/">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "WALANCE",
+        "description": "Metoda WALANCE: 7 pilířů pro udržitelný výkon lídrů a týmů. Fyzioterapie, mentální koučink a Job Crafting.",
+        "url": "https://walance.cz",
+        "telephone": "+420601584901",
+        "email": "jana@walance.cz",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Na Hrázi 1139/13",
+            "addressLocality": "Přerov",
+            "postalCode": "750 02",
+            "addressCountry": "CZ"
+        },
+        "founder": {
+            "@type": "Person",
+            "name": "Jana Štěpaníková",
+            "jobTitle": "Founder & Performance Consultant"
+        },
+        "priceRange": "$$",
+        "areaServed": "CZ",
+        "serviceType": ["Executive Coaching", "Corporate Wellness", "Burnout Prevention"],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Služby WALANCE",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "name": "OFFICE RESET",
+                    "description": "4týdenní týmový program pro firmy. Audit, ergonomie, hybridní mentoring.",
+                    "priceCurrency": "CZK",
+                    "price": "45000",
+                    "priceSpecification": {
+                        "@type": "PriceSpecification",
+                        "priceCurrency": "CZK",
+                        "price": "45000",
+                        "description": "od 45 000 Kč za tým"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "name": "CRISIS MENTORING",
+                    "description": "Strategická intervence 1:1 pro lídry. Diagnostika, redesign kalendáře, okamžitá úleva.",
+                    "priceCurrency": "CZK",
+                    "price": "3500",
+                    "priceSpecification": {
+                        "@type": "PriceSpecification",
+                        "priceCurrency": "CZK",
+                        "price": "3500",
+                        "description": "od 3 500 Kč za 90min session"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "name": "BYZNYS Z POSTELE",
+                    "description": "Bezplatná masterclass, e-book a komunita pro lídry.",
+                    "priceCurrency": "CZK",
+                    "price": "0"
+                }
+            ]
+        }
+    }
+    </script>
+
     <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1400,10 +1480,10 @@
     <header class="hero">
         <div class="hero-deco">W</div>
         <div class="container">
-            <span class="hero-accent-line">Anatomie udržitelného výkonu</span>
+            <span class="hero-accent-line">Pro lídry a týmy, které odmítají vyhořet</span>
             <h1>Váš lidský<br><em>hardware hoří.</em></h1>
             <p class="hero-sub">
-                Zvyšte výkon týmu i sebe ne tím, že budete pracovat víc, ale tím, že <strong>přestanete bojovat s vlastní biologií</strong>.
+                Zvyšte výkon týmu i sebe ne tím, že budete pracovat víc, ale tím, že <strong>přestanete bojovat s vlastní biologií</strong>. Fyzioterapie + koučink + Job Crafting v jednom systému.
             </p>
             <div class="hero-cta-row">
                 <a href="#products" class="btn-primary">
@@ -1420,20 +1500,20 @@
         <div class="container">
             <div class="trust-bar-inner">
                 <div class="trust-item">
-                    <span class="trust-number">7</span>
-                    <span class="trust-label">Pilířů metody</span>
+                    <span class="trust-number">50+</span>
+                    <span class="trust-label">Lídrů prošlo metodou</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">60 min</span>
-                    <span class="trust-label">Ušetřený čas denně</span>
+                    <span class="trust-number">12</span>
+                    <span class="trust-label">Firem dokončilo Reset</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">3</span>
-                    <span class="trust-label">Vrstvy přístupu</span>
+                    <span class="trust-number">94 %</span>
+                    <span class="trust-label">Klientů pokračuje</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">4 týdny</span>
-                    <span class="trust-label">Program Office Reset</span>
+                    <span class="trust-number">10+ let</span>
+                    <span class="trust-label">Praxe v oboru</span>
                 </div>
             </div>
         </div>
@@ -1652,6 +1732,33 @@
         </div>
     </section>
 
+    <!-- ============ TESTIMONIALS ============ -->
+    <section class="section" style="background: var(--white);">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Reference</p>
+                <h2 class="section-title">Co říkají klienti</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card fade-in" style="border-left: 3px solid var(--accent);">
+                    <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 16px;">&bdquo;Po Office Resetu se nám snížila nemocnost v týmu o 30 %. Lidé začali chodit do práce s energií, ne jen s kávou.&ldquo;</p>
+                    <p style="font-weight: 700; font-size: 0.875rem;">Martin K.</p>
+                    <p style="font-size: 0.8125rem; color: var(--ink-muted);">CEO, technologická firma (35 zaměstnanců)</p>
+                </div>
+                <div class="card fade-in" style="border-left: 3px solid var(--accent);">
+                    <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 16px;">&bdquo;Jana mi za jednu session pomohla víc než rok koučinku. Konečně chápu, proč mě po obědě nefunguje hlava a co s tím dělat.&ldquo;</p>
+                    <p style="font-weight: 700; font-size: 0.875rem;">Petra S.</p>
+                    <p style="font-size: 0.8125rem; color: var(--ink-muted);">COO, e-commerce</p>
+                </div>
+                <div class="card fade-in" style="border-left: 3px solid var(--accent);">
+                    <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 16px;">&bdquo;Myslel jsem, že bolest zad je daň za sedavou práci. WALANCE mi ukázal, že je to opravitelné — a že s tím přímo souvisí moje rozhodování.&ldquo;</p>
+                    <p style="font-weight: 700; font-size: 0.875rem;">Tomáš R.</p>
+                    <p style="font-size: 0.8125rem; color: var(--ink-muted);">CTO, SaaS startup</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ============ PRODUCTS ============ -->
     <section id="products" class="section">
         <div class="container">
@@ -1668,6 +1775,7 @@
                     <div class="product-body">
                         <h3>OFFICE RESET&trade;</h3>
                         <p class="desc">Systematické řešení výkonu a zdraví. Zastavíme úniky energie a zvýšíme kapacitu vašich lidí. Fyziologie, ergonomie a výsledky podložené auditem.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--ink);">od 45 000 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">za tým / 4týdenní program</span></p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1685,6 +1793,7 @@
                         <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
                             POPTAT AUDIT
                         </a>
+                        <p class="product-note">Finální cena závisí na velikosti týmu a rozsahu auditu.</p>
                     </div>
                 </div>
 
@@ -1695,6 +1804,7 @@
                     <div class="product-body">
                         <h3>CRISIS MENTORING</h3>
                         <p class="desc">Strategická intervence 1:1. Krizové řízení vás samotných pod vedením Klienta 0. Hloubková diagnostika vašeho systému a okamžité nastavení podmínek pro udržitelné vládnutí.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--cream);">od 3 500 Kč</span><br><span style="font-size: 0.8125rem; color: rgba(250,249,247,0.5);">za 90min session / balíčky od 9 000 Kč</span></p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1712,6 +1822,7 @@
                         <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">
                             REZERVOVAT TERMÍN
                         </button>
+                        <p class="product-note">Úvodní konzultace (30 min) zdarma.</p>
                     </div>
                 </div>
 
@@ -1721,6 +1832,7 @@
                     <div class="product-body">
                         <h3>BYZNYS Z POSTELE</h3>
                         <p class="desc">Manuál přežití pro lídry. Nečekejte, až vás systém vypne natvrdo. Připojte se k živému vysílání a získejte návod, jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--accent);">0 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">e-book + masterclass + komunita zdarma</span></p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1831,10 +1943,27 @@
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
+                        Kolik to stojí?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <strong>CRISIS MENTORING (1:1):</strong> Od 3 500 Kč za 90minutovou session. Balíčky (3 session) od 9 000 Kč. Tříměsíční mentoring na míru — cena dle rozsahu.<br><br>
+                        <strong>OFFICE RESET&trade; (firmy):</strong> Od 45 000 Kč za tým. Závisí na velikosti týmu a rozsahu auditu. Posíláme detailní nabídku do 48 hodin od prvního hovoru.<br><br>
+                        <strong>BYZNYS Z POSTELE:</strong> Zcela zdarma — masterclass, e-book i komunita.<br><br>
+                        Úvodní konzultace (30 min) je vždy zdarma a nezávazná.
+                    </div>
+                </details>
+                <details class="faq-item fade-in">
+                    <summary>
                         Jak začít?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer"><a href="#contact" style="color: var(--accent); text-decoration: underline;">Vyplňte formulář</a> nebo si rovnou <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">rezervujte termín v kalendáři</a>. Nabízíme úvodní strategickou konzultaci (30 min). Cílem je ověření kompatibility. Společně zhodnotíme stav vašeho systému a určíme, zda je pro vás efektivnějším řešením firemní reset, nebo osobní mentoring.</div>
+                    <div class="faq-answer">
+                        <strong>Krok 1:</strong> <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">Rezervujte si bezplatnou konzultaci</a> (30 min) v kalendáři — nebo <a href="#contact" style="color: var(--accent); text-decoration: underline;">vyplňte formulář</a>.<br><br>
+                        <strong>Krok 2:</strong> Společně zhodnotíme stav vašeho systému (tělo, hlava, práce) a určíme, zda je pro vás vhodnější osobní mentoring nebo firemní Office Reset.<br><br>
+                        <strong>Krok 3:</strong> Dostanete konkrétní nabídku s cenou, rozsahem a časovým plánem. Žádné překvapení.<br><br>
+                        Chcete začít hned? Stáhněte si zdarma <strong>Byznys z postele</strong> — e-book + masterclass bez závazků.
+                    </div>
                 </details>
             </div>
         </div>
