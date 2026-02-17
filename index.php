@@ -702,6 +702,10 @@
             color: var(--accent);
         }
 
+        .pillars-section .section-subtitle {
+            color: rgba(250, 249, 247, 0.75);
+        }
+
         .pillars-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -868,7 +872,7 @@
         }
 
         @media (min-width: 1024px) {
-            .story-image-wrap { order: 0; }
+            .story-image-wrap { order: 0; margin-top: 52px; }
         }
 
         .story-image-wrap::after {
@@ -1873,7 +1877,7 @@
         <div class="container">
             <div class="section-header fade-in" style="text-align:center; margin-bottom:56px;">
                 <h2 class="section-title"><span>WALANCE</span> — Anatomie udržitelného lídra</h2>
-                <p class="section-subtitle">7 pilířů, 7 písmen. Každé stojí za jedním principem.</p>
+                <p class="section-subtitle" style="margin-bottom: 0;">7 pilířů, 7 písmen. Každé stojí za jedním principem.</p>
             </div>
 
             <div class="pillars-grid">
@@ -2445,17 +2449,24 @@
             <div class="faq-list">
                 <details class="faq-item fade-in">
                     <summary>
-                        Jak dlouho trvá spolupráce?
+                        Co je metoda WALANCE?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Zaměřuji se na skutečnou implementaci, ne na jednorázové teorie. Respektuji čas potřebný pro změnu návyků.<br><br><strong>OFFICE RESET&trade; (firemní týmy):</strong> 4týdenní cyklus. První týden nastavím systém a provedu audit (LIVE), další tři týdny slouží k fixaci nových návyků do praxe (hybridní formou).<br><br><strong>CRISIS MENTORING (lídři 1:1):</strong> Přizpůsobuji se stavu vašeho systému. Nabízím buď jednorázovou strategickou intervenci (90 min) pro okamžitou úlevu, nebo 3měsíční mentoring pro kompletní přestavbu pracovních návyků.</div>
+                    <div class="faq-answer">WALANCE je operační systém pro udržitelný špičkový výkon. Je to jediná metoda na trhu, která propojuje fyzioterapii, job crafting a strategický mentoring do jednoho funkčního celku.<br><br>WALANCE neřeší „wellbeing" jako benefit. Řeší kapacitu vašeho nejdůležitějšího kapitálu — lidí.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
-                        Kde probíhá spolupráce?
+                        K čemu to slouží?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Působím po celé ČR. Za klienty jezdím tam, kde je jejich byznys.<br><br><strong>Pro firmy (OFFICE RESET&trade;):</strong> Úvodní audit a nastavení pracoviště probíhá vždy fyzicky u vás ve firmě. Následný mentoring pro fixaci návyků řídím hybridně/online.<br><br><strong>Pro lídry (CRISIS MENTORING):</strong> Tělo nelze plně nastavit přes webkameru. Proto kombinuji osobní setkání (pro hloubkovou diagnostiku a manuální techniky) s efektivními online konzultacemi (pro řízení kalendáře a strategie).</div>
+                    <div class="faq-answer">Většina firem dnes krvácí skrze tzv. prezentismus — stav, kdy jsou lidé v práci fyzicky přítomni, ale jejich výkon je kvůli únavě, bolestem zad a digitálnímu šumu na 40 %. WALANCE tento únik peněz zastavuje.<br><br><strong>Zastavuji bolesti:</strong> Ne fitkem po práci, ale mikropohybem a dynamickou ergonomií přímo u stolu.<br><strong>Vracím soustředění:</strong> Digitální hygienou a vědomým využitím AI čistím hlavu pro Deep Work.<br><strong>Redesignuji práci:</strong> Pomocí Job Craftingu nastavuji role tak, aby lidi nabíjely, ne vysávaly.</div>
+                </details>
+                <details class="faq-item fade-in">
+                    <summary>
+                        Proč to funguje?
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="faq-answer">Moje práce stojí na radikální myšlence: „Pomáhám lidem zamilovat se do sebe." Protože když máš někoho (sebe) rád, chceš pro něj to nejlepší — nejlepší pohyb, nejlepší jídlo, nejlepší způsob práce.<br><br>Nezvyšuji výkon tlakem. Posiluji vztah k sobě, ze kterého výkon přirozeně vyvěrá.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
