@@ -2383,7 +2383,9 @@
                     <p class="glossary-card-desc">Mentální mlha — zpomalené myšlení, potíže s koncentrací a rozhodováním. Častý důsledek chronického stresu, nedostatku spánku nebo dehydratace.</p>
                     <p class="glossary-card-cta"><strong>Co s tím:</strong> Pracuji na spánkové hygieně, hydrataci a mikropřestávkách, které brain fog snižují.</p>
                 </div>
+            </div>
 
+            <div class="glossary-grid" id="glossary-more" style="display: none; margin-top: 16px;">
                 <!-- Deep work -->
                 <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
@@ -2393,9 +2395,7 @@
                     <p class="glossary-card-desc">Stav plného soustředění na kognitivně náročný úkol bez rušení. Cal Newport ukázal, že je klíčem k hodnotnému výkonu.</p>
                     <p class="glossary-card-cta"><strong>Co s tím:</strong> Pomáhám vytvořit podmínky pro deep work: time blocking, digitální hygiena, fyzické prostředí.</p>
                 </div>
-            </div>
 
-            <div class="glossary-grid" id="glossary-more" style="display: none; margin-top: 16px;">
                 <!-- Job crafting -->
                 <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
