@@ -10,6 +10,20 @@ function getCurrentUserId(): ?int {
 }
 
 /**
+ * Mapování tabulka → entity_id sloupec
+ */
+function getEntityCol(string $table): ?string {
+    $map = [
+        'contacts'        => 'contacts_id',
+        'bookings'        => 'bookings_id',
+        'activities'      => 'activities_id',
+        'blog_posts'      => 'blog_posts_id',
+        'blog_categories' => 'blog_categories_id',
+    ];
+    return $map[$table] ?? null;
+}
+
+/**
  * Vložení nového záznamu – doplní valid_from, valid_to, valid_user_from, {tabulka}_id
  */
 function softInsert(string $table, array $data): int {
@@ -40,7 +54,7 @@ function softInsert(string $table, array $data): int {
     $id = (int)$db->lastInsertId();
 
     // Nastavit entity_id = id pro nový záznam
-    $entityCol = $table === 'contacts' ? 'contacts_id' : ($table === 'bookings' ? 'bookings_id' : ($table === 'activities' ? 'activities_id' : null));
+    $entityCol = getEntityCol($table);
     if ($entityCol) {
         $db->prepare("UPDATE $table SET $entityCol = ? WHERE id = ?")->execute([$id, $id]);
     }
@@ -55,7 +69,7 @@ function softInsert(string $table, array $data): int {
 function softUpdate(string $table, int $id, array $data): void {
     $db = getDb();
     $userId = getCurrentUserId();
-    $entityCol = $table === 'contacts' ? 'contacts_id' : ($table === 'bookings' ? 'bookings_id' : ($table === 'activities' ? 'activities_id' : null));
+    $entityCol = getEntityCol($table);
 
     $row = findActive($table, $id);
     if (!$row) {
@@ -111,7 +125,7 @@ function findActive(string $table, int $id): ?array {
  * Načtení aktivního záznamu podle entity_id
  */
 function findActiveByEntityId(string $table, int $entityId): ?array {
-    $entityCol = $table === 'contacts' ? 'contacts_id' : ($table === 'bookings' ? 'bookings_id' : ($table === 'activities' ? 'activities_id' : null));
+    $entityCol = getEntityCol($table);
     if (!$entityCol) return null;
 
     $db = getDb();

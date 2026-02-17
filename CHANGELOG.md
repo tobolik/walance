@@ -6,6 +6,21 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.5.0] – 17.02.2026 23:08
+> Nepushnuto
+
+### Přidáno
+- **Blog systém:** Kompletní blogový modul – správa článků v admin (WYSIWYG editor), veřejné stránky, SEO, Open Graph
+- **DB migrace:** Tabulky blog_posts, blog_categories se soft-update logikou
+- **Admin blog:** Seznam článků (admin/blog.php), editor s TinyMCE (admin/blog-edit.php)
+- **API blog:** CRUD endpoint (api/blog.php), veřejné API (api/blog-public.php)
+- **Veřejný blog:** Seznam článků (blog/index.php), detail článku (blog/post.php) s pretty URLs
+- **Homepage:** Sekce Nejnovější z blogu na hlavní stránce + odkaz Blog v navigaci
+
+### Změněno
+- **crud.php:** Refaktor entity_id mapování do getEntityCol() funkce – podpora blog_posts, blog_categories
+- **Navigace admin:** Přidán odkaz Blog do sidebaru
+
 ## [2.4.6] – 17.02.2026 20:05
 > Pushed: 17.02.2026 20:05
 

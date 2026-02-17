@@ -1,4 +1,23 @@
-<?php require_once __DIR__ . '/api/config.php'; $v = defined('APP_VERSION') ? APP_VERSION : '1.0.0'; ?>
+<?php
+require_once __DIR__ . '/api/config.php';
+require_once __DIR__ . '/api/db.php';
+$v = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
+
+// Načíst 3 nejnovější blogové články pro sekci na homepage
+$latestBlogPosts = [];
+try {
+    $blogDb = getDb();
+    $blogStmt = $blogDb->prepare("SELECT bp.title, bp.slug, bp.excerpt, bp.featured_image, bp.published_at, au.name as author_name
+            FROM blog_posts bp
+            LEFT JOIN admin_users au ON bp.author_id = au.id
+            WHERE bp.valid_to IS NULL AND bp.status = 'published' AND bp.published_at IS NOT NULL
+            ORDER BY bp.published_at DESC LIMIT 3");
+    $blogStmt->execute();
+    $latestBlogPosts = $blogStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Blog tabulka nemusí existovat, ignorujeme
+}
+?>
 <!DOCTYPE html>
 <html lang="cs">
 <!-- VERSION: <?= htmlspecialchars($v) ?> -->
@@ -1745,6 +1764,154 @@
         .time-slot-btn:hover { border-color: var(--accent); color: var(--accent); }
         .time-slot-selected { background: var(--accent) !important; color: var(--cream) !important; border-color: var(--accent) !important; }
 
+        /* ---- BLOG SECTION ---- */
+        .blog-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .blog-section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .blog-section-header h2 {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            margin-bottom: 12px;
+        }
+
+        .blog-section-header h2 em {
+            color: var(--accent);
+            font-style: normal;
+        }
+
+        .blog-section-header p {
+            font-size: 1.0625rem;
+            color: var(--ink-light);
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .blog-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+
+        @media (min-width: 640px) {
+            .blog-cards { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 960px) {
+            .blog-cards { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .blog-card-home {
+            background: var(--cream);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--mist);
+        }
+
+        .blog-card-home:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+        }
+
+        .blog-card-home-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .blog-card-home-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, var(--mist-light) 0%, var(--mist) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink-muted);
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .blog-card-home-body {
+            padding: 20px 24px 24px;
+        }
+
+        .blog-card-home-date {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+            margin-bottom: 6px;
+        }
+
+        .blog-card-home-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--ink);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card-home-title a { color: var(--ink); transition: color 0.2s; }
+        .blog-card-home-title a:hover { color: var(--accent); }
+
+        .blog-card-home-excerpt {
+            font-size: 0.9375rem;
+            color: var(--ink-light);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card-home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent);
+            transition: gap 0.2s;
+        }
+
+        .blog-card-home-link:hover { gap: 10px; }
+
+        .blog-section-cta {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .blog-section-cta a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent);
+            transition: all 0.2s;
+        }
+
+        .blog-section-cta a:hover {
+            background: var(--accent);
+            color: var(--white);
+        }
+
         /* ---- UTILITIES ---- */
         .text-center { text-align: center; }
         .mt-2 { margin-top: 8px; }
@@ -1763,6 +1930,7 @@
                 <li><a href="#method">Metoda</a></li>
                 <li><a href="#story">Příběh</a></li>
                 <li><a href="#products">Nabídka</a></li>
+                <li><a href="blog/">Blog</a></li>
                 <li><a href="#contact">Kontakt</a></li>
                 <li><a href="#contact" class="nav-cta">Konzultace zdarma</a></li>
             </ul>
@@ -1783,6 +1951,7 @@
             <a href="#method" class="mobile-link">Metoda</a>
             <a href="#story" class="mobile-link">Příběh</a>
             <a href="#products" class="mobile-link">Nabídka</a>
+            <a href="blog/" class="mobile-link">Blog</a>
             <a href="#contact" class="mobile-link">Kontakt</a>
             <a href="#contact" class="mobile-link" style="color: var(--accent);">Konzultace zdarma</a>
         </div>
@@ -2565,6 +2734,50 @@
             </div>
         </div>
     </section>
+
+    <!-- ============ BLOG SECTION ============ -->
+    <?php if (!empty($latestBlogPosts)): ?>
+    <section class="blog-section" id="blog">
+        <div class="container">
+            <div class="blog-section-header fade-in">
+                <h2>Nejnovější z <em>blogu</em></h2>
+                <p>Články, které vám pomohou pochopit, jak funguje udržitelný výkon.</p>
+            </div>
+            <div class="blog-cards">
+                <?php foreach ($latestBlogPosts as $bp): ?>
+                <article class="blog-card-home fade-in">
+                    <a href="blog/<?= htmlspecialchars($bp['slug']) ?>">
+                        <?php if (!empty($bp['featured_image'])): ?>
+                        <img src="<?= htmlspecialchars($bp['featured_image']) ?>" alt="<?= htmlspecialchars($bp['title']) ?>" class="blog-card-home-img" loading="lazy">
+                        <?php else: ?>
+                        <div class="blog-card-home-placeholder">W</div>
+                        <?php endif; ?>
+                    </a>
+                    <div class="blog-card-home-body">
+                        <div class="blog-card-home-date"><?= date('d.m.Y', strtotime($bp['published_at'])) ?></div>
+                        <h3 class="blog-card-home-title">
+                            <a href="blog/<?= htmlspecialchars($bp['slug']) ?>"><?= htmlspecialchars($bp['title']) ?></a>
+                        </h3>
+                        <?php if ($bp['excerpt']): ?>
+                        <p class="blog-card-home-excerpt"><?= htmlspecialchars($bp['excerpt']) ?></p>
+                        <?php endif; ?>
+                        <a href="blog/<?= htmlspecialchars($bp['slug']) ?>" class="blog-card-home-link">
+                            Číst dál
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                    </div>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <div class="blog-section-cta fade-in">
+                <a href="blog/">
+                    Všechny články
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <!-- ============ BOOKING MODAL ============ -->
     <div id="booking-modal" style="display:none; position:fixed; inset:0; z-index:200;">

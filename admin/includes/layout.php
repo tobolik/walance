@@ -47,6 +47,10 @@ $adminV = defined('APP_VERSION') ? APP_VERSION : '1.0.0';
                 <i data-lucide="clock" class="w-4 h-4 flex-shrink-0 <?= $adminCurrentPage === 'availability' ? 'text-teal-600' : '' ?>"></i>
                 <span class="sidebar-text">Dostupnost</span>
             </a>
+            <a href="blog.php" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm <?= $adminCurrentPage === 'blog' ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800' ?>" title="Blog">
+                <i data-lucide="file-text" class="w-4 h-4 flex-shrink-0 <?= $adminCurrentPage === 'blog' ? 'text-teal-600' : '' ?>"></i>
+                <span class="sidebar-text">Blog</span>
+            </a>
             <a href="../" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-800 text-sm mt-2" title="Web">
                 <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
                 <span class="sidebar-text">Web</span>
