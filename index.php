@@ -1894,7 +1894,7 @@
 
                 <div class="contact-info fade-in">
                     <div>
-                        <h3>Rezervace termínu</h3>
+                        <h3>Rezervace konzultace zdarma</h3>
                         <p>Vyberte si volný termín v kalendáři. Rezervace je napojena na Google Calendar.</p>
                     </div>
                     <button type="button" class="contact-booking-btn" onclick="openBookingModal()">
@@ -1979,7 +1979,7 @@
                 </button>
             </div>
             <div style="padding:0 32px 32px;">
-                <h2 class="font-display" style="font-size:1.75rem; font-weight:700; margin-bottom:8px;">Rezervace termínu</h2>
+                <h2 class="font-display" style="font-size:1.75rem; font-weight:700; margin-bottom:8px;">Rezervace konzultace zdarma</h2>
                 <p style="color:var(--ink-light); font-size:0.875rem; margin-bottom:24px;">Zelená = volné termíny. Vyberte den, pak čas.</p>
 
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
