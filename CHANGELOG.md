@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.1] – 17.02.2026 19:45
+> Pushed: 17.02.2026 19:45
+
+### Opraveno
+- **FAQ:** vrácena omylem odstraněná otázka „Kde probíhá spolupráce?" (nebyla duplicitní)
+
 ## [2.4.0] – 17.02.2026 19:39
 > Pushed: 17.02.2026 19:39
 
@@ -17,7 +23,7 @@ U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 - **Pilíře – subtitle:** opravena čitelnost „7 pilířů, 7 písmen…" na tmavém pozadí (explicitní světlá barva)
 
 ### Odstraněno
-- **FAQ:** duplicitní otázky „Jak dlouho trvá spolupráce?" a „Kde probíhá spolupráce?"
+- **FAQ:** duplicitní otázka „Jak dlouho trvá spolupráce?" (obsah pokryt v produktových kartách)
 
 ## [2.3.0] – 17.02.2026 19:30
 > Pushed: 17.02.2026 19:30
