@@ -7,6 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [2.3.0] – 17.02.2026 19:30
+> Pushed: 17.02.2026 19:30
 
 ### Změněno
 - **Slovníček reality — plné texty:** odstraněno skryté rozbalování po kliknutí, všechny popisy i „Co s tím" jsou nyní viditelné přímo na kartičce
