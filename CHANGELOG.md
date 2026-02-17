@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [2.5.0] – 17.02.2026 23:08
-> Nepushnuto
+> Pushed: 17.02.2026 23:08
 
 ### Přidáno
 - **Blog systém:** Kompletní blogový modul – správa článků v admin (WYSIWYG editor), veřejné stránky, SEO, Open Graph
