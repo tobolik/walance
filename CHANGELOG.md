@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [1.5.0] – 17.02.2026 03:15
-> Nepushnuto
+> Pushed: 17.02.2026 03:47
 
 ### Přidáno
 - **Nová sekce „3 klíčové benefity WALANCE":** Udržitelný výkon, Práce ve flow, Mentální odolnost (tmavé pozadí, 3 karty)
