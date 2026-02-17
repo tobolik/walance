@@ -7,7 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [2.1.0] – 15.02.2026 00:15
-> Nepushnuto
+> Pushed: 15.02.2026 00:15
 
 ### Přidáno
 - **Slovníček reality:** nová sekce mezi Kontaktem a FAQ — 3 viditelné pojmy (Prezentismus, Brain fog, Deep work) + 5 dalších na rozklik (Job crafting, Tech neck, Chronický stres, Mikropřestávka, Ergonomie)
