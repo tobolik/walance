@@ -6,6 +6,14 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.1.1] – 17.02.2026 18:25
+
+### Změněno
+- **Story sekce – „O autorce metody":** přesunuto z pod celého gridu dovnitř textového sloupce (přímo pod text), eliminace zbytečného prázdného místa
+- **Story sekce – obrázek Jany:** opraven aspect-ratio z vynuceného landscape (3/2) na přirozený portrétní poměr (825×1081), přidán `max-height: 620px` na desktopu, `object-position: top center` — Jana se nyní vejde celá
+- **Story sekce – grid layout:** desktop sloupce změněny z `1fr 1fr` na `3fr 2fr`, zarovnání na `start` místo `center`
+- **HTML atributy obrázku:** opraven `width/height` z chybného 1800×1200 na skutečný rozměr 825×1081
+
 ## [2.1.0] – 17.02.2026 17:10
 > Pushed: 17.02.2026 17:10
 

@@ -859,7 +859,7 @@
         }
 
         @media (min-width: 1024px) {
-            .story-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
+            .story-grid { grid-template-columns: 3fr 2fr; gap: 60px; align-items: start; }
         }
 
         .story-image-wrap {
@@ -882,12 +882,19 @@
 
         .story-image {
             width: 100%;
-            aspect-ratio: 3/2;
+            height: auto;
             object-fit: cover;
+            object-position: top center;
             border-radius: 20px;
             position: relative;
             z-index: 1;
             display: block;
+        }
+
+        @media (min-width: 1024px) {
+            .story-image {
+                max-height: 620px;
+            }
         }
 
         .story-label {
@@ -1948,28 +1955,27 @@
                         <p class="story-quote">„Řídím byznys horizontálně. A funguje to. Moje hlava je díky systému ostřejší než kdy dřív, přestože tělo je v opravě. Moje omezení se stalo laboratoří pro vaši efektivitu."</p>
                         <p>Pokud dokážu udržet vysoké pracovní tempo, jasnou mysl a strategický nadhled já z postele, garantuji vám, že váš systém vyladím kdekoli — v kanceláři i pod největším tlakem.</p>
                     </div>
+                    <details class="story-author-details fade-in">
+                        <summary>
+                            O autorce metody
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        <div class="story-author-body">
+                            <p>Jana je autorkou metody WALANCE a „Klientem 0" (celý systém nejprve vyzkoušela na sobě). Po letech v korporátním světě, kde zažila vyhoření, chronické bolesti a ztrátu smyslu, vytvořila metodu, která jí vrátila zdraví, čas a radost z práce.</p>
+                            <p>Dnes pracuje s firmami i jednotlivci. Její přístup kombinuje poznatky z neurovědy, ergonomie, time managementu a koučinku do jednoho praktického systému.</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="story-image-wrap fade-in">
                     <img src="assets/images/hero-story-jana.jpg"
                          alt="Jana Štěpaníková — zakladatelka WALANCE"
                          class="story-image"
-                         width="1800" height="1200"
+                         width="825" height="1081"
                          loading="lazy"
                          decoding="async"
                          fetchpriority="low">
                 </div>
             </div>
-
-            <details class="story-author-details fade-in">
-                <summary>
-                    O autorce metody
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </summary>
-                <div class="story-author-body">
-                    <p>Jana je autorkou metody WALANCE a „Klientem 0" (celý systém nejprve vyzkoušela na sobě). Po letech v korporátním světě, kde zažila vyhoření, chronické bolesti a ztrátu smyslu, vytvořila metodu, která jí vrátila zdraví, čas a radost z práce.</p>
-                    <p>Dnes pracuje s firmami i jednotlivci. Její přístup kombinuje poznatky z neurovědy, ergonomie, time managementu a koučinku do jednoho praktického systému.</p>
-                </div>
-            </details>
         </div>
     </section>
 
