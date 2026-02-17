@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.2.1] – 17.02.2026 18:23
+> Pushed: 17.02.2026 18:23
+
+### Opraveno
+- **Changelog:** opraveny chybné časové údaje u v2.1.1 (18:25 → 18:12) a v2.2.0 (18:50 → 18:21) podle skutečných commitů
+
 ## [2.2.0] – 17.02.2026 18:21
 > Pushed: 17.02.2026 18:21
 
