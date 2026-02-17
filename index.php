@@ -1519,41 +1519,14 @@
         </div>
     </section>
 
-    <!-- ============ BENEFITS ============ -->
-    <section class="section benefits-section">
-        <div class="container">
-            <div class="section-header fade-in" style="text-align: center;">
-                <p class="section-label" style="color: var(--accent);">3 klíčové benefity WALANCE</p>
-            </div>
-
-            <div class="benefits-grid">
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Tělo / Fyzio</p>
-                    <h3>Udržitelný výkon</h3>
-                    <p>Tělo nesmí být limitujícím faktorem vašeho úspěchu. Nastavíme vaši biologii (spánek, dech, ergonomii) tak, aby zvládla vysokou zátěž bez výkyvů. Místo abyste energii museli „dobíjet" kofeinem, vytvoříme systém, který ji generuje přirozeně. Získáte stabilní drive od rána do večera.</p>
-                </div>
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Práce / Job Crafting</p>
-                    <h3>Práce ve flow</h3>
-                    <p>Dřina není ctnost, je to chyba v designu práce. Pomocí metodiky Job Craftingu odstraníme „tření" ve vašich úkolech. Přenastavíme vaši roli tak, abyste dělali to, pro co máte talent. Výsledek? Maximální efektivita s minimálním úsilím. Práce vás přestane vysávat a začne vás nabíjet.</p>
-                </div>
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Hlava / Koučink</p>
-                    <h3>Mentální odolnost</h3>
-                    <p>V krizi vyhrává ten, kdo zachová chladnou hlavu. Získáte nástroje pro okamžitou regulaci stresu a emocí. Vaše rozhodování bude strategické a přesné i pod extrémním tlakem. Naučíte se vypnout hlavu na povel, abyste si práci a stres nebrali domů.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- ============ PROBLEM ============ -->
     <section id="problem" class="section">
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">Poznáváte se?</p>
-                <h2 class="section-title">Váš byznys software je geniální.<br>Ale co hardware?</h2>
+                <h2 class="section-title">Výkon neklesá kvůli neschopnosti.<br>Klesá kvůli přetížení.</h2>
                 <p class="section-subtitle">
-                    Snažíte se řídit formuli 1 se zataženou ruční brzdou. To není stáří. To je systémová chyba.
+                    Jste schopní lidé v náročných rolích. Problém není v tom, co děláte — ale v tom, že váš systém běží bez údržby.
                 </p>
             </div>
 
@@ -1562,28 +1535,28 @@
                     <div class="card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 3.9 2.5 7.1 6 8.4V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.6c3.5-1.3 6-4.5 6-8.4a9 9 0 0 0-9-9z"/><path d="M10 17h4"/></svg>
                     </div>
-                    <h3>Hlava (Software)</h3>
-                    <p>Optimalizujeme váš procesor. Když jede hlava na 100 %, systém začne sekat chyby. Odstraníme „mentální viry" — rozhodovací paralýzu a neschopnost vypnout práci doma. Získáte čistou hlavu pro strategii, ne jen pro hašení požárů.</p>
+                    <h3>Rozhodujete pod mlhou</h3>
+                    <p>Neustálý stres a neschopnost „vypnout" po práci. Hlava jede nonstop, ale místo jasných rozhodnutí generuje zmatky. Strategické myšlení ustupuje hašení požárů.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon" style="background: rgba(90, 125, 90, 0.1);">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--sage);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     </div>
-                    <h3>Tělo (Hardware)</h3>
-                    <p>Tělo jako opora, ne brzda. Bolest a únava jsou „chybová hlášení", že jedete na dluh. Budujeme fyzickou odolnost (resilienci), která podrží vaši hlavu v krizích. Ať už řešíte záda, poúrazový stav nebo vyčerpání — vytvoříme hardware, o který se můžete kdykoliv opřít.</p>
+                    <h3>Tělo táhne za ruční brzdu</h3>
+                    <p>Bolest zad, chronická únava, spadlá energie po obědě. Kompenzujete to kávou a vůlí, ale to není řešení — to je odklad.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <h3>Tým &amp; Výkon (Operační systém)</h3>
-                    <p>Konec drahého „nicnedělání". Prezentismus je tichý zabiják firmy. Lidé jsou fyzicky přítomni, ale mentálně jedou na 40 %. Platíte plnou mzdu za poloviční výkon. Odstraníme tento „zombie mód". Nastavíme týmovou kulturu tak, aby lidé nechodili do práce jen přežít, ale aby měli kapacitu tvořit skutečnou hodnotu.</p>
+                    <h3>Práce vysává místo nabíjí</h3>
+                    <p>Děláte hodně, ale málo z toho odpovídá tomu, v čem jste opravdu dobří. Role není nastavená na vaše silné stránky. Výsledek? Dřete víc, ale výsledky neodpovídají úsilí.</p>
                 </div>
             </div>
 
             <div class="verdict-box fade-in">
-                <h3>To není stáří. To je systémová chyba.</h3>
-                <p>Metoda WALANCE nelepí symptomy. Opravuje všechny tři vrstvy najednou — hardware (tělo), software (mysl) a operační systém (návyky/práci).</p>
+                <h3>Tohle se dá změnit. Celé. Najednou.</h3>
+                <p>Metoda WALANCE pracuje se všemi třemi vrstvami současně — s tělem, myslí i nastavením práce. Protože když opravíte jen jednu, ty další vás stáhnou zpět.</p>
             </div>
         </div>
     </section>
@@ -2126,12 +2099,12 @@
         // Pillars interactive (WALANCE acronym)
         const pillarsData = [
             { letter: 'W', title: 'Walk & Work', subtitle: 'Pohyb jako nástroj myšlení', desc: 'Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Aktivujte svůj procesor v pohybu a nechte nápady volně proudit.' },
-            { letter: 'A', title: 'Awareness', subtitle: 'Senzory pro včasné varování', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat signály těla — mělké dýchání nebo tuhnoucí šíji — dříve, než systém nahlásí kritickou chybu a zablokuje vás.' },
+            { letter: 'A', title: 'Awareness', subtitle: 'Senzory pro včasné varování', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat signály těla — mělké dýchání nebo tuhnoucí šíji — dříve, než se z drobného napětí stane problém, který vás zastaví.' },
             { letter: 'L', title: 'Longevity', subtitle: 'Maximální životnost systému', desc: 'Nejde o to dožít se stovky, ale nebýt v padesáti „na odpis". Budujeme tělo, které udrží plnou kapacitu pro vysoký výkon tak dlouho, dokud se sami rozhodnete zůstat ve hře.' },
             { letter: 'A', title: 'Alignment', subtitle: 'Geometrie těla i role', desc: 'Odstraňujeme tření v systému. Srovnáme vaši páteř (fyzický postoj) a pomocí Job Craftingu zarovnáme pracovní náplň s vašimi silnými stránkami. Když vše lícuje, výkon roste bez odporu.' },
             { letter: 'N', title: 'New Habits', subtitle: 'Systémový upgrade návyků', desc: 'Velké revoluce nefungují. Fungují mikrozměny, které využívají neuroplasticitu mozku. Nastavíme nové rutiny tak, aby se staly přirozenou součástí vašeho dne — bez stresu a bez nutnosti železné vůle.' },
             { letter: 'C', title: 'Clarity', subtitle: 'Ochrana procesoru před šumem', desc: 'Nevyhoříte z práce, ale z chaosu. Nastavíme principy informační hygieny a hluboké práce (Deep Work). Odstraníme digitální smog, aby vaše mysl zůstala ostrá a schopná soustředění i pod tlakem.' },
-            { letter: 'E', title: 'Energy', subtitle: 'Optimalizace biologického paliva', desc: 'Time management sám o sobě nestačí, pokud chybí energie. Zaměříme se na její řízení. Naučíte se pracovat se svými biorytmy a nejtěžší úkoly plánovat do výkonnostních špiček. Výsledkem je stabilní přísun sil po celý den, ne jen do oběda.' },
+            { letter: 'E', title: 'Energy', subtitle: 'Optimalizace biologického paliva', desc: 'Time management sám o sobě nestačí, pokud nemáte energii. Zaměříme se na její řízení. Naučíte se pracovat se svými biorytmy a nejtěžší úkoly plánovat do výkonnostních špiček. Výsledkem je stabilní přísun sil po celý den, ne jen do oběda.' },
         ];
 
         document.querySelectorAll('#pillar-buttons .pillar-btn').forEach(btn => {
