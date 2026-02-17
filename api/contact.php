@@ -67,7 +67,7 @@ $body .= "Zpráva:\n$message";
 $sent = @mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
 
 if ($sent) {
-    echo json_encode(['success' => true, 'message' => 'Zpráva byla odeslána. Brzy vás budeme kontaktovat.']);
+    echo json_encode(['success' => true, 'message' => 'Zpráva byla odeslána. Brzy se vám ozvu.']);
 } else {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Nepodařilo se odeslat zprávu. Zkuste to prosím později nebo napište na ' . CONTACT_EMAIL]);

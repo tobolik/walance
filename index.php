@@ -415,6 +415,57 @@
             margin: 0 auto;
         }
 
+        /* Benefits section */
+        .benefits-section {
+            background: var(--ink);
+            color: var(--cream);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .benefits-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .benefit-card {
+            padding: 40px 32px;
+            background: rgba(250,249,247,0.06);
+            border-radius: 24px;
+            border: 1px solid rgba(250,249,247,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            background: rgba(250,249,247,0.1);
+            transform: translateY(-4px);
+        }
+
+        .benefit-tag {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--cream);
+        }
+
+        .benefit-card p {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: rgba(250,249,247,0.7);
+        }
+
         /* Problem cards */
         .cards-grid {
             display: grid;
@@ -704,10 +755,12 @@
 
         @media (max-width: 767px) {
             .pillars-section { padding: 64px 0; }
-            .pillars-grid { grid-template-columns: 1fr; gap: 32px; }
-            .pillar-detail { padding: 32px; min-height: auto; }
+            .pillars-grid { grid-template-columns: 1fr; gap: 24px; }
+            .pillar-detail { padding: 32px; min-height: auto; order: -1; }
             .pillar-detail-bg { font-size: 6rem; }
             .pillar-detail-subtitle { font-size: 1.4rem; }
+            .pillar-buttons { gap: 4px; }
+            .pillar-btn { padding: 14px 16px; }
         }
 
         /* ---- STORY ---- */
@@ -1386,6 +1439,33 @@
         </div>
     </section>
 
+    <!-- ============ BENEFITS ============ -->
+    <section class="section benefits-section">
+        <div class="container">
+            <div class="section-header fade-in" style="text-align: center;">
+                <p class="section-label" style="color: var(--accent);">3 klíčové benefity WALANCE</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card fade-in">
+                    <p class="benefit-tag">Tělo / Fyzio</p>
+                    <h3>Udržitelný výkon</h3>
+                    <p>Tělo nesmí být limitujícím faktorem vašeho úspěchu. Nastavíme vaši biologii (spánek, dech, ergonomii) tak, aby zvládla vysokou zátěž bez výkyvů. Místo abyste energii museli „dobíjet" kofeinem, vytvoříme systém, který ji generuje přirozeně. Získáte stabilní drive od rána do večera.</p>
+                </div>
+                <div class="benefit-card fade-in">
+                    <p class="benefit-tag">Práce / Job Crafting</p>
+                    <h3>Práce ve flow</h3>
+                    <p>Dřina není ctnost, je to chyba v designu práce. Pomocí metodiky Job Craftingu odstraníme „tření" ve vašich úkolech. Přenastavíme vaši roli tak, abyste dělali to, pro co máte talent. Výsledek? Maximální efektivita s minimálním úsilím. Práce vás přestane vysávat a začne vás nabíjet.</p>
+                </div>
+                <div class="benefit-card fade-in">
+                    <p class="benefit-tag">Hlava / Koučink</p>
+                    <h3>Mentální odolnost</h3>
+                    <p>V krizi vyhrává ten, kdo zachová chladnou hlavu. Získáte nástroje pro okamžitou regulaci stresu a emocí. Vaše rozhodování bude strategické a přesné i pod extrémním tlakem. Naučíte se vypnout hlavu na povel, abyste si práci a stres nebrali domů.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ============ PROBLEM ============ -->
     <section id="problem" class="section">
         <div class="container">
@@ -1403,27 +1483,27 @@
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 3.9 2.5 7.1 6 8.4V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.6c3.5-1.3 6-4.5 6-8.4a9 9 0 0 0-9-9z"/><path d="M10 17h4"/></svg>
                     </div>
                     <h3>Hlava (Software)</h3>
-                    <p>Mozková mlha po obědě. Rozhodovací paralýza. Neschopnost „vypnout" práci doma. Jedete na autopilota.</p>
+                    <p>Optimalizujeme váš procesor. Když jede hlava na 100 %, systém začne sekat chyby. Odstraníme „mentální viry" — rozhodovací paralýzu a neschopnost vypnout práci doma. Získáte čistou hlavu pro strategii, ne jen pro hašení požárů.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon" style="background: rgba(90, 125, 90, 0.1);">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--sage);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     </div>
                     <h3>Tělo (Hardware)</h3>
-                    <p>Bolest krční páteře vystřelující do rukou. Mělké dýchání. Chronická únava, kterou spánek neřeší.</p>
+                    <p>Tělo jako opora, ne brzda. Bolest a únava jsou „chybová hlášení", že jedete na dluh. Budujeme fyzickou odolnost (resilienci), která podrží vaši hlavu v krizích. Ať už řešíte záda, poúrazový stav nebo vyčerpání — vytvoříme hardware, o který se můžete kdykoliv opřít.</p>
                 </div>
                 <div class="card fade-in">
                     <div class="card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <h3>Tým (Výkon)</h3>
-                    <p>Prezentismus: lidé sedí u počítačů, ale jejich kognitivní výkon je na 40 %. Vyhořelí lidé netvoří hodnoty.</p>
+                    <h3>Tým &amp; Výkon (Operační systém)</h3>
+                    <p>Konec drahého „nicnedělání". Prezentismus je tichý zabiják firmy. Lidé jsou fyzicky přítomni, ale mentálně jedou na 40 %. Platíte plnou mzdu za poloviční výkon. Odstraníme tento „zombie mód". Nastavíme týmovou kulturu tak, aby lidé nechodili do práce jen přežít, ale aby měli kapacitu tvořit skutečnou hodnotu.</p>
                 </div>
             </div>
 
             <div class="verdict-box fade-in">
                 <h3>To není stáří. To je systémová chyba.</h3>
-                <p>Metoda WALANCE opravuje všechny tři vrstvy najednou — tělo, mysl i návyky.</p>
+                <p>Metoda WALANCE nelepí symptomy. Opravuje všechny tři vrstvy najednou — hardware (tělo), software (mysl) a operační systém (návyky/práci).</p>
             </div>
         </div>
     </section>
@@ -1435,25 +1515,25 @@
                 <p class="section-label">Metoda WALANCE</p>
                 <h2 class="section-title">Neučím vás cvičit.<br>Učím vás pracovat.</h2>
                 <p class="section-subtitle">
-                    Metoda WALANCE je <strong>provozní manuál k vašemu tělu</strong>. Propojuji fyzioterapii, neurovědu a leadership.
+                    Metoda WALANCE není wellness benefit. Je to <strong>strategický manuál k vašemu výkonu</strong>. Propojuje fyzioterapii (hardware), mentální koučink (software) a Job Crafting (systém práce).
                 </p>
             </div>
 
             <div class="solution-grid">
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 1</p>
-                    <h3>Hardware</h3>
-                    <p>Tělo &amp; Fyzio. Odstraním fyzické tření. Konec bolestí zad znamená lepší prokrvení mozku. Opravím šasi, aby motor mohl běžet naplno.</p>
+                    <h3>Hardware (Tělo &amp; Fyzio)</h3>
+                    <p>Opravíme šasi, aby motor běžel naplno. Bolest zad je mechanická závada, která škrtí výkon hlavy. Vyladíme sezení a pohyb. Tělo přestane „drhnout" a stane se pevnou konstrukcí, která bezpečně unese jakékoliv tempo.</p>
                 </div>
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 2</p>
-                    <h3>Software</h3>
-                    <p>Job Crafting. Designuji práci tak, aby vás nabíjela, ne vysávala. Sladím vaše silné stránky s náplní práce.</p>
+                    <h3>Software (Hlava &amp; Koučink)</h3>
+                    <p>Odvirujeme procesor. Rozhodovací paralýza a neschopnost vypnout jsou jako zasekané aplikace na pozadí. Pomocí koučinku uvolníme vaši mentální kapacitu. Získáte čistou hlavu pro strategická rozhodnutí, ne pro stres.</p>
                 </div>
                 <div class="solution-card fade-in">
                     <p class="solution-tag">Vrstva 3</p>
-                    <h3>Operační systém</h3>
-                    <p>Návyky &amp; Rituály. Mikrozměny, které běží na pozadí a šetří vaši energii. Automatizace zdraví, abyste na něj nemuseli myslet.</p>
+                    <h3>Operační systém (Návyky &amp; Job Crafting)</h3>
+                    <p>Automatizace zdraví a práce. Mikrozměny a rituály nastavíme tak, aby běžely na pozadí a šetřily energii. Pomocí Job Craftingu designujeme práci tak, aby vás nabíjela. Sladíme vaše silné stránky s náplní role.</p>
                 </div>
             </div>
         </div>
@@ -1524,7 +1604,7 @@
                     <div class="pillar-detail-content">
                         <p class="pillar-detail-tag" id="p-title">Walk &amp; Work</p>
                         <h3 class="pillar-detail-subtitle" id="p-subtitle">Pohyb jako nástroj myšlení</h3>
-                        <p class="pillar-detail-desc" id="p-desc">Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Ukončete mozkovou mlhu.</p>
+                        <p class="pillar-detail-desc" id="p-desc">Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Aktivujte svůj procesor v pohybu a nechte nápady volně proudit.</p>
                     </div>
                 </div>
             </div>
@@ -1536,20 +1616,20 @@
         <div class="container">
             <div class="story-grid">
                 <div class="fade-in">
-                    <span class="story-label">Případová studie</span>
-                    <h2>Teorie končí, když si zraníte koleno.<br><em>Já to teď žiju.</em></h2>
+                    <span class="story-label">Případová studie: Klient 0</span>
+                    <h2>Teorie končí ve chvíli, kdy si zraníte koleno.<br><em>Já to teď žiju.</em></h2>
                     <div class="story-text">
-                        <p>Jmenuji se <strong>Jana</strong>. Jsem fyzioterapeutka a manažerka. Roky jsem učila firmy, jak nevyhořet. A pak přišla lekce pokory.</p>
-                        <p>V lednu 2026 mě těžký úraz kolene upoutal na lůžko. Mohla jsem zavřít firmu. Místo toho jsem se stala <strong>Klientem 0</strong>.</p>
-                        <p class="story-quote">„Aplikuji metodu WALANCE v extrémních podmínkách. Řídím byznys horizontálně. A funguje to. Mám čistší hlavu než vy v kanceláři."</p>
-                        <p>Pokud dokážu udržet vysoký výkon já z postele, naučím to i vás.</p>
+                        <p>Jmenuji se <strong>Jana</strong>. Roky učím lídry, jak nevyhořet a držet vysoký výkon. Pak přišla nečekaná lekce pokory.</p>
+                        <p>V lednu 2026 mě těžký úraz kolene upoutal na lůžko. Mohla jsem projekty pozastavit a na měsíce zmizet z trhu. Místo toho jsem se stala <strong>Klientem 0</strong>. Rozhodla jsem se otestovat metodu WALANCE v těch nejextrémnějších podmínkách.</p>
+                        <p class="story-quote">„Řídím byznys horizontálně. A funguje to. Moje hlava je díky systému ostřejší než kdy dřív, přestože tělo je v opravě. Moje omezení se stalo laboratoří pro vaši efektivitu."</p>
+                        <p>Pokud dokážu udržet vysoké pracovní tempo, jasnou mysl a strategický nadhled já z postele, garantuji vám, že váš systém vyladím kdekoli — v kanceláři i pod největším tlakem.</p>
                     </div>
                 </div>
                 <div class="story-image-wrap fade-in">
                     <img src="assets/images/hero-story-jana.jpg"
                          alt="Jana Štěpaníková — zakladatelka WALANCE"
                          class="story-image"
-                         width="800" height="1067"
+                         width="1800" height="1200"
                          loading="lazy"
                          decoding="async"
                          fetchpriority="low">
@@ -1561,13 +1641,13 @@
     <!-- ============ ROI ============ -->
     <section class="section roi-section fade-in">
         <div class="container">
-            <p class="section-label" style="color: rgba(250,249,247,0.5);">Matematika je neúprosná</p>
+            <p class="section-label" style="color: rgba(250,249,247,0.5);">Matematika výkonu je neúprosná</p>
             <div class="roi-number">8</div>
             <p class="roi-unit">MINUT</p>
-            <p class="roi-text">Tolik času denně stačí ušetřit (díky absenci bolestí zad), aby se investice vrátila.</p>
+            <p class="roi-text">Tolik času denně stačí ušetřit (eliminací mikrostresů a fyzického nepohodlí), aby se vám investice do WALANCE vrátila.</p>
             <div class="roi-highlight">
-                <p>Cílím na <strong>60 MINUT</strong> denně navíc.</p>
-                <small>Vynásobte si to hodinovou sazbou vašich klíčových lidí.</small>
+                <p><strong>60 MINUT</strong> — to je náš reálný cíl. Hodina čisté mentální kapacity denně navíc pro každého klíčového člověka.</p>
+                <small>Vynásobte si to hodinovou sazbou vašich lídrů. WALANCE není benefit. Je to prevence systémových výpadků a optimalizace vašeho nejdražšího aktiva — kapacity vašich lidí.</small>
             </div>
         </div>
     </section>
@@ -1587,23 +1667,19 @@
                     <div class="product-header">Pro firmy</div>
                     <div class="product-body">
                         <h3>OFFICE RESET&trade;</h3>
-                        <p class="desc">Pro týmy, které jedou na dluh a potřebují zastavit úniky energie.</p>
+                        <p class="desc">Systematické řešení výkonu a zdraví. Zastavíme úniky energie a zvýšíme kapacitu vašich lidí. Fyziologie, ergonomie a výsledky podložené auditem.</p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Audit „energetických děr"</span>
+                                <span>Audit „energetických děr" (měření kondice týmu)</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Fyzio-ergonomie pracoviště</span>
+                                <span>Fyzio-ergonomie: nastavení těl a židlí pro výkon</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>4 týdny hybridního mentoringu</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Tvrdá data, žádné ezo</span>
+                                <span>4 týdny hybridního mentoringu pro fixaci návyků</span>
                             </li>
                         </ul>
                         <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
@@ -1618,23 +1694,19 @@
                     <div class="product-header">Pro lídry (1-on-1)</div>
                     <div class="product-body">
                         <h3>CRISIS MENTORING</h3>
-                        <p class="desc">Strategická konzultace s Janou (Klient 0). Krizové řízení vás samotných.</p>
+                        <p class="desc">Strategická intervence 1:1. Krizové řízení vás samotných pod vedením Klienta 0. Hloubková diagnostika vašeho systému a okamžité nastavení podmínek pro udržitelné vládnutí.</p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Hloubková diagnostika</span>
+                                <span>Hloubková diagnostika: Tělo, Hlava, Práce</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Redesign pracovního kalendáře</span>
+                                <span>Redesign kalendáře: plánování podle energie, ne času</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Okamžitá úleva od tlaku</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Systém, jak fungovat horizontálně</span>
+                                <span>Okamžitá úleva od tlaku a fyzické bolesti</span>
                             </li>
                         </ul>
                         <button type="button" onclick="openBookingModal()" class="product-cta product-cta--primary">
@@ -1648,27 +1720,27 @@
                     <div class="product-header" style="color: var(--sage);">Start (zdarma)</div>
                     <div class="product-body">
                         <h3>BYZNYS Z POSTELE</h3>
-                        <p class="desc">Webinář: Jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
+                        <p class="desc">Manuál přežití pro lídry. Nečekejte, až vás systém vypne natvrdo. Připojte se k živému vysílání a získejte návod, jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>3 okamžité techniky</span>
+                                <span>LIVE Masterclass: strategie horizontálního řízení</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>E-book s manuálem</span>
+                                <span>E-book: Krizový manuál Klienta 0</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Přístup do komunity</span>
+                                <span>3 okamžité techniky pro úlevu od bolesti a stresu</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Záznam masterclass</span>
+                                <span>Vstup do komunity lídrů, kteří odmítají vyhořet</span>
                             </li>
                         </ul>
                         <a href="#contact" class="product-cta product-cta--outline">
-                            STÁHNOUT ZDARMA
+                            VSTOUPIT DO PROGRAMU ZDARMA
                         </a>
                     </div>
                 </div>
@@ -1682,7 +1754,7 @@
             <div class="section-header fade-in">
                 <p class="section-label">Kontakt</p>
                 <h2 class="section-title">Napište mi</h2>
-                <p class="section-subtitle">Máte dotaz nebo chcete rezervovat termín? Ozvěte se mi.</p>
+                <p class="section-subtitle">Zaujala vás metoda WALANCE? Ozvěte se. Ať už řešíte OFFICE RESET&trade; pro firmu, CRISIS MENTORING pro sebe, nebo máte jen dotaz k termínům — jsem tady pro vás.</p>
             </div>
 
             <div class="contact-grid">
@@ -1690,8 +1762,8 @@
                     <h3 style="font-size: 1.25rem; margin-bottom: 24px;">Kontaktní formulář</h3>
                     <form id="contact-form">
                         <div class="form-group">
-                            <label for="c-name">Jméno *</label>
-                            <input type="text" id="c-name" name="name" required placeholder="Vaše jméno">
+                            <label for="c-name">Jméno a příjmení *</label>
+                            <input type="text" id="c-name" name="name" required placeholder="Vaše jméno a příjmení">
                         </div>
                         <div class="form-group">
                             <label for="c-email">E-mail *</label>
@@ -1738,31 +1810,31 @@
             <div class="faq-list">
                 <details class="faq-item fade-in">
                     <summary>
-                        Jak dlouho trvá typická spolupráce?
+                        Jak dlouho trvá spolupráce?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Office Reset&trade; je 4týdenní program pro firmy. Crisis Mentoring je individuální a přizpůsobuje se vaší situaci — od jednorázové konzultace po dlouhodobý mentoring.</div>
+                    <div class="faq-answer">Zaměřujeme se na skutečnou implementaci, ne na jednorázové teorie. Respektujeme čas potřebný pro změnu návyků.<br><br><strong>OFFICE RESET&trade; (firemní týmy):</strong> 4týdenní cyklus. První týden nastavíme systém a provedeme audit (LIVE), další tři týdny slouží k fixaci nových návyků do praxe (hybridní formou).<br><br><strong>CRISIS MENTORING (lídři 1:1):</strong> Přizpůsobujeme se stavu vašeho systému. Nabízíme buď jednorázovou strategickou intervenci (90 min) pro okamžitou úlevu, nebo 3měsíční mentoring pro kompletní přestavbu pracovních návyků.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
-                        Přijedete k nám do firmy?
+                        Kde probíhá spolupráce?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">Ano, za klientem přijedu osobně. Spolupráce zároveň probíhá hybridně — online konzultace, video hovory i fyzio cvičení na video. Kombinujeme podle toho, co vám vyhovuje.</div>
+                    <div class="faq-answer">Působíme po celé ČR. Za klienty jezdím tam, kde je jejich byznys.<br><br><strong>Pro firmy (OFFICE RESET&trade;):</strong> Úvodní audit a nastavení pracoviště probíhá vždy fyzicky u vás ve firmě. Následný mentoring pro fixaci návyků řídíme hybridně/online.<br><br><strong>Pro lídry (CRISIS MENTORING):</strong> Tělo nelze plně nastavit přes webkameru. Proto kombinujeme osobní setkání (pro hloubkovou diagnostiku a manuální techniky) s efektivními online konzultacemi (pro řízení kalendáře a strategie).</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Jak se liší WALANCE od klasického koučingu?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer">WALANCE propojuje fyzioterapii s leadershipem. Pracuji s myšlením i s tělem zároveň. Začínáte od hardware (tělo) a postupujete k software (mysl) a operačnímu systému (návyky). Žádný jiný kouč toto nepropojuje.</div>
+                    <div class="faq-answer">Většina koučů pracuje „shora dolů" (od hlavy k tělu). My jdeme opačně. Klasický koučink ladí váš software (mindset). My ale začínáme opravou hardwaru (těla).<br><br>WALANCE respektuje biologii výkonu:<br><strong>Hardware (Tělo):</strong> Nejdřív odstraníme fyzické bloky, bolest a chronickou únavu.<br><strong>Software (Hlava):</strong> Teprve když systém nebolí, nastavujeme strategie a myšlení.<br><strong>Operační systém (Návyky):</strong> Vše ukotvíme do kalendáře, aby změna vydržela.</div>
                 </details>
                 <details class="faq-item fade-in">
                     <summary>
                         Jak začít?
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </summary>
-                    <div class="faq-answer"><a href="#contact" style="color: var(--accent); text-decoration: underline;">Napište mi přes formulář</a> nebo si rovnou <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">rezervujte termín v kalendáři</a>. Začneme krátkým auditem vaší situace — zdarma a nezávazně.</div>
+                    <div class="faq-answer"><a href="#contact" style="color: var(--accent); text-decoration: underline;">Vyplňte formulář</a> nebo si rovnou <a href="javascript:void(0)" onclick="openBookingModal()" style="color: var(--accent); text-decoration: underline;">rezervujte termín v kalendáři</a>. Nabízíme úvodní strategickou konzultaci (30 min). Cílem je ověření kompatibility. Společně zhodnotíme stav vašeho systému a určíme, zda je pro vás efektivnějším řešením firemní reset, nebo osobní mentoring.</div>
                 </details>
             </div>
         </div>
@@ -1846,7 +1918,8 @@
         <div class="container footer-inner">
             <div>
                 <div class="footer-brand">WALANCE.</div>
-                <p class="footer-tagline" style="margin-bottom: 6px;">NetWalking Pro s.r.o.</p>
+                <p class="footer-tagline" style="margin-bottom: 12px; font-style: italic; max-width: 320px;">„Byznys je management energie. Každý udržitelný výkon stojí na stabilitě svého nositele."</p>
+                <p style="font-size: 0.75rem; font-weight: 700; opacity: 0.6; margin-bottom: 6px;">NetWalking Pro s.r.o.</p>
                 <p style="font-size: 0.8125rem; line-height: 1.6;">
                     Jana Štěpaníková<br>
                     <a href="mailto:jana@walance.cz" style="color: rgba(250,249,247,0.6); text-decoration: none;">jana@walance.cz</a><br>
@@ -1896,13 +1969,13 @@
 
         // Pillars interactive (WALANCE acronym)
         const pillarsData = [
-            { letter: 'W', title: 'Walk & Work', subtitle: 'Pohyb jako nástroj myšlení', desc: 'Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Ukončete mozkovou mlhu.' },
-            { letter: 'A', title: 'Awareness', subtitle: 'Diagnostika reality', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat varovné signály těla (mělké dýchání, ztuhlá šíje) dříve, než se zablokujete.' },
-            { letter: 'L', title: 'Longevity', subtitle: 'Udržitelnost funkčnosti', desc: 'Nejde o to dožít se stovky, ale nebýt v 50 letech „na odpis". Cílem je udržet plnou funkční kapacitu těla pro vysoký výkon.' },
-            { letter: 'A', title: 'Alignment', subtitle: 'Zarovnání a optimalizace', desc: 'Odstranění fyzického i mentálního tření. Srovnání páteře a zarovnání pracovní náplně se silnými stránkami (Job Crafting).' },
-            { letter: 'N', title: 'New Habits', subtitle: 'Job Crafting v praxi', desc: 'Velké změny nefungují. Fungují mikronávyky a neuroplasticita. Přepisování starých vzorců bez revolucí.' },
-            { letter: 'C', title: 'Clarity', subtitle: 'Informační hygiena', desc: 'Nevyhoříte z práce, ale z šumu. Techniky pro hlubokou práci (Deep Work) a ochrana proti digitální demenci.' },
-            { letter: 'E', title: 'Energy', subtitle: 'Management zdrojů', desc: 'Time management nestačí. Řídíme biologickou energii. Nejtěžší úkoly plánujeme do biologických špiček.' },
+            { letter: 'W', title: 'Walk & Work', subtitle: 'Pohyb jako nástroj myšlení', desc: 'Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Aktivujte svůj procesor v pohybu a nechte nápady volně proudit.' },
+            { letter: 'A', title: 'Awareness', subtitle: 'Senzory pro včasné varování', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat signály těla — mělké dýchání nebo tuhnoucí šíji — dříve, než systém nahlásí kritickou chybu a zablokuje vás.' },
+            { letter: 'L', title: 'Longevity', subtitle: 'Maximální životnost systému', desc: 'Nejde o to dožít se stovky, ale nebýt v padesáti „na odpis". Budujeme tělo, které udrží plnou kapacitu pro vysoký výkon tak dlouho, dokud se sami rozhodnete zůstat ve hře.' },
+            { letter: 'A', title: 'Alignment', subtitle: 'Geometrie těla i role', desc: 'Odstraňujeme tření v systému. Srovnáme vaši páteř (fyzický postoj) a pomocí Job Craftingu zarovnáme pracovní náplň s vašimi silnými stránkami. Když vše lícuje, výkon roste bez odporu.' },
+            { letter: 'N', title: 'New Habits', subtitle: 'Systémový upgrade návyků', desc: 'Velké revoluce nefungují. Fungují mikrozměny, které využívají neuroplasticitu mozku. Nastavíme nové rutiny tak, aby se staly přirozenou součástí vašeho dne — bez stresu a bez nutnosti železné vůle.' },
+            { letter: 'C', title: 'Clarity', subtitle: 'Ochrana procesoru před šumem', desc: 'Nevyhoříte z práce, ale z chaosu. Nastavíme principy informační hygieny a hluboké práce (Deep Work). Odstraníme digitální smog, aby vaše mysl zůstala ostrá a schopná soustředění i pod tlakem.' },
+            { letter: 'E', title: 'Energy', subtitle: 'Optimalizace biologického paliva', desc: 'Time management sám o sobě nestačí, pokud chybí energie. Zaměříme se na její řízení. Naučíte se pracovat se svými biorytmy a nejtěžší úkoly plánovat do výkonnostních špiček. Výsledkem je stabilní přísun sil po celý den, ne jen do oběda.' },
         ];
 
         document.querySelectorAll('#pillar-buttons .pillar-btn').forEach(btn => {

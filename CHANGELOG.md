@@ -6,6 +6,25 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [1.5.0] – 17.02.2026 03:15
+> Nepushnuto
+
+### Přidáno
+- **Nová sekce „3 klíčové benefity WALANCE":** Udržitelný výkon, Práce ve flow, Mentální odolnost (tmavé pozadí, 3 karty)
+
+### Změněno
+- **Sekce Problém:** přepsány karty Hlava/Tělo/Tým + verdict box (delší texty, metafora systémové chyby)
+- **Sekce Metoda:** nový subtitle + přepracované 3 vrstvy (Hardware/Software/OS s podtitulky)
+- **Sekce 7 pilířů:** aktualizovány všechny popisy (W-A-L-A-N-C-E) — delší, detailnější texty
+- **Mobilní pilíře:** detail panel se zobrazuje nad tlačítky (order: -1), lepší UX
+- **Sekce Příběh:** rozšířený text, nový citát, upravený heading
+- **Sekce ROI:** nový text „Matematika výkonu", rozšířený highlight s hodnotovou argumentací
+- **Produkty:** přepracovány všechny 3 karty (Office Reset, Crisis Mentoring, Byznys z postele) — nové popisy a features
+- **Kontakt:** nový subtitle s popisem služeb, formulář „Jméno a příjmení"
+- **FAQ:** 4 otázky výrazně rozšířeny (konkrétní info o délce spolupráce, místě, odlišnostech, prvním kroku)
+- **Patička:** nový citát „Byznys je management energie..."
+- **E-maily:** ich-forma (Jana) místo my-formy (tým WALANCE), podpis „Jana Štěpaníková"
+
 ## [1.4.2] – 16.02.2026 20:25
 > Pushed: 16.02.2026 20:32
 

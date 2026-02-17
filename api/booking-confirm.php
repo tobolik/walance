@@ -55,16 +55,16 @@ try {
         $dateFormatted = date('d.m.Y', strtotime($date));
         $clientSubject = 'Rezervace termínu u WALANCE – váš termín byl potvrzen';
         $clientBody = "Dobrý den, $name,\n\n";
-        $clientBody .= "rádi vás informujeme, že váš termín byl potvrzen.\n\n";
+        $clientBody .= "ráda vás informuji, že váš termín byl potvrzen.\n\n";
         $clientBody .= "Shrnutí rezervace:\n";
         $clientBody .= "• Datum: $dateFormatted\n";
         $clientBody .= "• Čas: $time\n";
         if ($message) $clientBody .= "• Vaše zpráva: $message\n\n";
         $clientBody .= "---\n\n";
         $clientBody .= "WALANCE – Anatomie udržitelného výkonu\n\n";
-        $clientBody .= "Metoda WALANCE spojuje koučink, fyzioterapii a provozní manuál pro lídry a týmy. Pomáháme vám udržet výkon bez vyhoření – protože byznys není sprint, je to maraton v pohybu.\n\n";
-        $clientBody .= "Těšíme se na setkání!\n\n";
-        $clientBody .= "S pozdravem,\ntým WALANCE";
+        $clientBody .= "Metoda WALANCE spojuje fyzioterapii, mentální koučink a Job Crafting. Pomáhám vám udržet výkon bez vyhoření.\n\n";
+        $clientBody .= "Těším se na setkání!\n\n";
+        $clientBody .= "S pozdravem,\nJana Štěpaníková\nWALANCE";
 
         $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
         $headers .= "From: " . MAIL_FROM . "\r\n";
