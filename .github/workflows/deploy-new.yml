@@ -1,0 +1,70 @@
+name: Deploy new.walance.cz via SFTP
+
+on:
+  push:
+    branches: [claude/walance-business-critique-e5oul]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Zkontrolovat secrets
+        run: |
+          if [ -z "${{ secrets.SFTP_REMOTE_PATH_NEW }}" ]; then
+            echo "::error::Secret SFTP_REMOTE_PATH_NEW chybí. Nastavte: Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Composer install (jen Calendar API)
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Připravit soubory k nasazení
+        run: |
+          mkdir -p deploy
+          rsync -a --exclude='node_modules' --exclude='.git' \
+            --exclude='data/*.db' --exclude='api/credentials/*.json' --exclude='.github' \
+            ./ deploy/
+          mkdir -p deploy/data deploy/api/credentials
+
+      - name: Deploy na new.walance.cz
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_HOST }}
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './deploy/*'
+          remote_path: ${{ secrets.SFTP_REMOTE_PATH_NEW }}
+          sftp_only: true
+          sftpArgs: '-o ConnectTimeout=10'
+
+      - name: Composer install na serveru (fallback)
+        if: success()
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          script: |
+            cd ${{ secrets.SFTP_REMOTE_PATH_NEW }} && composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Spustit migraci databáze
+        env:
+          SITE_URL: 'https://new.walance.cz'
+        run: |
+          URL="${{ env.SITE_URL }}/api/migrate.php"
+          echo "Volám migraci..."
+          RESPONSE=$(curl -s -L -w "\n%{http_code}" "$URL?token=${{ secrets.MIGRATE_TOKEN }}")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          echo "$BODY"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Migrace selhala (HTTP $HTTP_CODE)"
+            exit 1
+          fi
+          echo "Migrace dokončena."
