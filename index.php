@@ -1131,17 +1131,8 @@
             gap: 24px;
         }
 
-        /* Mobile: free first, expensive last (reverse HTML order) */
-        .products-grid .product-card:nth-child(1) { order: 3; } /* Office Reset 45k → last */
-        .products-grid .product-card:nth-child(2) { order: 2; } /* Crisis Mentoring → middle */
-        .products-grid .product-card:nth-child(3) { order: 1; } /* Byznys z postele free → first */
-
         @media (min-width: 768px) {
             .products-grid { grid-template-columns: repeat(3, 1fr); }
-            /* Desktop: restore original order */
-            .products-grid .product-card:nth-child(1) { order: 1; }
-            .products-grid .product-card:nth-child(2) { order: 2; }
-            .products-grid .product-card:nth-child(3) { order: 3; }
         }
 
         .product-card {
@@ -2041,31 +2032,34 @@
             </div>
 
             <div class="products-grid">
-                <!-- Product 1: Office Reset -->
+                <!-- Product 1: Byznys z postele (zdarma) -->
                 <div class="product-card product-card--default fade-in">
-                    <div class="product-header">Pro firmy</div>
+                    <div class="product-header" style="color: var(--sage);">Start (zdarma)</div>
                     <div class="product-body">
-                        <h3>OFFICE RESET&trade;</h3>
-                        <p class="desc">Systematické řešení výkonu a zdraví. Zastavíme úniky energie a zvýšíme kapacitu vašich lidí. Fyziologie, ergonomie a výsledky podložené auditem.</p>
-                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--ink);">od 45 000 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">za tým / 4týdenní program</span></p>
+                        <h3>BYZNYS Z POSTELE</h3>
+                        <p class="desc">Manuál přežití pro lídry. Nečekejte, až vás systém vypne natvrdo. Připojte se k živému vysílání a získejte návod, jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--accent);">0 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">e-book + masterclass + komunita zdarma</span></p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Audit „energetických děr" (měření kondice týmu)</span>
+                                <span>LIVE Masterclass: strategie horizontálního řízení</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Fyzio-ergonomie: nastavení těl a židlí pro výkon</span>
+                                <span>E-book: Krizový manuál Klienta 0</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>4 týdny hybridního mentoringu pro fixaci návyků</span>
+                                <span>3 okamžité techniky pro úlevu od bolesti a stresu</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Vstup do komunity lídrů, kteří odmítají vyhořet</span>
                             </li>
                         </ul>
-                        <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
-                            POPTAT AUDIT
+                        <a href="#contact" class="product-cta product-cta--outline">
+                            VSTOUPIT DO PROGRAMU ZDARMA
                         </a>
-                        <p class="product-note">Finální cena závisí na velikosti týmu a rozsahu auditu.</p>
                     </div>
                 </div>
 
@@ -2098,34 +2092,31 @@
                     </div>
                 </div>
 
-                <!-- Product 3: Byznys z postele -->
+                <!-- Product 3: Office Reset (pro firmy) -->
                 <div class="product-card product-card--default fade-in">
-                    <div class="product-header" style="color: var(--sage);">Start (zdarma)</div>
+                    <div class="product-header">Pro firmy</div>
                     <div class="product-body">
-                        <h3>BYZNYS Z POSTELE</h3>
-                        <p class="desc">Manuál přežití pro lídry. Nečekejte, až vás systém vypne natvrdo. Připojte se k živému vysílání a získejte návod, jak řídit firmu a nezbláznit se, i když tělo stávkuje.</p>
-                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--accent);">0 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">e-book + masterclass + komunita zdarma</span></p>
+                        <h3>OFFICE RESET&trade;</h3>
+                        <p class="desc">Systematické řešení výkonu a zdraví. Zastavíme úniky energie a zvýšíme kapacitu vašich lidí. Fyziologie, ergonomie a výsledky podložené auditem.</p>
+                        <p style="margin-bottom: 20px;"><span style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--ink);">od 45 000 Kč</span><br><span style="font-size: 0.8125rem; color: var(--ink-muted);">za tým / 4týdenní program</span></p>
                         <ul class="product-features">
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>LIVE Masterclass: strategie horizontálního řízení</span>
+                                <span>Audit „energetických děr" (měření kondice týmu)</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>E-book: Krizový manuál Klienta 0</span>
+                                <span>Fyzio-ergonomie: nastavení těl a židlí pro výkon</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>3 okamžité techniky pro úlevu od bolesti a stresu</span>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Vstup do komunity lídrů, kteří odmítají vyhořet</span>
+                                <span>4 týdny hybridního mentoringu pro fixaci návyků</span>
                             </li>
                         </ul>
-                        <a href="#contact" class="product-cta product-cta--outline">
-                            VSTOUPIT DO PROGRAMU ZDARMA
+                        <a href="mailto:jana@walance.cz?subject=Popt%C3%A1vka%20Office%20Reset" class="product-cta product-cta--outline">
+                            POPTAT AUDIT
                         </a>
+                        <p class="product-note">Finální cena závisí na velikosti týmu a rozsahu auditu.</p>
                     </div>
                 </div>
             </div>
