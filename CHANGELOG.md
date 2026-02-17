@@ -6,6 +6,14 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [1.4.2] – 16.02.2026 20:25
+> Nepushnuto
+
+### Změněno
+- **Hero obrázek:** nový story obrázek (`hero-story-jana.jpg`) + CSS úprava pro portrait formát (`aspect-ratio: 4/3`, `max-height: 520px`, `object-position: center top`)
+- **Patička:** LinkedIn odkaz → linkedin.com/in/janastepanikova
+- **Text:** oprava tvaru „autopilot" → „autopilota" (4. pád)
+
 ## [1.4.1] – 16.02.2026 14:35
 > Pushed: 16.02.2026 14:36
 

@@ -1549,7 +1549,7 @@
                     <img src="assets/images/hero-story-jana.jpg"
                          alt="Jana Štěpaníková — zakladatelka WALANCE"
                          class="story-image"
-                         width="1800" height="1200"
+                         width="800" height="1067"
                          loading="lazy"
                          decoding="async"
                          fetchpriority="low">
