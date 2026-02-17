@@ -6,6 +6,32 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.0.0] – 14.02.2026 23:45
+
+### Přidáno
+- **SEO:** robots.txt, sitemap.xml, JSON-LD structured data, canonical URL, příprava Google Analytics 4
+- **Ceny u produktů:** explicitní ceny (Office Reset od 45 000 Kč, Crisis Mentoring od 3 500 Kč, Byznys z postele 0 Kč)
+- **Nová FAQ:** „Kolik to stojí?" s kompletním ceníkem
+- **Product notes:** „Finální cena závisí na velikosti týmu" a „Úvodní konzultace (30 min) zdarma"
+- **Sekce Příběhy klientů:** 5 reálných případových studií (Markéta, Petra, Lucie, Martin, Klient 0)
+- **FAQ „Jak začít?":** rozšířeno na 3 kroky s CTA
+
+### Změněno
+- **Hero:** vrácen původní text „Anatomie udržitelného výkonu", odstraněn dovětek „Fyzioterapie + koučink + Job Crafting"
+- **Trust bar:** 7 pilířů, 60 min ušetřený čas, 5 ověřených případových studií, 4 týdny Office Reset
+- **Problem sekce:** empatický tón — „Výkon neklesá kvůli neschopnosti. Klesá kvůli přetížení."
+- **Problem karty:** „Rozhodujete pod mlhou", „Tělo táhne za ruční brzdu", „Práce vysává místo nabíjí"
+- **Verdict box:** „Tohle se dá změnit. Celé. Systematicky."
+- **ROI sekce:** odstraněny nepodložené „8 min / 60 min" claimy, nahrazeno „3 v 1 METODA"
+- **Product badge:** „Bestseller" → „Doporučuji"
+- **Booking modal:** přejmenován na „Rezervace konzultace zdarma"
+- **Ich-forma:** sjednoceny všechny FAQ odpovědi a popisy metody do ich-formy (Jana je jedna osoba)
+- **Řazení produktů:** od nejlevnějšího po nejdražší
+- **Merge větve new.walance.cz do master**
+
+### Odstraněno
+- **Sekce „3 klíčové benefity":** duplicitní obsah se sekcemi Problém a Metoda
+
 ## [1.5.2] – 17.02.2026 03:53
 > Pushed: 17.02.2026 03:53
 
