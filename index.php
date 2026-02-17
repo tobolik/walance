@@ -1508,39 +1508,12 @@
                     <span class="trust-label">Pilířů metody</span>
                 </div>
                 <div class="trust-item">
-                    <span class="trust-number">1. konzultace</span>
-                    <span class="trust-label">Zdarma a nezávazně</span>
+                    <span class="trust-number">4</span>
+                    <span class="trust-label">Ověřené případové studie</span>
                 </div>
                 <div class="trust-item">
                     <span class="trust-number">4 týdny</span>
                     <span class="trust-label">Program Office Reset</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ BENEFITS ============ -->
-    <section class="section benefits-section">
-        <div class="container">
-            <div class="section-header fade-in" style="text-align: center;">
-                <p class="section-label" style="color: var(--accent);">3 klíčové benefity WALANCE</p>
-            </div>
-
-            <div class="benefits-grid">
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Tělo / Fyzio</p>
-                    <h3>Udržitelný výkon</h3>
-                    <p>Tělo nesmí být limitujícím faktorem vašeho úspěchu. Nastavíme vaši biologii (spánek, dech, ergonomii) tak, aby zvládla vysokou zátěž bez výkyvů. Místo abyste energii museli „dobíjet" kofeinem, vytvoříme systém, který ji generuje přirozeně. Získáte stabilní drive od rána do večera.</p>
-                </div>
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Práce / Job Crafting</p>
-                    <h3>Práce ve flow</h3>
-                    <p>Dřina není ctnost — často je to jen špatně nastavená práce. Pomocí metodiky Job Craftingu odstraníme „tření" ve vašich úkolech. Přenastavíme vaši roli tak, abyste dělali to, pro co máte talent. Práce vás přestane vysávat a začne vás nabíjet.</p>
-                </div>
-                <div class="benefit-card fade-in">
-                    <p class="benefit-tag">Hlava / Koučink</p>
-                    <h3>Mentální odolnost</h3>
-                    <p>V krizi vyhrává ten, kdo zachová chladnou hlavu. Získáte nástroje pro okamžitou regulaci stresu a emocí. Vaše rozhodování bude strategické a přesné i pod extrémním tlakem. Naučíte se vypnout hlavu na povel, abyste si práci a stres nebrali domů.</p>
                 </div>
             </div>
         </div>
@@ -1582,8 +1555,8 @@
             </div>
 
             <div class="verdict-box fade-in">
-                <h3>Tohle se dá změnit. Celé.</h3>
-                <p>Metoda WALANCE pracuje se všemi třemi vrstvami — s tělem, myslí i nastavením práce. Protože když řešíte jen jednu, ty další vás brzdí.</p>
+                <h3>Tohle se dá změnit. Celé. Najednou.</h3>
+                <p>Metoda WALANCE pracuje se všemi třemi vrstvami současně — s tělem, myslí i nastavením práce. Protože když opravíte jen jednu, ty další vás stáhnou zpět.</p>
             </div>
         </div>
     </section>
@@ -1721,18 +1694,18 @@
     <!-- ============ ROI ============ -->
     <section class="section roi-section fade-in">
         <div class="container">
-            <p class="section-label" style="color: rgba(250,249,247,0.5);">Proč se to vyplatí</p>
-            <div class="roi-number">3 v 1</div>
-            <p class="roi-unit">METODA</p>
-            <p class="roi-text">Fyzioterapie, koučink a Job Crafting v jednom systému. Místo tří specialistů pracujete s jedním člověkem, který vidí celý obraz.</p>
+            <p class="section-label" style="color: rgba(250,249,247,0.5);">Matematika výkonu je neúprosná</p>
+            <div class="roi-number">8</div>
+            <p class="roi-unit">MINUT</p>
+            <p class="roi-text">Tolik času denně stačí ušetřit (eliminací mikrostresů a fyzického nepohodlí), aby se vám investice do WALANCE vrátila.</p>
             <div class="roi-highlight">
-                <p><strong>Méně mikrostresů, víc čisté kapacity.</strong> Když přestanete bojovat s bolestí zad, únavou a rozhodovací paralýzou, uvolníte energii pro to, co opravdu potřebujete řešit.</p>
-                <small>WALANCE není wellness benefit. Je to investice do kapacity vašich lidí — vašeho nejdražšího aktiva.</small>
+                <p><strong>60 MINUT</strong> — to je náš reálný cíl. Hodina čisté mentální kapacity denně navíc pro každého klíčového člověka.</p>
+                <small>Vynásobte si to hodinovou sazbou vašich lídrů. WALANCE není benefit. Je to prevence systémových výpadků a optimalizace vašeho nejdražšího aktiva — kapacity vašich lidí.</small>
             </div>
         </div>
     </section>
 
-    <!-- ============ PŘÍBĚHY KLIENTŮ — SKRYTO, dokud Jana nedoplní obsah ============
+    <!-- ============ PŘÍBĚHY KLIENTŮ ============ -->
     <section id="results" class="section" style="background: var(--white);">
         <div class="container">
             <div class="section-header fade-in">
@@ -1742,46 +1715,49 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
 
+                <!-- PŘÍBĚH 1 — Jana nahradí reálným příběhem -->
                 <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
                     <div>
-                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 1</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;CITACE KLIENTA&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;">Jméno klienta</p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);">Role / kontext</p>
+                        <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 1 <!-- např. "Chronická bolest zad" --></p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
                     </div>
                 </div>
 
+                <!-- PŘÍBĚH 2 -->
                 <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
                     <div>
                         <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 2</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;CITACE KLIENTA&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;">Jméno klienta</p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);">Role / kontext</p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
                     </div>
                 </div>
 
+                <!-- PŘÍBĚH 3 -->
                 <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
                     <div>
                         <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 3</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;CITACE KLIENTA&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;">Jméno klienta</p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);">Role / kontext</p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
                     </div>
                 </div>
 
+                <!-- PŘÍBĚH 4 -->
                 <div class="card fade-in" style="border-left: 3px solid var(--accent); display: grid; grid-template-columns: 1fr; gap: 16px;">
                     <div>
                         <p style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 8px;">Příběh 4</p>
-                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;CITACE KLIENTA&ldquo;</p>
-                        <p style="font-weight: 700; font-size: 0.875rem;">Jméno klienta</p>
-                        <p style="font-size: 0.8125rem; color: var(--ink-muted);">Role / kontext</p>
+                        <p style="font-style: italic; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px;">&bdquo;<!-- SEM DOPLNÍ JANA CITACI KLIENTA -->&ldquo;</p>
+                        <p style="font-weight: 700; font-size: 0.875rem;"><!-- Jméno klienta --></p>
+                        <p style="font-size: 0.8125rem; color: var(--ink-muted);"><!-- Role / kontext --></p>
                     </div>
                 </div>
 
             </div>
         </div>
     </section>
-    ============ KONEC SKRYTÉ SEKCE ============ -->
 
     <!-- ============ PRODUCTS ============ -->
     <section id="products" class="section">
@@ -1972,7 +1948,7 @@
                     </summary>
                     <div class="faq-answer">
                         <strong>CRISIS MENTORING (1:1):</strong> Od 3 500 Kč za 90minutovou session. Balíčky (3 session) od 9 000 Kč. Tříměsíční mentoring na míru — cena dle rozsahu.<br><br>
-                        <strong>OFFICE RESET&trade; (firmy):</strong> Od 45 000 Kč za tým. Závisí na velikosti týmu a rozsahu auditu. Pošlu vám detailní nabídku do 48 hodin od prvního hovoru.<br><br>
+                        <strong>OFFICE RESET&trade; (firmy):</strong> Od 45 000 Kč za tým. Závisí na velikosti týmu a rozsahu auditu. Posíláme detailní nabídku do 48 hodin od prvního hovoru.<br><br>
                         <strong>BYZNYS Z POSTELE:</strong> Zcela zdarma — masterclass, e-book i komunita.<br><br>
                         Úvodní konzultace (30 min) je vždy zdarma a nezávazná.
                     </div>
