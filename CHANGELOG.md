@@ -6,6 +6,13 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.3.0] – 17.02.2026 19:30
+
+### Změněno
+- **Slovníček reality — plné texty:** odstraněno skryté rozbalování po kliknutí, všechny popisy i „Co s tím" jsou nyní viditelné přímo na kartičce
+- **Slovníček reality — hlavička:** přidán label „Slovníček", title „Slovníček reality" a subtitle s vysvětlením
+- **Slovníček reality — texty:** vráceny plné originální popisy místo zkrácených verzí (Prezentismus, Brain fog, Deep work, Job crafting, Tech neck, Chronický stres, Mikropřestávka, Ergonomie)
+
 ## [2.2.1] – 17.02.2026 18:23
 > Pushed: 17.02.2026 18:23
 

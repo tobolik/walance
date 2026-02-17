@@ -1487,7 +1487,6 @@
             border-radius: 16px;
             padding: 28px 24px;
             transition: border-color 0.2s, box-shadow 0.2s;
-            cursor: pointer;
         }
 
         .glossary-card:hover {
@@ -1522,19 +1521,7 @@
             font-size: 0.9375rem;
             color: var(--ink-light);
             line-height: 1.6;
-            margin: 0;
-        }
-
-        .glossary-card-detail {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s ease, margin-top 0.35s ease;
-            margin-top: 0;
-        }
-
-        .glossary-card.open .glossary-card-detail {
-            max-height: 200px;
-            margin-top: 12px;
+            margin: 0 0 12px;
         }
 
         .glossary-card-cta {
@@ -2352,107 +2339,92 @@
     <section class="section glossary-section">
         <div class="container">
             <div class="section-header fade-in">
-                <p class="section-label">Slovníček reality</p>
-                <h2 class="section-title">Pojmy, které řešíte — a co s nimi</h2>
+                <p class="section-label">Slovníček</p>
+                <h2 class="section-title">Slovníček reality</h2>
+                <p class="section-subtitle" style="margin-top: 12px;">Pojmy, o kterých se mluví — ale málo kdo ví, co s nimi. Tady je přehled i s řešením.</p>
             </div>
 
             <div class="glossary-grid" id="glossary-grid">
                 <!-- Prezentismus -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <h3>Prezentismus</h3>
-                    <p class="glossary-card-desc">Jste v práci, ale nejste přítomní. Produktivita klesá o 30–40 %.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> WALANCE audit odhalí míru prezentismu ve vaší firmě a navrhne konkrétní intervence.</p>
-                    </div>
+                    <p class="glossary-card-desc">Stav, kdy je člověk fyzicky přítomen v práci, ale mentálně nepracuje. Produktivita klesá o 30–40 %.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> WALANCE audit odhalí míru prezentismu ve vaší firmě a navrhne konkrétní intervence.</p>
                 </div>
 
                 <!-- Brain fog -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg>
                     </div>
                     <h3>Brain fog</h3>
-                    <p class="glossary-card-desc">Mentální mlha, která zpomaluje rozhodování i kreativitu. Běžný důsledek stresu a špatného spánku.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> Pracuji na spánkové hygieně, hydrataci a mikropřestávkách, které brain fog snižují.</p>
-                    </div>
+                    <p class="glossary-card-desc">Mentální mlha — zpomalené myšlení, potíže s koncentrací a rozhodováním. Častý důsledek chronického stresu, nedostatku spánku nebo dehydratace.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> Pracuji na spánkové hygieně, hydrataci a mikropřestávkách, které brain fog snižují.</p>
                 </div>
 
                 <!-- Deep work -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><path d="M8 3h8"/></svg>
                     </div>
                     <h3>Deep work</h3>
-                    <p class="glossary-card-desc">Stav plného soustředění bez rušení. Klíč k hodnotnému výkonu.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> Pomáhám vytvořit podmínky pro deep work: time blocking, digitální hygiena, fyzické prostředí.</p>
-                    </div>
+                    <p class="glossary-card-desc">Stav plného soustředění na kognitivně náročný úkol bez rušení. Cal Newport ukázal, že je klíčem k hodnotnému výkonu.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> Pomáhám vytvořit podmínky pro deep work: time blocking, digitální hygiena, fyzické prostředí.</p>
                 </div>
             </div>
 
             <div class="glossary-grid" id="glossary-more" style="display: none; margin-top: 16px;">
                 <!-- Job crafting -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                     </div>
                     <h3>Job crafting</h3>
-                    <p class="glossary-card-desc">Aktivní přeměna pracovní role tak, aby odpovídala vašim silným stránkám.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> V rámci WALANCE pracuji na alignmentu mezi vašimi hodnotami a tím, jak reálně pracujete.</p>
-                    </div>
+                    <p class="glossary-card-desc">Aktivní přeměna vlastní pracovní role — úkolů, vztahů nebo vnímání práce — tak, aby lépe odpovídala vašim silným stránkám a hodnotám.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> V rámci WALANCE pracuji na alignmentu mezi vašimi hodnotami a tím, jak reálně pracujete.</p>
                 </div>
 
                 <!-- Tech neck -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                     </div>
                     <h3>Tech neck</h3>
-                    <p class="glossary-card-desc">Chronická bolest krční páteře z hodin u obrazovky. Trpí jí 8 z 10 kancelářských pracovníků.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> Ergonomický audit pracoviště + korekční cvičení integrovaná do pracovního dne.</p>
-                    </div>
+                    <p class="glossary-card-desc">Chronická bolest krční páteře a ramen způsobená předkloněnou hlavou u obrazovky. Postihuje až 80 % kancelářských pracovníků.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> Ergonomický audit pracoviště + korekční cvičení integrovaná do pracovního dne.</p>
                 </div>
 
                 <!-- Chronický stres -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     </div>
                     <h3>Chronický stres</h3>
-                    <p class="glossary-card-desc">Dlouhodobá aktivace stresové odpovědi, která poškozuje imunitu i kognitivní funkce.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> Mapuji spouštěče stresu a implementuji techniky regulace nervového systému.</p>
-                    </div>
+                    <p class="glossary-card-desc">Dlouhodobá aktivace stresové odpovědi, která poškozuje imunitní systém, kognitivní funkce i emoční regulaci.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> Mapuji spouštěče stresu a implementuji techniky regulace nervového systému.</p>
                 </div>
 
                 <!-- Mikropřestávka -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
                     </div>
                     <h3>Mikropřestávka</h3>
-                    <p class="glossary-card-desc">Krátká (1–5 min) přestávka zaměřená na regeneraci — pohyb, dýchání, odpojení od obrazovky.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> Integruji mikropřestávky do pracovního dne jako systémový návyk, ne nárazovou aktivitu.</p>
-                    </div>
+                    <p class="glossary-card-desc">Krátká (1–5 min) přestávka v práci zaměřená na regeneraci — pohyb, dýchání, odpojení od obrazovky.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> Integruji mikropřestávky do pracovního dne jako systémový návyk, ne nárazovou aktivitu.</p>
                 </div>
 
                 <!-- Ergonomie -->
-                <div class="glossary-card fade-in" onclick="this.classList.toggle('open')">
+                <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3"/></svg>
                     </div>
                     <h3>Ergonomie</h3>
-                    <p class="glossary-card-desc">Věda o přizpůsobení pracoviště lidskému tělu. Správná ergonomie snižuje bolest a zvyšuje výkon.</p>
-                    <div class="glossary-card-detail">
-                        <p class="glossary-card-cta"><strong>Co s tím:</strong> Audit pracoviště + konkrétní doporučení pro nastavení stolu, monitoru, židle a návyků.</p>
-                    </div>
+                    <p class="glossary-card-desc">Věda o přizpůsobení pracovního prostředí lidskému tělu. Správná ergonomie snižuje bolest a zvyšuje výkon.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> Audit pracoviště + konkrétní doporučení pro nastavení stolu, monitoru, židle a návyků.</p>
                 </div>
             </div>
 
