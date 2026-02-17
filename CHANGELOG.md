@@ -7,6 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [2.2.0] – 17.02.2026 18:50
+> Pushed: 17.02.2026 18:50
 
 ### Změněno
 - **Slovníček reality:** kompletní redesign z akordeonového seznamu na kartičkový grid layout (3 sloupce desktop, 2 tablet, 1 mobil)
