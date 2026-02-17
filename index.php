@@ -2349,6 +2349,16 @@
             </div>
 
             <div class="glossary-grid" id="glossary-grid">
+                <!-- WALANCE -->
+                <div class="glossary-card fade-in">
+                    <div class="glossary-card-icon">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3>WALANCE</h3>
+                    <p class="glossary-card-desc">Operační systém pro udržitelný špičkový výkon. Jediná metoda na trhu, která propojuje fyzioterapii, job crafting a strategický mentoring do jednoho funkčního celku.</p>
+                    <p class="glossary-card-cta"><strong>Co s tím:</strong> WALANCE neřeší „wellbeing" jako benefit. Řeší kapacitu vašeho nejdůležitějšího kapitálu — lidí.</p>
+                </div>
+
                 <!-- Prezentismus -->
                 <div class="glossary-card fade-in">
                     <div class="glossary-card-icon">

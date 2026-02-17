@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.2] – 17.02.2026 19:49
+> Pushed: 17.02.2026 19:49
+
+### Přidáno
+- **Slovníček reality:** přidán pojem „WALANCE" jako první kartička — definice metody přímo ve slovníčku
+
 ## [2.4.1] – 17.02.2026 19:45
 > Pushed: 17.02.2026 19:45
 
