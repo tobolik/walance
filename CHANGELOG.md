@@ -6,6 +6,11 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.7.1] – 18.02.2026 17:03
+
+### Opraveno
+- Překlep: „Sloučovaný" → „Slučovaný" v merge porovnání
+
 ## [2.7.0] – 18.02.2026 16:41
 > Pushed: 18.02.2026 16:42
 
