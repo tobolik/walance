@@ -6,6 +6,15 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.5.0] – 18.02.2026 14:35
+
+### Změněno
+- **Admin contact.php:** poznámky sloučeny do editačního formuláře kontaktu — jedno tlačítko „Uložit" pro všechna pole (jméno, e-mail, telefon, poznámky)
+- **Admin contact.php:** poznámky zobrazeny jako read-only text pod „Původní zpráva", editovatelné přes „Upravit"
+- **Admin contact.php:** odstraněn samostatný AJAX handler `update_notes` a tlačítko „Uložit poznámky"
+- **Admin dashboard.php:** odstraněn sloupec „Poznámky" s editovatelnou textarea ze seznamu kontaktů
+- **Admin dashboard.php:** odstraněn AJAX handler a JS listener pro automatické ukládání poznámek
+
 ## [2.4.9] – 18.02.2026 14:18
 > Pushed: 18.02.2026 14:18
 

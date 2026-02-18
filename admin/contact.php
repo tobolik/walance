@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
+        $notes = trim($_POST['notes'] ?? '');
         if (empty($name) || empty($email)) {
             echo json_encode(['success' => false, 'error' => 'Jméno a e-mail jsou povinné.']);
             exit;
@@ -38,19 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 'name' => $name,
                 'email' => $email,
                 'phone' => $phone,
+                'notes' => $notes,
             ]);
-            echo json_encode(['success' => true]);
-        } catch (Exception $e) {
-            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-        }
-        exit;
-    }
-
-    // ── Update notes ──
-    if ($action === 'update_notes') {
-        $notes = trim($_POST['notes'] ?? '');
-        try {
-            softUpdate('contacts', $id, ['notes' => $notes]);
             echo json_encode(['success' => true]);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'error' => $e->getMessage()]);
@@ -305,6 +295,10 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
                         <input type="tel" id="edit-phone" value="<?= htmlspecialchars($contact['phone'] ?? '') ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                     </div>
                 </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Poznámky</label>
+                    <textarea id="edit-notes" rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"><?= htmlspecialchars($contact['notes'] ?? '') ?></textarea>
+                </div>
                 <div class="flex gap-2 mt-4">
                     <button type="button" onclick="saveContact()" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 text-sm font-medium transition-colors">
                         <i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Uložit
@@ -322,13 +316,12 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
             </div>
             <?php endif; ?>
 
-            <div class="mt-4 pt-4 border-t border-slate-100">
+            <?php if (!empty($contact['notes'])): ?>
+            <div id="notes-readonly" class="mt-4 pt-4 border-t border-slate-100">
                 <span class="text-slate-500 text-sm">Poznámky</span>
-                <div class="mt-1">
-                    <textarea id="notes-textarea" rows="3" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"><?= htmlspecialchars($contact['notes'] ?? '') ?></textarea>
-                    <button type="button" onclick="saveNotes()" class="mt-2 px-4 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium transition-colors">Uložit poznámky</button>
-                </div>
+                <p class="text-slate-700 mt-1"><?= nl2br(htmlspecialchars($contact['notes'])) ?></p>
             </div>
+            <?php endif; ?>
         </div>
 
         <!-- ═══ Bookings ═══ -->
@@ -607,32 +600,29 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
         // ═══ EDIT CONTACT ═══
         function openEditContact() {
             document.getElementById('contact-edit-form').classList.remove('hidden');
+            const nr = document.getElementById('notes-readonly');
+            if (nr) nr.classList.add('hidden');
             document.getElementById('edit-name').focus();
             document.getElementById('edit-name').select();
         }
         function cancelEditContact() {
             document.getElementById('contact-edit-form').classList.add('hidden');
+            const nr = document.getElementById('notes-readonly');
+            if (nr) nr.classList.remove('hidden');
         }
         function saveContact() {
             const name = document.getElementById('edit-name').value.trim();
             const email = document.getElementById('edit-email').value.trim();
             const phone = document.getElementById('edit-phone').value.trim();
+            const notes = document.getElementById('edit-notes').value.trim();
             if (!name || !email) { showToast('Jméno a e-mail jsou povinné.', 'error'); return; }
-            postAction({ action: 'edit_contact', name, email, phone }).then(r => {
+            postAction({ action: 'edit_contact', name, email, phone, notes }).then(r => {
                 if (r.success) {
                     showToast('Kontakt uložen.', 'success');
                     setTimeout(() => location.reload(), 500);
                 } else {
                     showToast(r.error || 'Chyba při ukládání.', 'error');
                 }
-            }).catch(() => showToast('Chyba připojení.', 'error'));
-        }
-
-        // ═══ NOTES ═══
-        function saveNotes() {
-            const notes = document.getElementById('notes-textarea').value;
-            postAction({ action: 'update_notes', notes }).then(r => {
-                showToast(r.success ? 'Poznámky uloženy.' : 'Chyba.', r.success ? 'success' : 'error');
             }).catch(() => showToast('Chyba připojení.', 'error'));
         }
 

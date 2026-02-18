@@ -47,22 +47,6 @@ foreach ($contacts as $c) {
     }
 }
 
-// Update notes (AJAX) – softUpdate
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    header('Content-Type: application/json');
-    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-    if ($_POST['action'] === 'update_notes') {
-        $id = (int)($_POST['id'] ?? 0);
-        $notes = trim($_POST['notes'] ?? '');
-        try {
-            softUpdate('contacts', $id, ['notes' => $notes]);
-            echo json_encode(['success' => true]);
-        } catch (Exception $e) {
-            echo json_encode(['success' => false]);
-        }
-    }
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -107,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">E-mail</th>
                             <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Zdroj</th>
                             <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Zpráva</th>
-                            <th class="text-left py-4 px-6 text-sm font-semibold text-slate-600">Poznámky</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -144,9 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                     <span class="block truncate" title="<?= htmlspecialchars($msg) ?>"><?= htmlspecialchars($msg) ?></span>
                                 <?php elseif (empty($bookingsByContact[$c['id']])): ?>—<?php endif; ?>
                             </td>
-                            <td class="py-4 px-6">
-                                <textarea data-id="<?= $c['id'] ?>" class="notes-input w-full text-sm border border-slate-200 rounded px-2 py-1 focus:ring-2 focus:ring-teal-500" rows="2" placeholder="Poznámka..."><?= htmlspecialchars($c['notes'] ?? '') ?></textarea>
-                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -159,25 +139,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
         <div class="mt-6 p-4 bg-slate-50 rounded-lg text-sm text-slate-600">
             <strong>Rezervace:</strong> Pro zobrazení rezervací přejděte do detailu kontaktu (zdroj „Rezervace“). 
-            Poznámky se ukládají automaticky při odchodu z pole.
         </div>
     </div>
 <?php include __DIR__ . '/includes/layout-end.php'; ?>
 
     <script>
         lucide.createIcons();
-        document.querySelectorAll('.notes-input').forEach(el => {
-            el.addEventListener('blur', function() {
-                const id = this.dataset.id;
-                const notes = this.value;
-                fetch('dashboard.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=update_notes&id=' + id + '&notes=' + encodeURIComponent(notes),
-                    cache: 'no-store'
-                });
-            });
-        });
     </script>
 </body>
 </html>
