@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.8] – 18.02.2026 14:05
+> Pushed: 18.02.2026 14:05
+
+### Opraveno
+- **Admin bookings.php:** opraven table striping z 2+2 vzoru (4n pattern) zpět na standardní odd/even střídání řádků
+
 ## [2.4.7] – 17.02.2026 23:02
 > Pushed: 17.02.2026 23:03
 
