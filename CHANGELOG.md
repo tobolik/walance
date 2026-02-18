@@ -7,6 +7,7 @@ Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
 ## [2.6.0] – 18.02.2026 16:12
+> Pushed: 18.02.2026 16:16
 
 ### Opraveno
 - **KRITICKÉ: Merge kontaktů porušoval soft-update** — přímé `UPDATE bookings/activities SET contacts_id` nahrazeno smyčkou přes `softUpdate()`, zachovává historii verzí
