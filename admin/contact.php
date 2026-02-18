@@ -890,7 +890,7 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
 
                     html += '<label class="flex items-start gap-2 p-2 rounded-lg border cursor-pointer transition-colors hover:bg-amber-50 ' + (sChecked ? 'border-amber-400 bg-amber-50/50' : 'border-slate-200') + '" data-radio-label="' + uid + '">';
                     html += '<input type="radio" name="' + uid + '" value="secondary"' + sChecked + ' class="mt-0.5 accent-amber-600" onchange="updateRadioStyles(\'' + uid + '\')">';
-                    html += '<div><div class="text-xs text-amber-700 font-medium mb-0.5">Sloučovaný</div>';
+                    html += '<div><div class="text-xs text-amber-700 font-medium mb-0.5">Slučovaný</div>';
                     if (isTextarea) {
                         html += '<div class="text-sm text-slate-700 whitespace-pre-wrap max-h-20 overflow-y-auto">' + (escHtml(sVal) || '<span class="text-slate-400 italic">prázdné</span>') + '</div>';
                     } else {
