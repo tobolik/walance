@@ -402,8 +402,14 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
                 <p class="text-slate-500 text-sm" id="no-activities">Zatím žádné aktivity.</p>
                 <?php else: ?>
                 <div class="space-y-4">
-                    <?php foreach ($activities as $a): ?>
-                    <div class="activity-item flex gap-4 p-4 border-l-4 <?= $a['type'] === 'call' ? 'border-blue-400' : ($a['type'] === 'email' ? 'border-purple-400' : ($a['type'] === 'meeting' ? 'border-green-400' : ($a['type'] === 'booking_confirmation' ? 'border-teal-400' : 'border-slate-300')) ?> bg-slate-50/50 rounded-r-lg group" data-id="<?= (int)$a['id'] ?>" data-type="<?= htmlspecialchars($a['type']) ?>" data-subject="<?= htmlspecialchars($a['subject'] ?? '') ?>" data-body="<?= htmlspecialchars($a['body'] ?? '') ?>" data-direction="<?= htmlspecialchars($a['direction'] ?? '') ?>">
+                    <?php foreach ($activities as $a):
+                        $borderMap = ['call' => 'border-blue-400', 'email' => 'border-purple-400', 'meeting' => 'border-green-400', 'booking_confirmation' => 'border-teal-400'];
+                        $borderClass = isset($borderMap[$a['type']]) ? $borderMap[$a['type']] : 'border-slate-300';
+                        $aSubject = isset($a['subject']) ? $a['subject'] : '';
+                        $aBody = isset($a['body']) ? $a['body'] : '';
+                        $aDir = isset($a['direction']) ? $a['direction'] : '';
+                    ?>
+                    <div class="activity-item flex gap-4 p-4 border-l-4 <?= $borderClass ?> bg-slate-50/50 rounded-r-lg group" data-id="<?= (int)$a['id'] ?>" data-type="<?= htmlspecialchars($a['type']) ?>" data-subject="<?= htmlspecialchars($aSubject) ?>" data-body="<?= htmlspecialchars($aBody) ?>" data-direction="<?= htmlspecialchars($aDir) ?>">
                         <div class="flex-shrink-0 pt-0.5">
                             <?php if ($a['type'] === 'call'): ?>
                             <i data-lucide="phone" class="w-5 h-5 text-blue-600"></i>

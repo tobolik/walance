@@ -6,6 +6,12 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.9] – 18.02.2026 14:18
+> Pushed: 18.02.2026 14:18
+
+### Opraveno
+- **Admin contact.php line 406:** parse error — zjednodušen extrémně dlouhý řádek s vnořenými ternárními operátory, extrahováno do proměnných
+
 ## [2.4.8] – 18.02.2026 14:05
 > Pushed: 18.02.2026 14:05
 
