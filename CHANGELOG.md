@@ -6,6 +6,18 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.4.7] – 17.02.2026 23:02
+> Pushed: 17.02.2026 23:03
+
+### Přidáno
+- Editace kontaktů – inline formulář pro úpravu jména, e-mailu a telefonu
+- Slučování kontaktů – vyhledávací modal, přesun rezervací a aktivit, sloučení poznámek
+- Editace aktivit – modal s úpravou typu, předmětu, obsahu a směru
+- Mazání aktivit – potvrzovací dialog a soft-delete
+
+### Změněno
+- Stránka kontaktu přepracována na AJAX – formuláře bez reloadu stránky, toast notifikace
+
 ## [2.4.6] – 17.02.2026 20:05
 > Pushed: 17.02.2026 20:05
 
