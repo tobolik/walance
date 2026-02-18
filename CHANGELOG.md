@@ -6,7 +6,24 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.6.0] – 18.02.2026 16:12
+
+### Opraveno
+- **KRITICKÉ: Merge kontaktů porušoval soft-update** — přímé `UPDATE bookings/activities SET contacts_id` nahrazeno smyčkou přes `softUpdate()`, zachovává historii verzí
+- **soft-update.mdc** nastaveno na `alwaysApply: true` — pravidlo platí pro celý projekt, ne jen api/
+
+### Přidáno
+- **No-op guard v `softUpdate()`** — pokud se data nezměnila, nová verze se nevytváří (prevence zbytečného nafukování DB)
+- **Sloupec `merged_into_contacts_id`** v tabulce contacts — sleduje, do kterého kontaktu byl sloučený kontakt absorbován
+- **Migrace** pro nový sloupec (MySQL i SQLite) v `migrate.php`
+- **UI: sekce „Sloučené kontakty"** v detailu kontaktu — zobrazuje badge s počtem, po rozkliknutí seznam se jménem, e-mailem, telefonem, datem sloučení a původními poznámkami/zprávou
+- **Merge trail** — před soft-delete sekundárního kontaktu se na něj zapíše `merged_into_contacts_id` odkazující na primární entity_id
+
+### Změněno
+- **`db-mysql.sql`** — doplněn sloupec `merged_into_contacts_id` a index `idx_merged`
+
 ## [2.5.0] – 18.02.2026 14:35
+> Pushed: 18.02.2026 14:36
 
 ### Změněno
 - **Admin contact.php:** poznámky sloučeny do editačního formuláře kontaktu — jedno tlačítko „Uložit" pro všechna pole (jméno, e-mail, telefon, poznámky)

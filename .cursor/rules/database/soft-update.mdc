@@ -1,12 +1,12 @@
 ---
 description: Soft-update, entity_id, valid_*, app versioning
-globs: api/**/*.php, migrations/*.sql, docs/SOFT-UPDATE-AND-VERSIONING.md
-alwaysApply: false
+globs: api/**/*.php, admin/**/*.php, migrations/*.sql, docs/SOFT-UPDATE-AND-VERSIONING.md
+alwaysApply: true
 ---
 
 # Soft-update and Versioning – CRITICAL RULES
 
-When editing API, migrations or new tables **always** follow these rules.
+These rules apply to the **entire project** – every PHP file, migration, and admin page. Never bypass them.
 
 ## 1. Methods in crud.php and _bootstrap.php
 
@@ -14,6 +14,7 @@ When editing API, migrations or new tables **always** follow these rules.
 - **Update:** only `softUpdate($table, $id, $data)` – $id = physical row `id`; closes old version, inserts new one with same entity_id.
 - **Delete:** only `softDelete($table, $id)` – $id = physical `id`; sets valid_to, valid_user_to.
 - **Read:** `findActive($table, $id)`, `findActiveByEntityId($table, $entityId)`, `findAllActive($table, $order)`; in SQL always `WHERE valid_to IS NULL`.
+- **No-op guard:** `softUpdate()` must skip the update when no business data actually changed (new values identical to current row). This prevents unnecessary DB bloat from duplicate versions.
 
 ## 2. Entity_id
 

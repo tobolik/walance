@@ -156,13 +156,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         try {
             $db->beginTransaction();
 
-            // Move bookings from secondary to primary
-            $db->prepare("UPDATE bookings SET contacts_id = ? WHERE contacts_id = ? AND valid_to IS NULL")
-                ->execute([$primaryEntityId, $secondaryEntityId]);
+            // Move bookings from secondary to primary (via softUpdate, preserves history)
+            $stmtB = $db->prepare("SELECT id FROM bookings WHERE contacts_id = ? AND valid_to IS NULL");
+            $stmtB->execute([$secondaryEntityId]);
+            foreach ($stmtB->fetchAll(PDO::FETCH_COLUMN) as $bId) {
+                softUpdate('bookings', (int)$bId, ['contacts_id' => $primaryEntityId]);
+            }
 
-            // Move activities from secondary to primary
-            $db->prepare("UPDATE activities SET contacts_id = ? WHERE contacts_id = ? AND valid_to IS NULL")
-                ->execute([$primaryEntityId, $secondaryEntityId]);
+            // Move activities from secondary to primary (via softUpdate, preserves history)
+            $stmtA = $db->prepare("SELECT id FROM activities WHERE contacts_id = ? AND valid_to IS NULL");
+            $stmtA->execute([$secondaryEntityId]);
+            foreach ($stmtA->fetchAll(PDO::FETCH_COLUMN) as $aId) {
+                softUpdate('activities', (int)$aId, ['contacts_id' => $primaryEntityId]);
+            }
 
             // Merge data: if primary is missing phone/message, take from secondary
             $updates = [];
@@ -178,8 +184,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $updates['message'] = $secondary['message'];
             }
 
-            // Soft-delete secondary contact
-            softDelete('contacts', $mergeId);
+            // Record merge trail on secondary, then soft-delete
+            softUpdate('contacts', $mergeId, ['merged_into_contacts_id' => $primaryEntityId]);
+            $updatedSecondary = findActiveByEntityId('contacts', $secondaryEntityId);
+            if ($updatedSecondary) {
+                softDelete('contacts', (int)$updatedSecondary['id']);
+            }
 
             // Update primary if needed
             if (!empty($updates)) {
@@ -217,6 +227,20 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt = $db->prepare("SELECT * FROM activities WHERE contacts_id = ? AND valid_to IS NULL ORDER BY valid_from DESC");
 $stmt->execute([$entityId]);
 $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Merged contacts (absorbed into this one)
+$stmt = $db->prepare("
+    SELECT c1.* FROM contacts c1
+    INNER JOIN (
+        SELECT contacts_id, MAX(id) as max_id
+        FROM contacts
+        WHERE merged_into_contacts_id = ? AND valid_to IS NOT NULL
+        GROUP BY contacts_id
+    ) latest ON c1.id = latest.max_id
+    ORDER BY c1.valid_to DESC
+");
+$stmt->execute([$entityId]);
+$mergedContacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $typeLabels = ['call' => 'Telefonát', 'email' => 'E-mail', 'meeting' => 'Schůzka', 'note' => 'Poznámka', 'booking_confirmation' => 'Potvrzení termínu'];
 $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
@@ -320,6 +344,41 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
             <div id="notes-readonly" class="mt-4 pt-4 border-t border-slate-100">
                 <span class="text-slate-500 text-sm">Poznámky</span>
                 <p class="text-slate-700 mt-1"><?= nl2br(htmlspecialchars($contact['notes'])) ?></p>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!empty($mergedContacts)): ?>
+            <div class="mt-4 pt-4 border-t border-slate-100">
+                <button type="button" onclick="document.getElementById('merged-list').classList.toggle('hidden')" class="flex items-center gap-2 text-sm text-slate-600 hover:text-teal-600 transition-colors">
+                    <i data-lucide="git-merge" class="w-4 h-4"></i>
+                    <span>Sloučené kontakty</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700"><?= count($mergedContacts) ?></span>
+                    <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                </button>
+                <div id="merged-list" class="hidden mt-3 space-y-2">
+                    <?php foreach ($mergedContacts as $mc): ?>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="font-medium text-slate-800"><?= htmlspecialchars($mc['name']) ?></span>
+                                <span class="text-slate-400 mx-1.5">&middot;</span>
+                                <span class="text-sm text-slate-600"><?= htmlspecialchars($mc['email']) ?></span>
+                                <?php if (!empty($mc['phone'])): ?>
+                                    <span class="text-slate-400 mx-1.5">&middot;</span>
+                                    <span class="text-sm text-slate-600"><?= htmlspecialchars($mc['phone']) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <span class="text-xs text-slate-400">Sloučen <?= date('d.m.Y H:i', strtotime($mc['valid_to'])) ?></span>
+                        </div>
+                        <?php if (!empty($mc['message'])): ?>
+                        <p class="text-sm text-slate-500 mt-1 truncate" title="<?= htmlspecialchars($mc['message']) ?>"><?= htmlspecialchars($mc['message']) ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($mc['notes'])): ?>
+                        <p class="text-sm text-slate-500 mt-1"><em>Poznámky:</em> <?= htmlspecialchars($mc['notes']) ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
             <?php endif; ?>
         </div>

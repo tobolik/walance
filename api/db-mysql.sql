@@ -14,12 +14,14 @@ CREATE TABLE IF NOT EXISTS contacts (
     message TEXT,
     source VARCHAR(50) DEFAULT 'contact',
     notes TEXT,
+    merged_into_contacts_id INT UNSIGNED NULL,
     valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     valid_to DATETIME NULL DEFAULT NULL,
     valid_user_from INT UNSIGNED NULL,
     valid_user_to INT UNSIGNED NULL,
     INDEX idx_contacts_id (contacts_id, valid_to),
-    INDEX idx_v (valid_to)
+    INDEX idx_v (valid_to),
+    INDEX idx_merged (merged_into_contacts_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS bookings (

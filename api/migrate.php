@@ -35,12 +35,14 @@ try {
                 message TEXT,
                 source VARCHAR(50) DEFAULT 'contact',
                 notes TEXT,
+                merged_into_contacts_id INT UNSIGNED NULL,
                 valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 valid_to DATETIME NULL DEFAULT NULL,
                 valid_user_from INT UNSIGNED NULL,
                 valid_user_to INT UNSIGNED NULL,
                 INDEX idx_contacts_id (contacts_id, valid_to),
-                INDEX idx_v (valid_to)
+                INDEX idx_v (valid_to),
+                INDEX idx_merged (merged_into_contacts_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
         $messages[] = "Tabulka contacts OK.";
@@ -56,6 +58,13 @@ try {
             $pdo->exec("UPDATE contacts SET contacts_id = id, valid_from = COALESCE(created_at, CURRENT_TIMESTAMP), valid_to = NULL WHERE valid_to IS NULL OR valid_to = 0");
             $pdo->exec("ALTER TABLE contacts ADD INDEX idx_contacts_id (contacts_id, valid_to), ADD INDEX idx_v (valid_to)");
             $messages[] = "Migrace contacts na soft-update OK.";
+        }
+
+        // Migrace: přidat merged_into_contacts_id pokud chybí
+        $mergedCol = $pdo->query("SHOW COLUMNS FROM contacts LIKE 'merged_into_contacts_id'")->fetch();
+        if (!$mergedCol) {
+            $pdo->exec("ALTER TABLE contacts ADD COLUMN merged_into_contacts_id INT UNSIGNED NULL AFTER notes, ADD INDEX idx_merged (merged_into_contacts_id)");
+            $messages[] = "Migrace contacts: přidán sloupec merged_into_contacts_id.";
         }
 
         // bookings – soft-update schema
@@ -178,6 +187,7 @@ try {
                 message TEXT,
                 source TEXT DEFAULT 'contact',
                 notes TEXT,
+                merged_into_contacts_id INTEGER,
                 valid_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 valid_to DATETIME,
                 valid_user_from INTEGER,
@@ -186,6 +196,19 @@ try {
         ");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_contacts_valid ON contacts(contacts_id, valid_to)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_contacts_v ON contacts(valid_to)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_contacts_merged ON contacts(merged_into_contacts_id)");
+
+        // Migrace: přidat merged_into_contacts_id pokud chybí (SQLite)
+        $sqliteCols = $pdo->query("PRAGMA table_info(contacts)")->fetchAll(PDO::FETCH_ASSOC);
+        $hasMerged = false;
+        foreach ($sqliteCols as $c) {
+            if ($c['name'] === 'merged_into_contacts_id') { $hasMerged = true; break; }
+        }
+        if (!$hasMerged) {
+            $pdo->exec("ALTER TABLE contacts ADD COLUMN merged_into_contacts_id INTEGER NULL");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_contacts_merged ON contacts(merged_into_contacts_id)");
+            $messages[] = "Migrace contacts: přidán sloupec merged_into_contacts_id.";
+        }
 
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS bookings (

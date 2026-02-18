@@ -62,6 +62,16 @@ function softUpdate(string $table, int $id, array $data): void {
         throw new RuntimeException("Záznam id=$id nenalezen nebo již uzavřen.");
     }
 
+    // No-op guard: skip if no business data actually changed
+    $changed = false;
+    foreach ($data as $k => $v) {
+        if (!array_key_exists($k, $row) || (string)$row[$k] !== (string)$v) {
+            $changed = true;
+            break;
+        }
+    }
+    if (!$changed) return;
+
     $entityId = $entityCol ? ($row[$entityCol] ?? $id) : $id;
 
     // Sloučit starý řádek s novými daty (bez id, valid_*)
