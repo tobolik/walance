@@ -6,6 +6,19 @@ Formát je založen na [Keep a Changelog](https://keepachangelog.com/cs/1.0.0/).
 Datum a čas ve formátu `DD.MM.YYYY HH:MM`.
 U každé verze je uvedeno, zda a kdy byla pushnuta na remote (`> Pushed:`).
 
+## [2.7.0] – 18.02.2026 16:41
+
+### Přidáno
+- **Admin contact.php: side-by-side merge porovnání** — při slučování kontaktů se zobrazí modal s porovnáním všech polí (jméno, e-mail, telefon, poznámky) vedle sebe s radio buttony pro výběr hodnot
+- Barevné zvýraznění: teal = aktuální kontakt, amber = sloučovaný, blue = spojit obě (jen poznámky)
+- U poznámek třetí volba "Spojit obě" pro automatické sloučení s oddělovačem
+- Pole se stejnými hodnotami se nezobrazují jako volba (automaticky zachována)
+
+### Změněno
+- **Merge handler** přijímá uživatelem zvolené hodnoty (`chosen_name`, `chosen_email`, `chosen_phone`, `chosen_notes`) místo automatických pravidel
+- **Search API** vrací i `message` a `notes` pro porovnání
+- Tlačítko "Sloučit →" v seznamu přejmenováno na "Porovnat →"
+
 ## [2.6.0] – 18.02.2026 16:12
 > Pushed: 18.02.2026 16:16
 

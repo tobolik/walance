@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $q = trim($_POST['q'] ?? '');
         $contact = findActive('contacts', $id);
         $entityId = $contact ? ($contact['contacts_id'] ?? $contact['id']) : 0;
-        $sql = "SELECT c.id, c.contacts_id, c.name, c.email, c.phone, c.source,
+        $sql = "SELECT c.id, c.contacts_id, c.name, c.email, c.phone, c.source, c.message, c.notes,
                     (SELECT COUNT(*) FROM bookings b WHERE b.contacts_id = COALESCE(c.contacts_id, c.id) AND b.valid_to IS NULL) as booking_count,
                     (SELECT COUNT(*) FROM activities a WHERE a.contacts_id = COALESCE(c.contacts_id, c.id) AND a.valid_to IS NULL) as activity_count
                 FROM contacts c WHERE c.valid_to IS NULL AND c.id != ?";
@@ -170,18 +170,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 softUpdate('activities', (int)$aId, ['contacts_id' => $primaryEntityId]);
             }
 
-            // Merge data: if primary is missing phone/message, take from secondary
+            // Apply user-chosen values from side-by-side comparison
             $updates = [];
-            if (empty($primary['phone']) && !empty($secondary['phone'])) {
-                $updates['phone'] = $secondary['phone'];
-            }
-            if (empty($primary['notes']) && !empty($secondary['notes'])) {
-                $updates['notes'] = $secondary['notes'];
-            } elseif (!empty($primary['notes']) && !empty($secondary['notes'])) {
-                $updates['notes'] = $primary['notes'] . "\n---\n" . $secondary['notes'];
-            }
-            if (empty($primary['message']) && !empty($secondary['message'])) {
-                $updates['message'] = $secondary['message'];
+            $chosenFields = ['name', 'email', 'phone', 'notes'];
+            foreach ($chosenFields as $f) {
+                $key = 'chosen_' . $f;
+                if (isset($_POST[$key])) {
+                    $val = trim($_POST[$key]);
+                    if ((string)$val !== (string)($primary[$f] ?? '')) {
+                        $updates[$f] = $val;
+                    }
+                }
             }
 
             // Record merge trail on secondary, then soft-delete
@@ -605,26 +604,32 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
         </div>
     </div>
 
-    <!-- ═══ Merge Confirm Modal ═══ -->
-    <div id="merge-confirm-modal" class="fixed inset-0 z-[60] hidden">
-        <div class="modal-backdrop absolute inset-0" onclick="closeMergeConfirm()"></div>
+    <!-- ═══ Merge Compare Modal ═══ -->
+    <div id="merge-compare-modal" class="fixed inset-0 z-[60] hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="closeMergeCompare()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 pointer-events-auto relative">
-                <h3 class="text-lg font-bold text-slate-800 mb-2">Potvrdit sloučení</h3>
-                <p class="text-slate-600 text-sm mb-4">
-                    Opravdu chcete sloučit kontakt <strong id="merge-confirm-name"></strong> do <strong><?= htmlspecialchars($contact['name']) ?></strong>?
-                </p>
-                <p class="text-amber-700 text-sm bg-amber-50 px-3 py-2 rounded-lg mb-4">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 pointer-events-auto relative max-h-[90vh] overflow-y-auto">
+                <button type="button" onclick="closeMergeCompare()" class="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <h3 class="text-lg font-bold text-slate-800 mb-1">Porovnání kontaktů</h3>
+                <p class="text-slate-500 text-sm mb-4">Vyberte, které hodnoty chcete zachovat. Rezervace a aktivity budou přesunuty automaticky.</p>
+
+                <input type="hidden" id="merge-compare-id">
+
+                <div class="space-y-3" id="merge-compare-fields"></div>
+
+                <p class="text-amber-700 text-sm bg-amber-50 px-3 py-2 rounded-lg mt-4">
                     <i data-lucide="alert-triangle" class="w-4 h-4 inline mr-1"></i>
-                    Všechny rezervace a aktivity budou přesunuty. Sloučený kontakt bude smazán. Tuto akci nelze vrátit.
+                    Sloučený kontakt bude smazán. Tuto akci nelze vrátit.
                 </p>
-                <input type="hidden" id="merge-confirm-id">
-                <div class="flex gap-2 justify-end">
-                    <button type="button" onclick="closeMergeConfirm()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium transition-colors">
+
+                <div class="flex gap-2 justify-end mt-4">
+                    <button type="button" onclick="closeMergeCompare()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium transition-colors">
                         Zrušit
                     </button>
                     <button type="button" onclick="executeMerge()" class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 text-sm font-medium transition-colors">
-                        Sloučit kontakty
+                        <i data-lucide="git-merge" class="w-4 h-4 inline mr-1"></i> Sloučit kontakty
                     </button>
                 </div>
             </div>
@@ -810,15 +815,17 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
                         results.innerHTML = '<p class="text-slate-500 text-sm text-center py-8">Žádné výsledky.</p>';
                         return;
                     }
+                    window._mergeSearchResults = {};
+                    r.contacts.forEach(c => { window._mergeSearchResults[c.id] = c; });
                     results.innerHTML = r.contacts.map(c => {
                         const sourceLabel = c.source === 'booking' ? 'Rezervace' : 'Kontakt';
                         const sourceClass = c.source === 'booking' ? 'bg-teal-100 text-teal-700' : 'bg-slate-100 text-slate-600';
-                        return '<div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer" onclick="prepareMerge(' + c.id + ', \'' + escHtml(c.name) + '\')">' +
+                        return '<div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer" onclick="selectMergeContact(' + c.id + ')">' +
                             '<div><div class="font-medium text-slate-800">' + escHtml(c.name) + '</div>' +
                             '<div class="text-sm text-slate-500">' + escHtml(c.email) + (c.phone ? ' · ' + escHtml(c.phone) : '') + '</div>' +
                             '<div class="flex gap-2 mt-1"><span class="px-2 py-0.5 rounded text-xs font-medium ' + sourceClass + '">' + sourceLabel + '</span>' +
                             '<span class="text-xs text-slate-400">' + c.booking_count + ' rez., ' + c.activity_count + ' akt.</span></div></div>' +
-                            '<span class="text-teal-600 text-sm font-medium flex-shrink-0 ml-4">Sloučit →</span></div>';
+                            '<span class="text-teal-600 text-sm font-medium flex-shrink-0 ml-4">Porovnat →</span></div>';
                     }).join('');
                 });
             }, 300);
@@ -830,20 +837,126 @@ $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
             return d.innerHTML;
         }
 
-        function prepareMerge(mergeId, name) {
-            document.getElementById('merge-confirm-id').value = mergeId;
-            document.getElementById('merge-confirm-name').textContent = name;
-            document.getElementById('merge-confirm-modal').classList.remove('hidden');
+        function selectMergeContact(cId) {
+            const c = window._mergeSearchResults[cId];
+            if (!c) return;
+            _secondaryData = { name: c.name || '', email: c.email || '', phone: c.phone || '', notes: c.notes || '' };
+            prepareMerge(c.id, _secondaryData);
         }
-        function closeMergeConfirm() {
-            document.getElementById('merge-confirm-modal').classList.add('hidden');
+
+        const primaryContact = {
+            name: <?= json_encode($contact['name']) ?>,
+            email: <?= json_encode($contact['email']) ?>,
+            phone: <?= json_encode($contact['phone'] ?? '') ?>,
+            notes: <?= json_encode($contact['notes'] ?? '') ?>
+        };
+
+        const fieldLabels = { name: 'Jméno', email: 'E-mail', phone: 'Telefon', notes: 'Poznámky' };
+
+        function prepareMerge(mergeId, secondaryData) {
+            document.getElementById('merge-compare-id').value = mergeId;
+            const container = document.getElementById('merge-compare-fields');
+            container.innerHTML = '';
+
+            const fields = ['name', 'email', 'phone', 'notes'];
+            fields.forEach(f => {
+                const pVal = primaryContact[f] || '';
+                const sVal = secondaryData[f] || '';
+                const same = pVal === sVal;
+                const isTextarea = f === 'notes';
+                const uid = 'merge_' + f;
+
+                let html = '<div class="border border-slate-200 rounded-lg p-3">';
+                html += '<div class="text-xs font-semibold text-slate-500 uppercase mb-2">' + escHtml(fieldLabels[f]) + '</div>';
+
+                if (same || (!pVal && !sVal)) {
+                    html += '<div class="text-sm text-slate-600">' + (escHtml(pVal) || '<span class="text-slate-400 italic">prázdné</span>') + '</div>';
+                    html += '<input type="hidden" name="' + uid + '" value="primary">';
+                } else {
+                    const pChecked = pVal ? ' checked' : '';
+                    const sChecked = !pVal && sVal ? ' checked' : '';
+
+                    html += '<div class="grid grid-cols-2 gap-3">';
+
+                    html += '<label class="flex items-start gap-2 p-2 rounded-lg border cursor-pointer transition-colors hover:bg-teal-50 ' + (pChecked ? 'border-teal-400 bg-teal-50/50' : 'border-slate-200') + '" data-radio-label="' + uid + '">';
+                    html += '<input type="radio" name="' + uid + '" value="primary"' + pChecked + ' class="mt-0.5 accent-teal-600" onchange="updateRadioStyles(\'' + uid + '\')">';
+                    html += '<div><div class="text-xs text-teal-700 font-medium mb-0.5">Aktuální</div>';
+                    if (isTextarea) {
+                        html += '<div class="text-sm text-slate-700 whitespace-pre-wrap max-h-20 overflow-y-auto">' + (escHtml(pVal) || '<span class="text-slate-400 italic">prázdné</span>') + '</div>';
+                    } else {
+                        html += '<div class="text-sm text-slate-700">' + (escHtml(pVal) || '<span class="text-slate-400 italic">prázdné</span>') + '</div>';
+                    }
+                    html += '</div></label>';
+
+                    html += '<label class="flex items-start gap-2 p-2 rounded-lg border cursor-pointer transition-colors hover:bg-amber-50 ' + (sChecked ? 'border-amber-400 bg-amber-50/50' : 'border-slate-200') + '" data-radio-label="' + uid + '">';
+                    html += '<input type="radio" name="' + uid + '" value="secondary"' + sChecked + ' class="mt-0.5 accent-amber-600" onchange="updateRadioStyles(\'' + uid + '\')">';
+                    html += '<div><div class="text-xs text-amber-700 font-medium mb-0.5">Sloučovaný</div>';
+                    if (isTextarea) {
+                        html += '<div class="text-sm text-slate-700 whitespace-pre-wrap max-h-20 overflow-y-auto">' + (escHtml(sVal) || '<span class="text-slate-400 italic">prázdné</span>') + '</div>';
+                    } else {
+                        html += '<div class="text-sm text-slate-700">' + (escHtml(sVal) || '<span class="text-slate-400 italic">prázdné</span>') + '</div>';
+                    }
+                    html += '</div></label>';
+
+                    html += '</div>';
+
+                    if (f === 'notes' && pVal && sVal) {
+                        const bothChecked = !pChecked && !sChecked ? ' checked' : '';
+                        html += '<label class="flex items-start gap-2 p-2 mt-2 rounded-lg border cursor-pointer transition-colors hover:bg-blue-50 ' + (bothChecked ? 'border-blue-400 bg-blue-50/50' : 'border-slate-200') + '" data-radio-label="' + uid + '">';
+                        html += '<input type="radio" name="' + uid + '" value="both"' + bothChecked + ' class="mt-0.5 accent-blue-600" onchange="updateRadioStyles(\'' + uid + '\')">';
+                        html += '<div><div class="text-xs text-blue-700 font-medium mb-0.5">Spojit obě</div>';
+                        html += '<div class="text-sm text-slate-500 italic">Obě poznámky budou spojeny oddělovačem</div>';
+                        html += '</div></label>';
+                    }
+                }
+
+                html += '</div>';
+                container.insertAdjacentHTML('beforeend', html);
+            });
+
+            lucide.createIcons();
+            document.getElementById('merge-compare-modal').classList.remove('hidden');
         }
+
+        function updateRadioStyles(groupName) {
+            document.querySelectorAll('label[data-radio-label="' + groupName + '"]').forEach(lbl => {
+                const radio = lbl.querySelector('input[type="radio"]');
+                lbl.classList.remove('border-teal-400', 'bg-teal-50/50', 'border-amber-400', 'bg-amber-50/50', 'border-blue-400', 'bg-blue-50/50');
+                lbl.classList.add('border-slate-200');
+                if (radio.checked) {
+                    if (radio.value === 'primary') { lbl.classList.replace('border-slate-200', 'border-teal-400'); lbl.classList.add('bg-teal-50/50'); }
+                    else if (radio.value === 'secondary') { lbl.classList.replace('border-slate-200', 'border-amber-400'); lbl.classList.add('bg-amber-50/50'); }
+                    else { lbl.classList.replace('border-slate-200', 'border-blue-400'); lbl.classList.add('bg-blue-50/50'); }
+                }
+            });
+        }
+
+        function closeMergeCompare() {
+            document.getElementById('merge-compare-modal').classList.add('hidden');
+        }
+
+        let _secondaryData = null;
+
         function executeMerge() {
-            const mergeId = document.getElementById('merge-confirm-id').value;
-            postAction({ action: 'merge_contacts', merge_id: mergeId }).then(r => {
+            const mergeId = document.getElementById('merge-compare-id').value;
+            const fields = ['name', 'email', 'phone', 'notes'];
+            const data = { action: 'merge_contacts', merge_id: mergeId };
+
+            fields.forEach(f => {
+                const radio = document.querySelector('input[name="merge_' + f + '"]:checked');
+                if (!radio || radio.value === 'primary') {
+                    data['chosen_' + f] = primaryContact[f] || '';
+                } else if (radio.value === 'secondary') {
+                    data['chosen_' + f] = _secondaryData[f] || '';
+                } else if (radio.value === 'both') {
+                    data['chosen_' + f] = (primaryContact[f] || '') + '\n---\n' + (_secondaryData[f] || '');
+                }
+            });
+
+            postAction(data).then(r => {
                 if (r.success) {
                     showToast('Kontakty sloučeny.', 'success');
-                    closeMergeConfirm();
+                    closeMergeCompare();
                     closeMergeModal();
                     setTimeout(() => location.reload(), 800);
                 } else {
