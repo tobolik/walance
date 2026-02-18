@@ -229,18 +229,23 @@ $stmt->execute([$entityId]);
 $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Merged contacts (absorbed into this one)
-$stmt = $db->prepare("
-    SELECT c1.* FROM contacts c1
-    INNER JOIN (
-        SELECT contacts_id, MAX(id) as max_id
-        FROM contacts
-        WHERE merged_into_contacts_id = ? AND valid_to IS NOT NULL
-        GROUP BY contacts_id
-    ) latest ON c1.id = latest.max_id
-    ORDER BY c1.valid_to DESC
-");
-$stmt->execute([$entityId]);
-$mergedContacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$mergedContacts = [];
+try {
+    $stmt = $db->prepare("
+        SELECT c1.* FROM contacts c1
+        INNER JOIN (
+            SELECT contacts_id, MAX(id) as max_id
+            FROM contacts
+            WHERE merged_into_contacts_id = ? AND valid_to IS NOT NULL
+            GROUP BY contacts_id
+        ) latest ON c1.id = latest.max_id
+        ORDER BY c1.valid_to DESC
+    ");
+    $stmt->execute([$entityId]);
+    $mergedContacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // Column may not exist yet if migration hasn't been run
+}
 
 $typeLabels = ['call' => 'Telefonát', 'email' => 'E-mail', 'meeting' => 'Schůzka', 'note' => 'Poznámka', 'booking_confirmation' => 'Potvrzení termínu'];
 $directionLabels = ['in' => 'Příchozí', 'out' => 'Odchozí'];
