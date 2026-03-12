@@ -1759,7 +1759,7 @@
         <div class="container nav-inner">
             <a href="#pillars" class="nav-logo">WALANCE<span>.</span></a>
             <ul class="nav-links">
-                <li><a href="#problem">Problém</a></li>
+                <li><a href="#problem">Realita</a></li>
                 <li><a href="#method">Metoda</a></li>
                 <li><a href="#story">Příběh</a></li>
                 <li><a href="#products">Nabídka</a></li>
@@ -1779,7 +1779,7 @@
             </button>
         </div>
         <div class="mobile-menu" id="mobile-menu">
-            <a href="#problem" class="mobile-link">Problém</a>
+            <a href="#problem" class="mobile-link">Realita</a>
             <a href="#method" class="mobile-link">Metoda</a>
             <a href="#story" class="mobile-link">Příběh</a>
             <a href="#products" class="mobile-link">Nabídka</a>
