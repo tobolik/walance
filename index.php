@@ -685,168 +685,6 @@
             line-height: 1.7;
         }
 
-        /* ---- PILLARS (7 pilířů WALANCE) ---- */
-        .pillars-section {
-            background: var(--ink);
-            color: var(--cream);
-            padding: 100px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pillars-section .section-title {
-            color: var(--cream);
-        }
-
-        .pillars-section .section-title span {
-            color: var(--accent);
-        }
-
-        .pillars-section .section-subtitle {
-            color: rgba(250, 249, 247, 0.75);
-        }
-
-        .pillars-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: start;
-        }
-
-        .pillar-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .pillar-btn {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            text-align: left;
-            padding: 18px 20px;
-            border-radius: 16px;
-            border: none;
-            border-left: 4px solid rgba(250,249,247,0.2);
-            background: rgba(250,249,247,0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-        }
-
-        .pillar-btn:hover {
-            background: rgba(250,249,247,0.1);
-        }
-
-        .pillar-btn.active {
-            background: rgba(250,249,247,0.1);
-            border-left-color: var(--accent);
-        }
-
-        .pillar-btn-letter {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 900;
-            width: 32px;
-            margin-right: 20px;
-            color: rgba(250,249,247,0.4);
-            transition: color 0.3s;
-        }
-
-        .pillar-btn:hover .pillar-btn-letter,
-        .pillar-btn.active .pillar-btn-letter {
-            color: var(--accent);
-        }
-
-        .pillar-btn-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: rgba(250,249,247,0.7);
-            transition: color 0.3s;
-        }
-
-        .pillar-btn:hover .pillar-btn-title,
-        .pillar-btn.active .pillar-btn-title {
-            color: var(--cream);
-        }
-
-        .pillar-btn-arrow {
-            margin-left: auto;
-            opacity: 0;
-            transition: opacity 0.3s;
-            color: var(--accent);
-        }
-
-        .pillar-btn.active .pillar-btn-arrow {
-            opacity: 1;
-        }
-
-        .pillar-detail {
-            background: rgba(250,249,247,0.08);
-            backdrop-filter: blur(8px);
-            padding: 48px;
-            border-radius: 24px;
-            border: 1px solid rgba(250,249,247,0.15);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            min-height: 360px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pillar-detail-bg {
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            font-family: var(--font-display);
-            font-size: 10rem;
-            font-weight: 900;
-            color: rgba(250,249,247,0.06);
-            pointer-events: none;
-            user-select: none;
-            line-height: 1;
-        }
-
-        .pillar-detail-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .pillar-detail-tag {
-            color: var(--accent);
-            font-size: 0.8125rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 8px;
-        }
-
-        .pillar-detail-subtitle {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--cream);
-            margin-bottom: 20px;
-        }
-
-        .pillar-detail-desc {
-            font-size: 1.15rem;
-            color: rgba(250,249,247,0.75);
-            line-height: 1.7;
-        }
-
-        @media (max-width: 767px) {
-            .pillars-section { padding: 64px 0; }
-            .pillars-grid { grid-template-columns: 1fr; gap: 24px; }
-            .pillar-detail { padding: 32px; min-height: auto; order: -1; }
-            .pillar-detail-bg { font-size: 6rem; }
-            .pillar-detail-subtitle { font-size: 1.4rem; }
-            .pillar-buttons { gap: 4px; }
-            .pillar-btn { padding: 14px 16px; }
-        }
-
         /* ---- STORY ---- */
         .story-section {
             background: var(--ink);
@@ -1757,7 +1595,7 @@
     <!-- ============ NAVIGATION ============ -->
     <nav class="nav">
         <div class="container nav-inner">
-            <a href="#pillars" class="nav-logo">WALANCE<span>.</span></a>
+            <a href="/" class="nav-logo">WALANCE<span>.</span></a>
             <ul class="nav-links">
                 <li><a href="#problem">Problém</a></li>
                 <li><a href="#method">Metoda</a></li>
@@ -1899,79 +1737,6 @@
                     <p class="solution-tag">Vrstva 3</p>
                     <h3>Operační systém (Návyky &amp; Job Crafting)</h3>
                     <p>Automatizace zdraví a práce. Mikrozměny a rituály nastavím tak, aby běžely na pozadí a šetřily energii. Pomocí Job Craftingu designuji práci tak, aby vás nabíjela. Sladím vaše silné stránky s náplní role.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ PILLARS (7 pilířů WALANCE) ============ -->
-    <section id="pillars" class="pillars-section">
-        <div class="container">
-            <div class="section-header fade-in" style="text-align:center; margin-bottom:56px;">
-                <h2 class="section-title"><span>WALANCE</span> — Anatomie udržitelného lídra</h2>
-                <p class="section-subtitle" style="margin-bottom: 0;">7 pilířů, 7 písmen. Každé stojí za jedním principem.</p>
-            </div>
-
-            <div class="pillars-grid">
-                <div class="pillar-buttons" id="pillar-buttons">
-                    <button class="pillar-btn active" data-index="0">
-                        <span class="pillar-btn-letter">W</span>
-                        <span class="pillar-btn-title">Walk &amp; Work</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                    <button class="pillar-btn" data-index="1">
-                        <span class="pillar-btn-letter">A</span>
-                        <span class="pillar-btn-title">Awareness</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                    <button class="pillar-btn" data-index="2">
-                        <span class="pillar-btn-letter">L</span>
-                        <span class="pillar-btn-title">Longevity</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                    <button class="pillar-btn" data-index="3">
-                        <span class="pillar-btn-letter">A</span>
-                        <span class="pillar-btn-title">Alignment</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                    <button class="pillar-btn" data-index="4">
-                        <span class="pillar-btn-letter">N</span>
-                        <span class="pillar-btn-title">New Habits</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                    <button class="pillar-btn" data-index="5">
-                        <span class="pillar-btn-letter">C</span>
-                        <span class="pillar-btn-title">Clarity</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                    <button class="pillar-btn" data-index="6">
-                        <span class="pillar-btn-letter">E</span>
-                        <span class="pillar-btn-title">Energy</span>
-                        <span class="pillar-btn-arrow">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </button>
-                </div>
-
-                <div class="pillar-detail">
-                    <div class="pillar-detail-bg" id="p-bg-letter">W</div>
-                    <div class="pillar-detail-content">
-                        <p class="pillar-detail-tag" id="p-title">Walk &amp; Work</p>
-                        <h3 class="pillar-detail-subtitle" id="p-subtitle">Pohyb jako nástroj myšlení</h3>
-                        <p class="pillar-detail-desc" id="p-desc">Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Aktivujte svůj procesor v pohybu a nechte nápady volně proudit.</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -2690,30 +2455,6 @@
                 hamburgerIcon.style.display = 'block';
                 closeIcon.style.display = 'none';
                 document.body.style.overflow = '';
-            });
-        });
-
-        // Pillars interactive (WALANCE acronym)
-        const pillarsData = [
-            { letter: 'W', title: 'Walk & Work', subtitle: 'Pohyb jako nástroj myšlení', desc: 'Nejtěžší rozhodnutí se nedělají na židli. Chůze zvyšuje prokrvení mozku a kreativitu o 60 %. Aktivujte svůj procesor v pohybu a nechte nápady volně proudit.' },
-            { letter: 'A', title: 'Awareness', subtitle: 'Senzory pro včasné varování', desc: 'Nemůžete řídit to, co necítíte. Učím vás vnímat signály těla — mělké dýchání nebo tuhnoucí šíji — dříve, než se z drobného napětí stane problém, který vás zastaví.' },
-            { letter: 'L', title: 'Longevity', subtitle: 'Maximální životnost systému', desc: 'Nejde o to dožít se stovky, ale nebýt v padesáti „na odpis". Budujeme tělo, které udrží plnou kapacitu pro vysoký výkon tak dlouho, dokud se sami rozhodnete zůstat ve hře.' },
-            { letter: 'A', title: 'Alignment', subtitle: 'Geometrie těla i role', desc: 'Odstraňujeme tření v systému. Srovnáme vaši páteř (fyzický postoj) a pomocí Job Craftingu zarovnáme pracovní náplň s vašimi silnými stránkami. Když vše lícuje, výkon roste bez odporu.' },
-            { letter: 'N', title: 'New Habits', subtitle: 'Systémový upgrade návyků', desc: 'Velké revoluce nefungují. Fungují mikrozměny, které využívají neuroplasticitu mozku. Nastavíme nové rutiny tak, aby se staly přirozenou součástí vašeho dne — bez stresu a bez nutnosti železné vůle.' },
-            { letter: 'C', title: 'Clarity', subtitle: 'Ochrana procesoru před šumem', desc: 'Nevyhoříte z práce, ale z chaosu. Nastavíme principy informační hygieny a hluboké práce (Deep Work). Odstraníme digitální smog, aby vaše mysl zůstala ostrá a schopná soustředění i pod tlakem.' },
-            { letter: 'E', title: 'Energy', subtitle: 'Optimalizace biologického paliva', desc: 'Time management sám o sobě nestačí, pokud nemáte energii. Zaměříme se na její řízení. Naučíte se pracovat se svými biorytmy a nejtěžší úkoly plánovat do výkonnostních špiček. Výsledkem je stabilní přísun sil po celý den, ne jen do oběda.' },
-        ];
-
-        document.querySelectorAll('#pillar-buttons .pillar-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const idx = parseInt(btn.dataset.index);
-                const data = pillarsData[idx];
-                document.querySelectorAll('#pillar-buttons .pillar-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById('p-bg-letter').textContent = data.letter;
-                document.getElementById('p-title').textContent = data.title;
-                document.getElementById('p-subtitle').textContent = data.subtitle;
-                document.getElementById('p-desc').textContent = data.desc;
             });
         });
 
